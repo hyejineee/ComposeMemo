@@ -15,8 +15,8 @@ class ExampleUnitTest {
         assertEquals(4, 2 + 2)
     }
 
-    @Test
-    fun github_workflow_test(){
-        assertEquals(5, 2+2)
-    }
+//    @Test
+//    fun github_workflow_test(){
+//        assertEquals(5, 2+2)
+//    }
 }
