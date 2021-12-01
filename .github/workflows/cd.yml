@@ -7,21 +7,19 @@ on:
     branches:
       - master
 jobs:
-  call-workflow:
-    uses: hyejineee/ComposeMemo/.github/workflows/ci.yml@v1
+    apk:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: hyejineee/ComposeMemo/.github/workflows/ci.yml@v1
 
-    runs-on: ubuntu-latest
-    steps:
-      - uses: ./.github/workflows/ci@v1
+        - name: Build debug APK
+          run: ./gradlew assembleDebug --stacktrace
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug --stacktrace
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v1
-        with:
-          name: debug-app
-          path: app/build/outputs/apk/debug
+        - name: Upload APK
+          uses: actions/upload-artifact@v1
+          with:
+            name: debug-app
+            path: app/build/outputs/apk/debug
 
 
 
