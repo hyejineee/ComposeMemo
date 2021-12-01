@@ -1,5 +1,6 @@
 package com.example.composememoapp
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -34,5 +35,15 @@ fun Greeting(name: String) {
 fun DefaultPreview() {
     ComposeMemoAppTheme {
         Greeting("Android")
+    }
+}
+
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun DefaultPreviewDarkMode() {
+    ComposeMemoAppTheme {
+        androidx.compose.material.Surface() {
+            Greeting("Android")
+        }
     }
 }
