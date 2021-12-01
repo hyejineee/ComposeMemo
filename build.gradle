@@ -5,10 +5,10 @@ buildscript {
     ext {
         navComposeVersion = '2.4.0-alpha01'
         navVersion ='2.3.5'
-        hiltVersion = '2.40'
+        hiltVersion = '2.40.3'
         viewModelKtxVersion ='2.4.0'
-        composeVersion = '1.0.3'
-        kotlinVersion = '1.5.30'
+        composeVersion = '1.0.5'
+        kotlinVersion = '1.5.31'
         ktlintVersion = '0.37.2'
 
     }
