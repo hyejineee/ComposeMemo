@@ -7,7 +7,9 @@ on:
     branches:
       - master
 jobs:
-  reusable_workflow_job:
+  call-workflow:
+    uses: hyejineee/ComposeMemo/.github/workflows/ci.yml@v1
+
     runs-on: ubuntu-latest
     steps:
       - uses: ./.github/workflows/ci@v1
