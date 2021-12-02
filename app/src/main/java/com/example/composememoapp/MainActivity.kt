@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
             ComposeMemoAppTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
+                    MemoApp()
                 }
             }
         }
@@ -26,24 +26,6 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
+fun MemoApp(){
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ComposeMemoAppTheme {
-        Greeting("Android")
-    }
-}
-
-@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
-@Composable
-fun DefaultPreviewDarkMode() {
-    ComposeMemoAppTheme {
-        androidx.compose.material.Surface() {
-            Greeting("Android")
-        }
-    }
 }
