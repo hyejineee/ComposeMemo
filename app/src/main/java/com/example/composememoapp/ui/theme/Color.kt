@@ -9,6 +9,6 @@ val Teal200 = Color(0xFF03DAC5)
 
 val DeepPurpleA200 = Color(0xff7c4dff)
 val DeepPurpleA200Light = Color(0xffb47cff)
-val DeepPurpleA200Dark= Color(0xff3f1dcb)
+val DeepPurpleA200Dark = Color(0xff3f1dcb)
 val Gray50 = Color(0xffF4F4F4)
 val Gray900 = Color(0xff212121)
