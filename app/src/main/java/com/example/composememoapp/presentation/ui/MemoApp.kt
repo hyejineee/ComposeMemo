@@ -32,12 +32,16 @@ fun MemoApp() {
     val navController = rememberNavController()
     val lazyListState = rememberLazyListState()
 
+    val handleClickAddMemoButton = {
+        navController.navigate(MemoAppScreen.Write.name)
+    }
+
     ComposeMemoAppTheme() {
         Scaffold(
             floatingActionButton = {
                 HomeAddMemoFAB(
                     extended = lazyListState.isScrollInProgress,
-                    onClick = { /*TODO*/ }
+                    onClick = handleClickAddMemoButton
                 )
             }
         ) {
