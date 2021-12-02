@@ -22,10 +22,9 @@ fun MemoAppNavHost(
         composable(MemoAppScreen.Home.name) {
             Text(text = "Home")
         }
-        
-        composable(MemoAppScreen.Write.name){
+
+        composable(MemoAppScreen.Write.name) {
             Text(text = "Write")
         }
     }
-
 }

@@ -1,8 +1,10 @@
 package com.example.composememoapp
 
 import android.content.Context
-import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.printToLog
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
@@ -19,10 +21,10 @@ class MemoAppComposableTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    lateinit var context:Context
+    lateinit var context: Context
 
     @Before
-    fun init(){
+    fun init() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         composeTestRule.setContent {
             ComposeMemoAppTheme {
@@ -32,11 +34,10 @@ class MemoAppComposableTest {
     }
 
     @Test
-    fun testMemoAppComposableHaveNavHostComposable(){
+    fun testMemoAppComposableHaveNavHostComposable() {
         composeTestRule.onRoot(useUnmergedTree = true).printToLog("MemoAppComposableTest")
         composeTestRule
             .onNodeWithContentDescription(Descriptions.MemoAppNavHost.name)
             .assertExists()
     }
-
 }
