@@ -36,16 +36,23 @@ class HomeAddMemoFABComposableTest {
         context = InstrumentationRegistry.getInstrumentation().targetContext
     }
 
-    @Test
-    fun whenExtendedValueIsFalseTextIsNotShown() {
+    private fun setContentWithHomeAddMemoFAB(
+        extended: Boolean = true,
+        onClick: () -> Unit = {}
+    ) {
         composeTestRule.setContent {
-            ComposeMemoAppTheme {
+            ComposeMemoAppTheme() {
                 HomeAddMemoFAB(
-                    extended = false,
-                    onClick = { /*TODO*/ }
+                    extended = extended,
+                    onClick = onClick
                 )
             }
         }
+    }
+
+    @Test
+    fun whenExtendedValueIsFalseTextIsNotShown() {
+        setContentWithHomeAddMemoFAB(false)
 
         composeTestRule
             .onNode(hasText(context.getString(R.string.addMemo)))
@@ -54,14 +61,7 @@ class HomeAddMemoFABComposableTest {
 
     @Test
     fun whenExtendedValueIsTrueTextIsShown() {
-        composeTestRule.setContent {
-            ComposeMemoAppTheme {
-                HomeAddMemoFAB(
-                    extended = true,
-                    onClick = { /*TODO*/ }
-                )
-            }
-        }
+        setContentWithHomeAddMemoFAB(true)
 
         composeTestRule
             .onNode(hasText(context.getString(R.string.addMemo)))
@@ -70,14 +70,8 @@ class HomeAddMemoFABComposableTest {
 
     @Test
     fun clickFAB() {
-        val onClickMock = mock<()->Unit>()
-        composeTestRule.setContent {
-            ComposeMemoAppTheme() {
-                HomeAddMemoFAB(
-                    onClick = onClickMock
-                )
-            }
-        }
+        val onClickMock = mock<() -> Unit>()
+        setContentWithHomeAddMemoFAB(onClick = onClickMock)
 
         composeTestRule
             .onNodeWithContentDescription(context.getString(R.string.addMemo))
