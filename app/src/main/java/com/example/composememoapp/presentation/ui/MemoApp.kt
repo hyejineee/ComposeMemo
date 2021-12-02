@@ -6,7 +6,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.*
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
@@ -33,7 +37,8 @@ fun MemoApp() {
             floatingActionButton = {
                 HomeAddMemoFAB(
                     extended = lazyListState.isScrollInProgress,
-                    onClick = { /*TODO*/ })
+                    onClick = { /*TODO*/ }
+                )
             }
         ) {
             MemoAppNavHost(
@@ -75,7 +80,6 @@ fun HomeAddMemoFAB(
         }
     }
 }
-
 
 @ExperimentalAnimationApi
 @Preview
