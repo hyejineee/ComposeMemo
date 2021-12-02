@@ -1,4 +1,4 @@
-package com.example.composememoapp.ui.theme
+package com.example.composememoapp.presentation.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
