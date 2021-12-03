@@ -75,8 +75,8 @@ jobs:
       - name: Run createTestCoverage
         uses: ReactiveCircus/android-emulator-runner@v2.21.0
         with:
-          api-level: 31
-          script: ./gradlew connectedCheck
+          api-level: 29
+          script: ./gradlew connectedCheck --stacktrace
 
       - name: Upload coverage
         uses: actions/upload-artifact@v1
