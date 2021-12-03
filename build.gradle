@@ -5,11 +5,14 @@ buildscript {
     ext {
         navComposeVersion = '2.4.0-alpha01'
         navVersion ='2.3.5'
-        hiltVersion = '2.40'
+        hiltVersion = '2.40.3'
         viewModelKtxVersion ='2.4.0'
-        composeVersion = '1.0.3'
-        kotlinVersion = '1.5.30'
+        composeVersion = '1.0.5'
+        kotlinVersion = '1.5.31'
         ktlintVersion = '0.37.2'
+        mockitoVersion = '4.1.0'
+        mockitoKtVersion= '4.0.0'
+        jacocoVersion = '0.8.7'
 
     }
     repositories {
@@ -20,11 +23,15 @@ buildscript {
         classpath "com.android.tools.build:gradle:7.0.3"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
+        classpath "org.jacoco:org.jacoco.core:$jacocoVersion"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+
 }
+
+
 
 subprojects {
 
@@ -42,9 +49,6 @@ subprojects {
 
     dependencies {
         ktlint "com.pinterest:ktlint:$ktlintVersion"
-        // additional 3rd party ruleset(s) can be specified here
-        // just add them to the classpath (e.g. ktlint 'groupId:artifactId:version') and
-        // ktlint will pick them up
     }
 
     task ktlint(type: JavaExec, group: "verification") {
@@ -52,9 +56,6 @@ subprojects {
         classpath = configurations.ktlint
         main = "com.pinterest.ktlint.Main"
         args "src/**/*.kt"
-        // to generate report in checkstyle format prepend following args:
-        // "--reporter=plain", "--reporter=checkstyle,output=${buildDir}/ktlint.xml"
-        // see https://github.com/pinterest/ktlint#usage for more
     }
 
 	/** 스타일 수정 후 자동으로 수정해 줌 */
@@ -63,6 +64,16 @@ subprojects {
         classpath = configurations.ktlint
         main = "com.pinterest.ktlint.Main"
         args "-F", "src/**/*.kt"
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            eachDependency { details ->
+                if ('org.jacoco' == details.requested.group) {
+                    details.useVersion "0.8.7"
+                }
+            }
+        }
     }
 }
 
