@@ -42,3 +42,12 @@ jobs:
       - name: Run Android Test
         run : ./gradlew assembleDebugAndroidTest
 
+      - name: Run createTestCoverage
+        run : ./gradlw testDebugUnitTestCoverage
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v1
+        with:
+          name: coverage-result
+          path: app/build/reports/coverage/androidTest/debug
+

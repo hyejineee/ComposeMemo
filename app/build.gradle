@@ -213,7 +213,6 @@ def setupAndroidReporting() {
                 def unitTestData = files("${project.buildDir}/jacoco/${testTaskName}.exec")
                 def androidTestData = fileTree(dir: "${buildDir}/outputs/code_coverage/debugAndroidTest/connected/",
                         includes: ["**/*.ec"])
-
                 executionData.from = files([unitTestData], [androidTestData])
 
                 def coverageSourceDirs = ["src/main/java",
