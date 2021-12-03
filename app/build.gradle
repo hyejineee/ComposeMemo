@@ -6,6 +6,129 @@ plugins {
     id 'jacoco'
 }
 
+android {
+
+    compileSdk 31
+
+    defaultConfig {
+        applicationId "com.example.composememoapp"
+        minSdk 23
+        targetSdk 31
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+        useIR = true
+    }
+
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion rootProject.composeVersion
+        kotlinCompilerVersion '1.5.31'
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    packagingOptions {
+        exclude "/META-INF/AL2.0"
+        exclude "/META-INF/LGPL2.1"
+        exclude "win32-x86/attach_hotspot_windows.dll"
+        exclude 'win32-x86-64/attach_hotspot_windows.dll'
+        exclude 'META-INF/licenses/ASM'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude("META-INF/*.kotlin_module")
+    }
+}
+
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation "androidx.compose.ui:ui:$rootProject.composeVersion"
+    implementation "androidx.compose.material:material:$rootProject.composeVersion"
+    implementation "androidx.compose.ui:ui-tooling-preview:$rootProject.composeVersion"
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
+    implementation 'androidx.activity:activity-compose:1.4.0'
+
+    testImplementation 'junit:junit:4.+'
+
+    // compose test
+    androidTestImplementation "androidx.compose.ui:ui-test:$rootProject.composeVersion"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$rootProject.composeVersion"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:$rootProject.composeVersion"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    debugImplementation "androidx.compose.ui:ui-tooling:$rootProject.composeVersion"
+
+
+    def coroutine_version = "1.5.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+
+
+    // navigation - compose
+    implementation "androidx.navigation:navigation-compose:$rootProject.navComposeVersion"
+
+    // navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$rootProject.navVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$rootProject.navVersion"
+
+    // hilt
+    implementation "com.google.dagger:hilt-android:$rootProject.hiltVersion"
+    kapt "com.google.dagger:hilt-android-compiler:$rootProject.hiltVersion"
+
+    //viewModel scope
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.viewModelKtxVersion"
+
+    androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
+    testImplementation "org.mockito:mockito-android:$mockitoVersion"
+
+    testImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKtVersion"
+    androidTestImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKtVersion"
+}
+
+
 project.afterEvaluate { project ->
     setupAndroidReporting()
 }
@@ -39,7 +162,7 @@ def setupAndroidReporting() {
             System.out.println("Task -> $testTaskName")
 
             // Create coverage task of form 'testFlavorTypeCoverage' depending on 'testFlavorTypeUnitTest'
-            task "${testTaskName}Coverage"(type: JacocoReport, dependsOn: ["$testTaskName", 'cleanTestDebugUnitTest', 'assembleDebugAndroidTest']) {
+            task "${testTaskName}Coverage"(type: JacocoReport, dependsOn: ["$testTaskName", 'cleanTestDebugUnitTest', 'connectedAndroidTest']) {
                 group = "Reporting"
                 description = "Generate Jacoco coverage reports on the ${sourceName.capitalize()} build."
 
@@ -84,143 +207,33 @@ def setupAndroidReporting() {
 
                 def javaTree = fileTree(dir: "${project.buildDir}/intermediates/javac/$sourceName/classes", excludes: fileFilter)
                 def kotlinTree = fileTree(dir: "${project.buildDir}/tmp/kotlin-classes/$sourceName", excludes: fileFilter)
+
                 classDirectories.from = files([javaTree], [kotlinTree])
-                executionData.from = files("${project.buildDir}/jacoco/${testTaskName}.exec")
+
+                def unitTestData = files("${project.buildDir}/jacoco/${testTaskName}.exec")
+                def androidTestData = fileTree(dir: "${buildDir}/outputs/code_coverage/debugAndroidTest/connected/",
+                        includes: ["**/*.ec"])
+
+                executionData.from = files([unitTestData], [androidTestData])
+
                 def coverageSourceDirs = ["src/main/java",
                                           "src/$productFlavorName/java",
                                           "src/$buildTypeName/java"]
 
-                sourceDirectories.setFrom(files(coverageSourceDirs))
-                additionalSourceDirs.setFrom(files(coverageSourceDirs))
+
+                sourceDirectories.from = files(coverageSourceDirs)
+                additionalSourceDirs.from = files(coverageSourceDirs)
 
                 reports {
                     csv.enabled false // change if needed
                     xml.enabled false // change if needed
                     html {
                         enabled true
-                        destination file("${buildDir}/coverage-report")
+                        destination file("${buildDir}/reports/coverage/androidTest/debug")
                     }
                 }
             }
+
         }
     }
-}
-
-android {
-
-    compileSdk 31
-
-    defaultConfig {
-        applicationId "com.example.composememoapp"
-        minSdk 23
-        targetSdk 31
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary true
-        }
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
-        useIR = true
-    }
-
-    buildFeatures {
-        compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion rootProject.composeVersion
-        kotlinCompilerVersion '1.5.31'
-    }
-    packagingOptions {
-        resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
-        }
-    }
-
-    testOptions{
-        unitTests.returnDefaultValues = true
-    }
-
-    packagingOptions{
-        exclude "/META-INF/AL2.0"
-        exclude "/META-INF/LGPL2.1"
-        exclude "win32-x86/attach_hotspot_windows.dll"
-        exclude 'win32-x86-64/attach_hotspot_windows.dll'
-        exclude 'META-INF/licenses/ASM'
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/ASL2.0'
-        exclude("META-INF/*.kotlin_module")
-    }
-}
-
-
-dependencies {
-
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.0'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation "androidx.compose.ui:ui:$rootProject.composeVersion"
-    implementation "androidx.compose.material:material:$rootProject.composeVersion"
-    implementation "androidx.compose.ui:ui-tooling-preview:$rootProject.composeVersion"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
-    implementation 'androidx.activity:activity-compose:1.4.0'
-
-    testImplementation 'junit:junit:4.+'
-
-    // compose test
-    androidTestImplementation "androidx.compose.ui:ui-test:$rootProject.composeVersion"
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$rootProject.composeVersion"
-    debugImplementation "androidx.compose.ui:ui-test-manifest:$rootProject.composeVersion"
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    debugImplementation "androidx.compose.ui:ui-tooling:$rootProject.composeVersion"
-
-
-    def coroutine_version ="1.5.2"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
-
-
-    // navigation - compose
-    implementation "androidx.navigation:navigation-compose:$rootProject.navComposeVersion"
-
-    // navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$rootProject.navVersion"
-    implementation "androidx.navigation:navigation-ui-ktx:$rootProject.navVersion"
-
-    // hilt
-    implementation "com.google.dagger:hilt-android:$rootProject.hiltVersion"
-    kapt "com.google.dagger:hilt-android-compiler:$rootProject.hiltVersion"
-
-    //viewModel scope
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.viewModelKtxVersion"
-
-    androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
-    testImplementation "org.mockito:mockito-android:$mockitoVersion"
-
-    testImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKtVersion"
-    androidTestImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKtVersion"
 }

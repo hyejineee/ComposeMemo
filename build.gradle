@@ -28,7 +28,10 @@ buildscript {
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+
 }
+
+
 
 subprojects {
 
@@ -61,6 +64,16 @@ subprojects {
         classpath = configurations.ktlint
         main = "com.pinterest.ktlint.Main"
         args "-F", "src/**/*.kt"
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            eachDependency { details ->
+                if ('org.jacoco' == details.requested.group) {
+                    details.useVersion "0.8.7"
+                }
+            }
+        }
     }
 }
 
