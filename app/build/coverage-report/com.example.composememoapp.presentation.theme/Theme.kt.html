@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Theme.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">com.example.composememoapp.presentation.theme</a> &gt; <span class="el_source">Theme.kt</span></div><h1>Theme.kt</h1><pre class="source lang-java linenums">package com.example.composememoapp.presentation.theme
+
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
+import androidx.compose.runtime.Composable
+
+<span class="fc" id="L9">private val DarkColorPalette = darkColors(</span>
+<span class="fc" id="L10">    primary = DeepPurpleA200Light,</span>
+<span class="fc" id="L11">    primaryVariant = DeepPurpleA200Dark,</span>
+<span class="fc" id="L12">    secondary = DeepPurpleA200,</span>
+<span class="fc" id="L13">    surface = Gray900</span>
+)
+
+<span class="fc" id="L16">private val LightColorPalette = lightColors(</span>
+<span class="fc" id="L17">    primary = DeepPurpleA200,</span>
+<span class="fc" id="L18">    primaryVariant = DeepPurpleA200Light,</span>
+<span class="fc" id="L19">    secondary = DeepPurpleA200Dark,</span>
+<span class="fc" id="L20">    surface = Gray50</span>
+
+    /* Other default colors to override
+    background = Color.White,
+    surface = Color.White,
+    onPrimary = Color.White,
+    onSecondary = Color.Black,
+    onBackground = Color.Black,
+    onSurface = Color.Black,
+    */
+)
+
+@Composable
+fun ComposeMemoAppTheme(
+<span class="pc bnc" id="L34" title="All 2 branches missed.">    darkTheme: Boolean = isSystemInDarkTheme(),</span>
+    content: @Composable() () -&gt; Unit
+<span class="pc bpc" id="L36" title="11 of 22 branches missed.">) {</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">    val colors = if (darkTheme) {</span>
+<span class="nc" id="L38">        DarkColorPalette</span>
+    } else {
+<span class="fc" id="L40">        LightColorPalette</span>
+    }
+
+<span class="fc" id="L43">    MaterialTheme(</span>
+<span class="fc" id="L44">        colors = colors,</span>
+<span class="fc" id="L45">        typography = Typography,</span>
+<span class="fc" id="L46">        shapes = Shapes,</span>
+<span class="fc" id="L47">        content = content</span>
+    )
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
