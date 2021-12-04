@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'jacoco'
 }
 
 android {
@@ -23,6 +24,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -52,13 +56,28 @@ android {
         }
     }
 
-    testOptions{
+    testOptions {
         unitTests.returnDefaultValues = true
     }
 
-    compileSdkVersion 31
-    buildToolsVersion '30.0.3'
+    packagingOptions {
+        exclude "/META-INF/AL2.0"
+        exclude "/META-INF/LGPL2.1"
+        exclude "win32-x86/attach_hotspot_windows.dll"
+        exclude 'win32-x86-64/attach_hotspot_windows.dll'
+        exclude 'META-INF/licenses/ASM'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude("META-INF/*.kotlin_module")
+    }
 }
+
 
 dependencies {
 
@@ -82,11 +101,10 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$rootProject.composeVersion"
 
 
-    def coroutine_version ="1.5.2"
+    def coroutine_version = "1.5.2"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
-
 
 
     // navigation - compose
@@ -103,7 +121,118 @@ dependencies {
     //viewModel scope
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.viewModelKtxVersion"
 
+    androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
+    testImplementation "org.mockito:mockito-android:$mockitoVersion"
+
+    testImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKtVersion"
+    androidTestImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKtVersion"
+}
 
 
+project.afterEvaluate { project ->
+    setupAndroidReporting()
+}
 
+def setupAndroidReporting() {
+    tasks.withType(Test) {
+        // Whether or not classes without source location should be instrumented
+        jacoco.includeNoLocationClasses = true
+        jacoco.excludes = ['jdk.internal.*']
+    }
+
+    // Grab all build types and product flavors
+    def buildTypes = android.buildTypes.collect { type ->
+        type.name
+    }
+    def productFlavors = android.productFlavors.collect { flavor ->
+        flavor.name
+    }
+    // When no product flavors defined, use empty
+    if (!productFlavors) productFlavors.add('')
+    productFlavors.each { productFlavorName ->
+        buildTypes.each { buildTypeName ->
+            def sourceName, sourcePath
+            if (!productFlavorName) {
+                sourceName = sourcePath = "${buildTypeName}"
+            } else {
+                sourceName = "${productFlavorName}${buildTypeName.capitalize()}"
+                sourcePath = "${productFlavorName}/${buildTypeName}"
+            }
+            def testTaskName = "test${sourceName.capitalize()}UnitTest"
+            System.out.println("Task -> $testTaskName")
+
+            // Create coverage task of form 'testFlavorTypeCoverage' depending on 'testFlavorTypeUnitTest'
+            task "${testTaskName}Coverage"(type: JacocoReport, dependsOn: ["$testTaskName", 'cleanTestDebugUnitTest', 'connectedAndroidTest']) {
+                group = "Reporting"
+                description = "Generate Jacoco coverage reports on the ${sourceName.capitalize()} build."
+
+                def fileFilter = [
+                        // data binding
+                        'android/databinding/**/*.class',
+                        '**/android/databinding/*Binding.class',
+                        '**/android/databinding/*',
+                        '**/androidx/databinding/*',
+                        '**/BR.*',
+                        // android
+                        '**/R.class',
+                        '**/R$*.class',
+                        '**/BuildConfig.*',
+                        '**/Manifest*.*',
+                        '**/*Test*.*',
+                        'android/**/*.*',
+                        // kotlin
+                        '**/*MapperImpl*.*',
+                        '**/*$ViewInjector*.*',
+                        '**/*$ViewBinder*.*',
+                        '**/BuildConfig.*',
+                        '**/*Component*.*',
+                        '**/*BR*.*',
+                        '**/Manifest*.*',
+                        '**/*$Lambda$*.*',
+                        '**/*Companion*.*',
+                        '**/*Module*.*',
+                        '**/*Dagger*.*',
+                        '**/*Hilt*.*',
+                        '**/*MembersInjector*.*',
+                        '**/*_MembersInjector.class',
+                        '**/*_Factory*.*',
+                        '**/*_Provide*Factory*.*',
+                        '**/*Extensions*.*',
+                        // sealed and data classes
+                        '**/*$Result.*',
+                        '**/*$Result$*.*',
+                        // adapters generated by moshi
+                        '**/*JsonAdapter.*',
+                ]
+
+                def javaTree = fileTree(dir: "${project.buildDir}/intermediates/javac/$sourceName/classes", excludes: fileFilter)
+                def kotlinTree = fileTree(dir: "${project.buildDir}/tmp/kotlin-classes/$sourceName", excludes: fileFilter)
+
+                classDirectories.from = files([javaTree], [kotlinTree])
+
+                def unitTestData = files("${project.buildDir}/jacoco/${testTaskName}.exec")
+                def androidTestData = fileTree(dir: "${buildDir}/outputs/code_coverage/debugAndroidTest/connected/",
+                        includes: ["**/*.ec"])
+                executionData.from = files([unitTestData], [androidTestData])
+
+                def coverageSourceDirs = ["src/main/java",
+                                          "src/$productFlavorName/java",
+                                          "src/$buildTypeName/java"]
+
+
+                sourceDirectories.from = files(coverageSourceDirs)
+                additionalSourceDirs.from = files(coverageSourceDirs)
+
+                reports {
+                    csv.enabled false // change if needed
+                    xml.enabled false // change if needed
+                    html {
+                        enabled true
+                        destination file("${buildDir}/reports/coverage/androidTest/debug")
+                    }
+                }
+            }
+
+        }
+    }
 }

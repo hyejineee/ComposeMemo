@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">ComposeMemoApp</string>
+    <string name="homeTitle">Memos</string>
+    <string name="navHostComposableDescription">memoAppNavHost</string>
+    <string name="addMemo">ADD MEMO</string>
 </resources>

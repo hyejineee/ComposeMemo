@@ -5,11 +5,14 @@ buildscript {
     ext {
         navComposeVersion = '2.4.0-alpha01'
         navVersion ='2.3.5'
-        hiltVersion = '2.40'
+        hiltVersion = '2.40.3'
         viewModelKtxVersion ='2.4.0'
-        composeVersion = '1.0.3'
-        kotlinVersion = '1.5.30'
+        composeVersion = '1.0.5'
+        kotlinVersion = '1.5.31'
         ktlintVersion = '0.37.2'
+        mockitoVersion = '4.1.0'
+        mockitoKtVersion= '4.0.0'
+        jacocoVersion = '0.8.7'
 
     }
     repositories {
@@ -20,9 +23,57 @@ buildscript {
         classpath "com.android.tools.build:gradle:7.0.3"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
+        classpath "org.jacoco:org.jacoco.core:$jacocoVersion"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+    }
+
+}
+
+
+
+subprojects {
+
+    repositories {
+        mavenCentral()
+    }
+
+    configurations {
+        ktlint
+    }
+
+    afterEvaluate { project ->
+        check.dependsOn ktlint
+    }
+
+    dependencies {
+        ktlint "com.pinterest:ktlint:$ktlintVersion"
+    }
+
+    task ktlint(type: JavaExec, group: "verification") {
+        description = "Check Kotlin code style."
+        classpath = configurations.ktlint
+        main = "com.pinterest.ktlint.Main"
+        args "src/**/*.kt"
+    }
+
+	/** 스타일 수정 후 자동으로 수정해 줌 */
+    task ktlintFormat(type: JavaExec, group: "formatting") {
+        description = "Fix Kotlin code style deviations."
+        classpath = configurations.ktlint
+        main = "com.pinterest.ktlint.Main"
+        args "-F", "src/**/*.kt"
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            eachDependency { details ->
+                if ('org.jacoco' == details.requested.group) {
+                    details.useVersion "0.8.7"
+                }
+            }
+        }
     }
 }
 
