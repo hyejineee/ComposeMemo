@@ -14,8 +14,10 @@
 .cxx
 local.properties
 
+/build
+app/build
 !app/build/jacoco
 
-/build
 
-app/build
+
+
