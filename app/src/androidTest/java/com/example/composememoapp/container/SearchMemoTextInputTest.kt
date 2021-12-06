@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -15,7 +16,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.composememoapp.R
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
-import com.example.composememoapp.presentation.ui.home.HomeScreen
 import com.example.composememoapp.presentation.ui.home.SearchMemoTextInput
 import com.example.composememoapp.util.Descriptions
 import com.example.composememoapp.util.model.TextInputSate
@@ -35,8 +35,10 @@ class SearchMemoTextInputTest {
 
     lateinit var context: Context
 
-    private val hint = "hint"
-    private val textInputStateMock = TextInputSate(hint = hint, initialText = hint)
+    private val hint by lazy {
+        context.getString(R.string.putSearchWordCaption)
+    }
+    private val textInputStateMock = TextInputSate("")
 
     @Before
     fun init() {
@@ -44,30 +46,24 @@ class SearchMemoTextInputTest {
     }
 
     private fun setContentWithSearchMemoTextInput(
-        mockState:TextInputSate? = null,
-        isHasState:Boolean = true,
+        mockState: TextInputSate? = null,
         modifier: Modifier = Modifier
     ) {
         composeTestRule.setContent {
 
             ComposeMemoAppTheme {
-                if (isHasState){
-
-                    mockState?.let {
-                        SearchMemoTextInput(state = it)
-                    }?:run{
-                        val state = rememberTextInputState(hint = hint)
-                        SearchMemoTextInput(state = state)
-                    }
-                }else{
-                    SearchMemoTextInput(modifier = modifier)
+                mockState?.let {
+                    SearchMemoTextInput(state = it)
+                } ?: run {
+                    val state = rememberTextInputState(initialText = "")
+                    SearchMemoTextInput(state = state)
                 }
             }
         }
     }
 
     @Test
-    fun initialStateIsShowHint(){
+    fun initialStateIsShowHint() {
         setContentWithSearchMemoTextInput(
             modifier = Modifier.padding(10.dp)
         )
@@ -78,17 +74,7 @@ class SearchMemoTextInputTest {
     }
 
     @Test
-    fun stateIsNullDefaultStateIsShown(){
-        setContentWithSearchMemoTextInput(isHasState = false)
-
-        composeTestRule
-            .onNodeWithText("")
-            .assertIsDisplayed()
-
-    }
-
-    @Test
-    fun withIconsShowAllIcon(){
+    fun withIconsShowAllIcon() {
         setContentWithSearchMemoTextInput()
 
         composeTestRule
@@ -101,20 +87,28 @@ class SearchMemoTextInputTest {
     }
 
     @Test
-    fun whenClickableIconClickSearchTextIsClear(){
+    fun whenClickableIconClickSearchTextIsClear() {
         setContentWithSearchMemoTextInput()
+
+        composeTestRule
+            .onNode(hasSetTextAction())
+            .performTextInput("hello")
+
+        composeTestRule
+            .onNodeWithText("hello")
+            .assertIsDisplayed()
 
         composeTestRule
             .onNodeWithContentDescription(Descriptions.ClearIcon.text)
             .performClick()
 
         composeTestRule
-            .onNodeWithText(hint)
+            .onNodeWithText("hello")
             .assertDoesNotExist()
     }
 
     @Test
-    fun whenStateIsChangedTextInputValueIsChanged(){
+    fun whenStateIsChangedTextInputValueIsChanged() {
         setContentWithSearchMemoTextInput(
             mockState = textInputStateMock
         )
@@ -127,30 +121,28 @@ class SearchMemoTextInputTest {
     }
 
     @Test
-    fun whenValueIsTypedStateValueIsChanged(){
+    fun whenValueIsTypedStateValueIsChanged() {
         setContentWithSearchMemoTextInput(
             mockState = textInputStateMock
         )
 
         composeTestRule
-            .onNodeWithText(hint)
+            .onNode(hasSetTextAction())
             .performTextInput("hello")
 
         assertThat(textInputStateMock.text, equalTo("hello"))
-
     }
 
     @Test
-    fun whenTextInputIsBlankShowHint(){
+    fun whenTextInputIsBlankShowHint() {
         setContentWithSearchMemoTextInput()
 
         composeTestRule
-            .onNodeWithText(hint)
+            .onNode(hasSetTextAction())
             .performTextClearance()
 
         composeTestRule
             .onNodeWithText(hint)
             .assertIsDisplayed()
     }
-
 }

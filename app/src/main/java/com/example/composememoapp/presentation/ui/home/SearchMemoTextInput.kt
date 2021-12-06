@@ -1,13 +1,10 @@
 package com.example.composememoapp.presentation.ui.home
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -17,11 +14,10 @@ import com.example.composememoapp.presentation.ui.component.TextInput
 import com.example.composememoapp.util.Descriptions
 import com.example.composememoapp.util.model.IconModel
 import com.example.composememoapp.util.model.TextInputSate
-import com.example.composememoapp.util.model.rememberTextInputState
 
 @Composable
 fun SearchMemoTextInput(
-    state: TextInputSate = rememberTextInputState(""),
+    state: TextInputSate,
     modifier: Modifier = Modifier
 ) {
 
@@ -46,21 +42,14 @@ fun SearchMemoTextInput(
         TextInput(
             text = state.text,
             onValueChange = {
-                if (state.isHint) {
-                    state.text = it.replace(state.hint!!, "")
-                }else{
-                    state.text = it
-                }
-
-                if(it.isBlank()){
-                    state.text = state.hint!!
-                }
-
+                state.text = it
             },
             modifier = Modifier
                 .padding(5.dp),
             iconModel = iconModel,
-            clickableIconModel = clickableIconModel
+            clickableIconModel = clickableIconModel,
+            hint = stringResource(id = R.string.putSearchWordCaption),
+            showHint = true
         )
     }
 }
@@ -69,8 +58,7 @@ fun SearchMemoTextInput(
 @Composable
 fun SearchMemoTextInput() {
     ComposeMemoAppTheme {
-        val hint = stringResource(id = R.string.putSearchWordCaption)
-        val state = TextInputSate(hint = hint, initialText = hint)
+        val state = TextInputSate("")
         SearchMemoTextInput(state = state)
     }
 }

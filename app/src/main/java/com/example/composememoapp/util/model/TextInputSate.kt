@@ -9,20 +9,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 
 class TextInputSate(
-    val hint: String,
     initialText: String,
 ) {
     var text by mutableStateOf(initialText)
 
-    val isHint: Boolean
-        get() = text == hint
-
     companion object {
         val Saver: Saver<TextInputSate, *> = listSaver(
-            save = { listOf(it.hint ?: "", it.text) },
+            save = { listOf(it.text) },
             restore = {
                 TextInputSate(
-                    hint = it[0],
                     initialText = it[1]
                 )
             }
@@ -31,8 +26,8 @@ class TextInputSate(
 }
 
 @Composable
-fun rememberTextInputState(hint: String): TextInputSate {
-    return rememberSaveable(hint, saver = TextInputSate.Saver) {
-        TextInputSate(hint = hint, hint )
+fun rememberTextInputState(initialText: String): TextInputSate {
+    return rememberSaveable(initialText, saver = TextInputSate.Saver) {
+        TextInputSate(initialText = initialText)
     }
 }

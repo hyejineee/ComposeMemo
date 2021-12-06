@@ -50,17 +50,30 @@ class TextInputTest {
     private fun setContentWithTextInput(
         iconModel: IconModel? = null,
         clickableIconModel: IconModel? = null,
+        showHint: Boolean = false,
+        hint: String? = null,
         text: String,
         onValueChange: (s: String) -> Unit
     ) {
         composeTestRule.setContent {
             ComposeMemoAppTheme() {
-                TextInput(
-                    iconModel = iconModel,
-                    clickableIconModel = clickableIconModel,
-                    text = text,
-                    onValueChange = onValueChange
-                )
+                if (showHint) {
+                    TextInput(
+                        iconModel = iconModel,
+                        clickableIconModel = clickableIconModel,
+                        hint = hint,
+                        showHint = true,
+                        text = text,
+                        onValueChange = onValueChange
+                    )
+                } else {
+                    TextInput(
+                        iconModel = iconModel,
+                        clickableIconModel = clickableIconModel,
+                        text = text,
+                        onValueChange = onValueChange
+                    )
+                }
             }
         }
     }
@@ -141,5 +154,23 @@ class TextInputTest {
             .performClick()
 
         verify(onIconClickMock, times(0)).invoke()
+    }
+
+    @Test
+    fun withHintText() {
+        setContentWithTextInput(text = "", onValueChange = onValueChangeMock, hint = "hint", showHint = true)
+
+        composeTestRule
+            .onNodeWithText("hint")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun withTextValueHintIsNotShown() {
+        setContentWithTextInput(text = "hello", onValueChange = onValueChangeMock, hint = "hint", showHint = true)
+
+        composeTestRule
+            .onNodeWithText("hint")
+            .assertDoesNotExist()
     }
 }
