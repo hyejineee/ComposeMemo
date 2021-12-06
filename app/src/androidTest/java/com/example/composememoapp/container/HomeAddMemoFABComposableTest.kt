@@ -1,4 +1,4 @@
-package com.example.composememoapp
+package com.example.composememoapp.container
 
 import android.content.Context
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.example.composememoapp.R
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.HomeAddMemoFAB
 import org.junit.Before

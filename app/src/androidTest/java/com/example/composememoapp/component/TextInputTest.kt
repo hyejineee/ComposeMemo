@@ -1,4 +1,4 @@
-package com.example.composememoapp
+package com.example.composememoapp.component
 
 import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
@@ -9,6 +9,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.example.composememoapp.R
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.component.TextInput
 import com.example.composememoapp.util.model.IconModel

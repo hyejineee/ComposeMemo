@@ -1,4 +1,4 @@
-package com.example.composememoapp
+package com.example.composememoapp.component
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.icons.Icons

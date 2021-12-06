@@ -1,4 +1,4 @@
-package com.example.composememoapp
+package com.example.composememoapp.component
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.icons.Icons
@@ -9,17 +9,18 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
-import com.example.composememoapp.presentation.ui.component.MiniFloatingButton
+import com.example.composememoapp.presentation.ui.component.MiniFloatingButtonContent
 import com.example.composememoapp.presentation.ui.component.MiniFloatingButtonModel
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 
 @ExperimentalAnimationApi
 @RunWith(AndroidJUnit4::class)
-class MiniFloatingButtonTest {
+class MiniFloatingButtonContentTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -31,31 +32,40 @@ class MiniFloatingButtonTest {
         description = "call icon"
     )
 
-    private fun setContentWithMiniFloatingButton(
+    private fun setContentWithMiniFloatingButtonContent(
         model: MiniFloatingButtonModel,
+        isFirstItem: Boolean
     ) {
         composeTestRule.setContent {
             ComposeMemoAppTheme() {
-                MiniFloatingButton(model = model)
+                MiniFloatingButtonContent(model = model, isFirstItem = isFirstItem)
             }
         }
     }
 
     @Test
     fun haveIcon() {
-        setContentWithMiniFloatingButton(model = model)
-
+        setContentWithMiniFloatingButtonContent(model = model, isFirstItem = false)
         composeTestRule
             .onNodeWithContentDescription(model.description ?: "")
             .assertIsDisplayed()
     }
 
     @Test
-    fun onClickIsCalled() {
-        setContentWithMiniFloatingButton(model = model)
+    fun onClickIsCalledWhenIsFirstItemFalse() {
+        setContentWithMiniFloatingButtonContent(model = model, isFirstItem = false)
         composeTestRule
             .onNodeWithContentDescription(model.description ?: "")
             .performClick()
-        verify(onClickMock).invoke()
+        verify(onClickMock, times(1)).invoke()
+    }
+
+    @Test
+    fun onClickIsNotCalledWhenIsFirstItemTrue() {
+        setContentWithMiniFloatingButtonContent(model = model, isFirstItem = true)
+        composeTestRule
+            .onNodeWithContentDescription(model.description ?: "")
+            .performClick()
+        verify(onClickMock, times(0)).invoke()
     }
 }
