@@ -42,7 +42,6 @@ class CategoryMenuBarTest {
             ComposeMemoAppTheme {
                 val listState = rememberLazyListState()
 
-
                 selected?.let {
                     CategoryMenuBar(
                         categories = categories,
@@ -57,8 +56,6 @@ class CategoryMenuBarTest {
                         listState = listState
                     )
                 }
-
-
             }
         }
     }
