@@ -54,7 +54,7 @@ class MemoListTest {
     }
 
     @Test
-    fun showMemos() {
+    fun 메모리스트를_보여준다() {
         setContentWithMemoList(memos = memoList)
         composeTestRule
             .onAllNodesWithText(memoList.first().contents.first().contents as String)
@@ -62,7 +62,7 @@ class MemoListTest {
     }
 
     @Test
-    fun whenClickMemoItemOnItemClickIsCalled() {
+    fun 메모_아이템을_클릭하면_onItemClick이_호출된다() {
         setContentWithMemoList(memos = memoList)
         composeTestRule
             .onAllNodesWithText(memoList.first().contents.first().contents as String)[0]

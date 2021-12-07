@@ -79,7 +79,7 @@ class TextInputTest {
     }
 
     @Test
-    fun onlyTextField() {
+    fun 아이콘이_없는_텍스트_인풋을_그린다() {
         setContentWithTextInput(text = "hello", onValueChange = onValueChangeMock)
 
         composeTestRule
@@ -92,7 +92,7 @@ class TextInputTest {
     }
 
     @Test
-    fun performInputTextCalledOnValueChange() {
+    fun 텍스트_입력을_했을_때_onValueChane가_호출된다() {
         setContentWithTextInput(text = "hello", onValueChange = onValueChangeMock)
 
         composeTestRule
@@ -103,7 +103,7 @@ class TextInputTest {
     }
 
     @Test
-    fun withIcon() {
+    fun 아이콘이_있는_텍스트_인풋을_그린다() {
         setContentWithTextInput(
             text = "hello", onValueChange = onValueChangeMock,
             iconModel = iconModelMock
@@ -115,7 +115,7 @@ class TextInputTest {
     }
 
     @Test
-    fun withClickableIcon() {
+    fun 클릭_가능한_아이콘이_있는_텍스트_인풋을_그린다() {
         setContentWithTextInput(
             text = "hello", onValueChange = onValueChangeMock,
             clickableIconModel = clickableIconModelMock
@@ -127,7 +127,7 @@ class TextInputTest {
     }
 
     @Test
-    fun whenClickableIconHasOnClick() {
+    fun onClick메소드가_있는_클릭_가능한_아이콘을_클릭히면_onClick메소드가_호출된() {
         setContentWithTextInput(
             text = "hello", onValueChange = onValueChangeMock,
             clickableIconModel = clickableIconModelMock
@@ -141,7 +141,7 @@ class TextInputTest {
     }
 
     @Test
-    fun whenClickableIconNotHasOnClick() {
+    fun onClick메소드가_없는_클릭_가능한_아이콘을_클릭하면_메소드가_호출되지_않는다() {
 
         val mock = clickableIconModelMock.copy(onClick = null)
         setContentWithTextInput(
@@ -157,7 +157,7 @@ class TextInputTest {
     }
 
     @Test
-    fun withHintText() {
+    fun 힌트가_있는_텍스트_인풋을_그린다() {
         setContentWithTextInput(text = "", onValueChange = onValueChangeMock, hint = "hint", showHint = true)
 
         composeTestRule
@@ -166,7 +166,7 @@ class TextInputTest {
     }
 
     @Test
-    fun withTextValueHintIsNotShown() {
+    fun 텍스트_인풋에_입력된_값이_없을_경우_힌트를_보여준다() {
         setContentWithTextInput(text = "hello", onValueChange = onValueChangeMock, hint = "hint", showHint = true)
 
         composeTestRule

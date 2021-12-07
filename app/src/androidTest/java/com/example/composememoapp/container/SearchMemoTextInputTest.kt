@@ -35,9 +35,7 @@ class SearchMemoTextInputTest {
 
     lateinit var context: Context
 
-    private val hint by lazy {
-        context.getString(R.string.putSearchWordCaption)
-    }
+    private val hint by lazy { context.getString(R.string.putSearchWordCaption) }
     private val textInputStateMock = TextInputSate("")
 
     @Before
@@ -63,7 +61,7 @@ class SearchMemoTextInputTest {
     }
 
     @Test
-    fun initialStateIsShowHint() {
+    fun 값이_없는_경우_힌트를_보여준다() {
         setContentWithSearchMemoTextInput(
             modifier = Modifier.padding(10.dp)
         )
@@ -74,7 +72,7 @@ class SearchMemoTextInputTest {
     }
 
     @Test
-    fun withIconsShowAllIcon() {
+    fun 아이콘을_보여준다() {
         setContentWithSearchMemoTextInput()
 
         composeTestRule
@@ -87,7 +85,7 @@ class SearchMemoTextInputTest {
     }
 
     @Test
-    fun whenClickableIconClickSearchTextIsClear() {
+    fun 클리어_아이콘을_클릭했을_때_입력된_텍스트를_지원준다() {
         setContentWithSearchMemoTextInput()
 
         composeTestRule
@@ -108,7 +106,7 @@ class SearchMemoTextInputTest {
     }
 
     @Test
-    fun whenStateIsChangedTextInputValueIsChanged() {
+    fun TextState가_변경_되었을_때_TextInput의_값도_변경된다() {
         setContentWithSearchMemoTextInput(
             mockState = textInputStateMock
         )
@@ -121,7 +119,7 @@ class SearchMemoTextInputTest {
     }
 
     @Test
-    fun whenValueIsTypedStateValueIsChanged() {
+    fun TextInput의_값이_변경되면_TextState의_값도_변경된다() {
         setContentWithSearchMemoTextInput(
             mockState = textInputStateMock
         )
@@ -134,7 +132,7 @@ class SearchMemoTextInputTest {
     }
 
     @Test
-    fun whenTextInputIsBlankShowHint() {
+    fun 입력된_텍스트_값이_없을때_힌트를_보여준다() {
         setContentWithSearchMemoTextInput()
 
         composeTestRule

@@ -2,6 +2,7 @@ package com.example.composememoapp.container
 
 import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasScrollAction
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -25,6 +26,8 @@ class HomeScreenTest {
     @Before
     fun init() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
+        composeTestRule.mainClock.autoAdvance = false
+        composeTestRule.mainClock.advanceTimeBy(50L)
     }
 
     private fun setContentWithHomeScreen() {
@@ -48,6 +51,14 @@ class HomeScreenTest {
         setContentWithHomeScreen()
         composeTestRule
             .onNodeWithText(context.getString(R.string.putSearchWordCaption))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun hasCategoryMenu() {
+        setContentWithHomeScreen()
+        composeTestRule
+            .onAllNodes(hasScrollAction())[0]
             .assertIsDisplayed()
     }
 }

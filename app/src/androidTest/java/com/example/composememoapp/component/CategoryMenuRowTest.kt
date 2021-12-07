@@ -31,7 +31,7 @@ class CategoryMenuRowTest {
     }
 
     @Test
-    fun showCategoryName() {
+    fun 카테고리_이름을_보여준다() {
         setContentWithCategoryMenuRow("ALL")
 
         composeTestRule.onNodeWithText("ALL").assertIsDisplayed()
