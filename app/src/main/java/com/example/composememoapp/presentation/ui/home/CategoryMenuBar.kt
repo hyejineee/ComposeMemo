@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -40,7 +41,9 @@ fun CategoryMenuBar(
         items(categories) { category ->
             CategoryMenuRow(
                 category,
-                modifier = Modifier.clickable(onClick = { onClick(category) }),
+                modifier = Modifier.selectable(category == selected) {
+                    onClick(category)
+                },
                 isSelected = category == selected
             )
         }
