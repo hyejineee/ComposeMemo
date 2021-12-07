@@ -18,7 +18,7 @@ class TextInputSate(
             save = { listOf(it.text) },
             restore = {
                 TextInputSate(
-                    initialText = it[1]
+                    initialText = it[0]
                 )
             }
         )

@@ -22,7 +22,7 @@ fun MemoList(
     onItemClick: (MemoEntity) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn {
+    LazyColumn(modifier = modifier) {
         items(memos) { memo ->
             MemoListItem(
                 memo = memo,

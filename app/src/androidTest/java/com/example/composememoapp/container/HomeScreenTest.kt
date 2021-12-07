@@ -39,7 +39,7 @@ class HomeScreenTest {
     }
 
     @Test
-    fun hasMemoTitle() {
+    fun 홈_타이틀을_보여준다() {
         setContentWithHomeScreen()
         composeTestRule
             .onNodeWithText(context.getString(R.string.homeTitle))
@@ -47,7 +47,7 @@ class HomeScreenTest {
     }
 
     @Test
-    fun hasSearchInput() {
+    fun 메모_검색창을_보여준다() {
         setContentWithHomeScreen()
         composeTestRule
             .onNodeWithText(context.getString(R.string.putSearchWordCaption))
@@ -55,7 +55,7 @@ class HomeScreenTest {
     }
 
     @Test
-    fun hasCategoryMenu() {
+    fun 카테고리_선택_메뉴를_보여준다() {
         setContentWithHomeScreen()
         composeTestRule
             .onAllNodes(hasScrollAction())[0]
