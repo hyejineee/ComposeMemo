@@ -1,4 +1,4 @@
-package com.example.composememoapp.container
+package com.example.composememoapp.home
 
 import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
