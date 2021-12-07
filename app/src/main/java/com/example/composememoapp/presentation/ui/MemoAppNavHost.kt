@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.composememoapp.presentation.ui.home.HomeScreen
 
 @Composable
 fun MemoAppNavHost(
@@ -20,7 +21,7 @@ fun MemoAppNavHost(
     ) {
 
         composable(MemoAppScreen.Home.name) {
-            Text(text = "Home")
+            HomeScreen(navController = navController)
         }
 
         composable(MemoAppScreen.Write.name) {
