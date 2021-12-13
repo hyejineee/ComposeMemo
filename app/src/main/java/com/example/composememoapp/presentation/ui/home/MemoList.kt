@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
@@ -22,28 +24,17 @@ fun MemoList(
     onItemClick: (MemoEntity) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-//    LazyVerticalGrid(
-//        modifier = modifier.padding(horizontal = 20.dp),
-//        cells = GridCells.Fixed(2)
-//    ) {
-//        items(memos) { memo ->
-//            MemoListItem(
-//                memo = memo,
-//                onItemClick = onItemClick,
-//                modifier = Modifier.clickable { onItemClick(memo) }
-//            )
-//        }
-//    }
 
-    PinterestGrid(modifier = modifier.padding(horizontal = 20.dp)) {
-        for (memo in memos) {
-            MemoListItem(
-                memo = memo,
-                onItemClick = onItemClick,
-                modifier = Modifier.clickable { onItemClick(memo) }
-            )
+    Column(modifier = modifier.verticalScroll(rememberScrollState())) {
+        PinterestGrid(modifier = modifier.padding(horizontal = 20.dp)) {
+            for (memo in memos) {
+                MemoListItem(
+                    memo = memo,
+                    onItemClick = onItemClick,
+                    modifier = Modifier.clickable { onItemClick(memo) }
+                )
+            }
         }
-
     }
 }
 
@@ -85,22 +76,22 @@ fun PinterestGrid(
 
         val placeables = measurables.mapIndexed { index, measurable ->
 
-
             val childConstraints = constraints.copy(
-                minWidth = constraints.maxWidth /cols,
-                maxWidth = constraints.maxWidth/cols
+                minWidth = constraints.maxWidth / cols,
+                maxWidth = constraints.maxWidth / cols
             )
             val placeable = measurable.measure(childConstraints)
 
             val cell = index % cols
-            cellWidths[cell] = constraints.maxWidth /cols
+            cellWidths[cell] = constraints.maxWidth / cols
             cellHeights[cell] += placeable.height
 
             placeable
         }
 
         val w = constraints.maxWidth
-        val h = cellHeights.maxOrNull()?.coerceIn(constraints.minHeight.rangeTo(constraints.maxHeight))
+        val h =
+            cellHeights.maxOrNull()?.coerceIn(constraints.minHeight.rangeTo(constraints.maxHeight))
                 ?: constraints.minHeight
 
         val cellX = IntArray(cols) { 0 }

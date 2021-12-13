@@ -36,6 +36,7 @@ fun SearchMemoTextInput(
         elevation = 5.dp,
         shape = RoundedCornerShape(50.dp),
         modifier = modifier
+            .padding(5.dp)
             .fillMaxWidth()
     ) {
         TextInput(
@@ -44,7 +45,7 @@ fun SearchMemoTextInput(
                 state.text = it
             },
             modifier = Modifier
-                .padding(3.dp),
+                .padding(5.dp),
             iconModel = iconModel,
             clickableIconModel = clickableIconModel,
             hint = stringResource(id = R.string.putSearchWordCaption),

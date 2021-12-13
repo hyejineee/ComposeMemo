@@ -60,7 +60,7 @@ fun CategoryMenuRow(
         modifier = modifier.padding(horizontal = 15.dp, vertical = 5.dp),
         fontWeight = FontWeight.SemiBold,
         fontStyle = FontStyle.Italic,
-        fontSize = 18.sp,
+        fontSize = 15.sp,
         color = if (isSelected) MaterialTheme.colors.secondary else Color.LightGray
     )
 }

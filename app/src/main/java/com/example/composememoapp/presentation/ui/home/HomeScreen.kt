@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -26,7 +25,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,14 +35,12 @@ import com.example.composememoapp.data.MemoEntity
 import com.example.composememoapp.data.TextBlock
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.MemoAppScreen
-import com.example.composememoapp.presentation.viewModel.MemoListViewModel
 import com.example.composememoapp.util.model.rememberTextInputState
 import com.example.composememoapp.util.toPx
 
 @Composable
 fun HomeScreen(
     navController: NavHostController = rememberNavController(),
-    viewModel: MemoListViewModel = MemoListViewModel()
 ) {
 
     val handleClickAddMemoButton = {
@@ -66,10 +62,10 @@ fun HomeScreen(
                 text = stringResource(id = R.string.homeTitle),
                 color = MaterialTheme.colors.primary,
                 fontWeight = FontWeight.ExtraBold,
-                fontSize = 50.sp,
+                fontSize = 40.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(30.dp)
+                    .padding(20.dp)
             )
 
             val searchTextInputState = rememberTextInputState(initialText = "")
@@ -77,7 +73,7 @@ fun HomeScreen(
                 state = searchTextInputState,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 30.dp, end = 30.dp, top = 10.dp, bottom = 20.dp)
+                    .padding(horizontal = 30.dp, vertical = 10.dp)
             )
 
             var selectedCategory by rememberSaveable { mutableStateOf("ALL") }
