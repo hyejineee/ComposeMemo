@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.composememoapp.R
-import com.example.composememoapp.data.MemoEntity
 import com.example.composememoapp.data.TextBlock
+import com.example.composememoapp.data.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.MemoAppScreen
 import com.example.composememoapp.util.model.rememberTextInputState
@@ -98,7 +98,7 @@ fun HomeScreen(
 
             val memoList = List(10) {
 
-                if (it == 0 || it==4 || it ==5) {
+                if (it == 0 || it == 4 || it == 5) {
                     MemoEntity(
                         id = it,
                         contents = List(11) { s ->
@@ -122,7 +122,6 @@ fun HomeScreen(
                 },
                 modifier = Modifier.padding(vertical = 10.dp)
             )
-
         }
 
         HomeBottomBar(
@@ -130,7 +129,6 @@ fun HomeScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
         )
-
     }
 }
 
@@ -141,16 +139,16 @@ fun HomeBottomBar(
 ) {
     Box(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .height(150.dp)
-            .background(
-                Brush.verticalGradient(
-                    listOf(Color(0x00000000), Color.White),
-                    startY = 0.dp.toPx(),
-                    endY = 100.dp.toPx()
+            modifier
+                .fillMaxWidth()
+                .height(150.dp)
+                .background(
+                    Brush.verticalGradient(
+                        listOf(Color(0x00000000), Color.White),
+                        startY = 0.dp.toPx(),
+                        endY = 100.dp.toPx()
+                    )
                 )
-            )
     ) {
         FloatingActionButton(
             backgroundColor = MaterialTheme.colors.primaryVariant,
@@ -162,9 +160,7 @@ fun HomeBottomBar(
             Icon(imageVector = Icons.Default.Add, contentDescription = "add memo")
         }
     }
-
 }
-
 
 @Preview
 @Composable

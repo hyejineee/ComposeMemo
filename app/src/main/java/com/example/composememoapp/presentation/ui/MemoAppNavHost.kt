@@ -1,8 +1,6 @@
 package com.example.composememoapp.presentation.ui
 
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -17,7 +15,7 @@ import com.example.composememoapp.presentation.viewModel.MemoViewModel
 fun MemoAppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel:MemoViewModel = MemoViewModel()
+    viewModel: MemoViewModel = MemoViewModel()
 ) {
 
     NavHost(
@@ -34,22 +32,21 @@ fun MemoAppNavHost(
         composable(
             route = "$detailScreenName/{${Key.MEMO_ARGS_KEY}}",
             arguments = listOf(
-                navArgument(Key.MEMO_ARGS_KEY){
+                navArgument(Key.MEMO_ARGS_KEY) {
                     type = NavType.IntType
                 }
             ),
-        ){ entry ->
+        ) { entry ->
             val memoId = entry.arguments?.getInt(Key.MEMO_ARGS_KEY)
-            val memo =  viewModel.getMemo(memoId?: kotlin.run { return@composable })
+            val memo = viewModel.getMemo(memoId ?: kotlin.run { return@composable })
 
             DetailAndWriteScreen(memoEntity = memo)
         }
 
-        composable(MemoAppScreen.Write.name){
+        composable(MemoAppScreen.Write.name) {
             DetailAndWriteScreen()
         }
     }
-
 }
 
 object Key {

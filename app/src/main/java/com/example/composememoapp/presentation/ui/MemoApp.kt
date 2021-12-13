@@ -35,8 +35,7 @@ fun MemoApp() {
     }
 
     ComposeMemoAppTheme() {
-        Scaffold(
-        ) {
+        Scaffold() {
             MemoAppNavHost(
                 navController = navController,
                 modifier = Modifier

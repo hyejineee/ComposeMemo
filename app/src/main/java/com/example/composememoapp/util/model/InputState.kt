@@ -1,4 +1,3 @@
 package com.example.composememoapp.util.model
 
-interface InputState {
-}
+interface InputState

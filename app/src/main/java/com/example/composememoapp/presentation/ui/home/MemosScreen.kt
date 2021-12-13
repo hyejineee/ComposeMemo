@@ -2,7 +2,7 @@ package com.example.composememoapp.presentation.ui.home
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.composememoapp.data.MemoEntity
+import com.example.composememoapp.data.entity.MemoEntity
 
 @Composable
 fun MemosScreen(

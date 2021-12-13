@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import com.example.composememoapp.presentation.ui.component.TextInput
 import com.example.composememoapp.util.model.InputState
 import com.example.composememoapp.util.model.TextInputSate
-import com.example.composememoapp.util.model.rememberTextInputState
 
 data class TextBlock(
     override var seq: Int,
@@ -21,10 +20,11 @@ data class TextBlock(
     override fun drawEditableContent(state: InputState) {
         val textInputState = (state as TextInputSate)
 
-        TextInput(text = textInputState.text, onValueChange = {
-            textInputState.text = it
-        })
+        TextInput(
+            text = textInputState.text,
+            onValueChange = {
+                textInputState.text = it
+            }
+        )
     }
-
-
 }

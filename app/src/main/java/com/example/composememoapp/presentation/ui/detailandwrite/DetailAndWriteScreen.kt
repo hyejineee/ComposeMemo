@@ -9,24 +9,17 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusTarget
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.composememoapp.R
-import com.example.composememoapp.data.MemoEntity
 import com.example.composememoapp.data.TextBlock
+import com.example.composememoapp.data.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
-import com.example.composememoapp.presentation.ui.component.TextInput
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
-import com.example.composememoapp.util.model.TextInputSate
 import com.example.composememoapp.util.model.rememberTextInputState
 
 @Composable
@@ -48,7 +41,6 @@ fun DetailAndWriteScreen(
         } ?: run {
             MemoCreateScreen()
         }
-
     }
 }
 
@@ -66,10 +58,9 @@ fun MemoDetailScreen(memoEntity: MemoEntity) {
 fun MemoCreateScreen() {
     val state = rememberTextInputState(initialText = "")
     Column(modifier = Modifier.padding(16.dp).fillMaxSize()) {
-        BasicTextField(value = state.text, onValueChange = {state.text = it}, modifier = Modifier.fillMaxWidth().focusTarget() )
+        BasicTextField(value = state.text, onValueChange = { state.text = it }, modifier = Modifier.fillMaxWidth().focusTarget())
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -88,7 +79,6 @@ fun DetailAndWriteScreenPreview() {
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun MemoCreateScreenPreview() {
@@ -96,4 +86,3 @@ fun MemoCreateScreenPreview() {
         MemoCreateScreen()
     }
 }
-

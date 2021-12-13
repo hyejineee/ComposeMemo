@@ -123,11 +123,19 @@ dependencies {
     //viewModel scope
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.viewModelKtxVersion"
 
+    //mockito
     androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
     testImplementation "org.mockito:mockito-android:$mockitoVersion"
 
-    testImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKtVersion"
-    androidTestImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKtVersion"
+    //Rx
+    implementation "io.reactivex.rxjava3:rxandroid:$rxVersion"
+    implementation "io.reactivex.rxjava3:rxjava:$rxVersion"
+    implementation "io.reactivex.rxjava3:rxkotlin:$rxVersion"
+
+    //room
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-rxjava3:$roomVersion"
 
 }
 

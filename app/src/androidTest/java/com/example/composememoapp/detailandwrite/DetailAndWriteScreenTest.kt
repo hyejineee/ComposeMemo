@@ -7,12 +7,11 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.composememoapp.data.MemoEntity
 import com.example.composememoapp.data.TextBlock
+import com.example.composememoapp.data.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.detailandwrite.DetailAndWriteScreen
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
-import com.example.composememoapp.util.DetailMode
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -72,5 +71,4 @@ class DetailAndWriteScreenTest {
             .onNode(hasSetTextAction())
             .assertTextEquals("hello")
     }
-
 }

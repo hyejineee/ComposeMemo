@@ -11,5 +11,5 @@ interface ContentBlock<T> {
     fun drawOnlyReadContent()
 
     @Composable
-    fun drawEditableContent(state:InputState)
+    fun drawEditableContent(state: InputState)
 }
