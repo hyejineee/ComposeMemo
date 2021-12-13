@@ -50,7 +50,7 @@ fun MemoListItem(
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
             memo.contents.forEach {
-                it.drawContent().invoke()
+                it.drawOnlyReadContent()
             }
         }
     }
@@ -63,8 +63,8 @@ fun MemoListItemPreview() {
         val memo = MemoEntity(
             id = 1,
             contents = listOf(
-                TextBlock(seq = 1, contents = "adskfeiwnocono"),
-                TextBlock(seq = 1, contents = "adskfeiwnocono"),
+                TextBlock(seq = 1, content = "adskfeiwnocono"),
+                TextBlock(seq = 1, content = "adskfeiwnocono"),
             ),
         )
         MemoListItem(memo = memo, onItemClick = {})
@@ -78,7 +78,7 @@ fun MemoListPreview() {
         val memos = List(10) {
             MemoEntity(
                 id = it,
-                contents = List(5) { seq -> TextBlock(seq = seq, contents = "content $seq") }
+                contents = List(5) { seq -> TextBlock(seq = seq, content = "content $seq") }
             )
         }
         MemoList(memos = memos, onItemClick = {})

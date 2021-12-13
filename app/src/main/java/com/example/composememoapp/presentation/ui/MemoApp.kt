@@ -36,17 +36,11 @@ fun MemoApp() {
 
     ComposeMemoAppTheme() {
         Scaffold(
-            floatingActionButton = {
-                HomeAddMemoFAB(
-                    extended = lazyListState.isScrollInProgress,
-                    onClick = handleClickAddMemoButton
-                )
-            }
         ) {
             MemoAppNavHost(
                 navController = navController,
                 modifier = Modifier
-                    .padding(it)
+                    .padding(it),
             )
         }
     }

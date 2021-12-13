@@ -10,7 +10,7 @@ import androidx.compose.runtime.setValue
 
 class TextInputSate(
     initialText: String,
-) {
+):InputState {
     var text by mutableStateOf(initialText)
 
     companion object {

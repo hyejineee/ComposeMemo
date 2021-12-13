@@ -72,14 +72,14 @@ fun HomeScreen(
             MemoEntity(
                 id = it,
                 contents = List(5) { s ->
-                    TextBlock(seq = s, contents = "content$s")
+                    TextBlock(seq = s, content = "content$s")
                 }
             )
         }
         MemosScreen(
             memos = memoList,
             onItemClick = {
-                navController.navigate(MemoAppScreen.Write.name)
+                navController.navigate("${MemoAppScreen.Detail.name}/${it.id}")
             },
             modifier = Modifier.padding(vertical = 10.dp)
         )

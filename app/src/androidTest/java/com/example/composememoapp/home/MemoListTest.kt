@@ -32,7 +32,7 @@ class MemoListTest {
         MemoEntity(
             id = it,
             contents = List(5) { s ->
-                TextBlock(seq = s, contents = "content$s")
+                TextBlock(seq = s, content = "content$s")
             }
         )
     }
@@ -57,7 +57,7 @@ class MemoListTest {
     fun 메모리스트를_보여준다() {
         setContentWithMemoList(memos = memoList)
         composeTestRule
-            .onAllNodesWithText(memoList.first().contents.first().contents as String)
+            .onAllNodesWithText(memoList.first().contents.first().content as String)
             .assertCountEquals(5)
     }
 
@@ -65,7 +65,7 @@ class MemoListTest {
     fun 메모_아이템을_클릭하면_onItemClick이_호출된다() {
         setContentWithMemoList(memos = memoList)
         composeTestRule
-            .onAllNodesWithText(memoList.first().contents.first().contents as String)[0]
+            .onAllNodesWithText(memoList.first().contents.first().content as String)[0]
             .performClick()
 
         verify(onItemClickMock).invoke(memoList.first())
