@@ -40,12 +40,9 @@ import com.example.composememoapp.util.toPx
 
 @Composable
 fun HomeScreen(
-    navController: NavHostController = rememberNavController(),
+   handleClickAddMemoButton: () -> Unit,
+   handleClickMemoItem:(MemoEntity) ->Unit
 ) {
-
-    val handleClickAddMemoButton = {
-        navController.navigate(MemoAppScreen.Write.name)
-    }
 
     Box(modifier = Modifier.fillMaxWidth()) {
         Column(
@@ -117,9 +114,7 @@ fun HomeScreen(
 
             MemosScreen(
                 memos = memoList,
-                onItemClick = {
-                    navController.navigate("${MemoAppScreen.Detail.name}/${it.id}")
-                },
+                onItemClick = handleClickMemoItem,
                 modifier = Modifier.padding(vertical = 10.dp)
             )
         }
@@ -166,6 +161,6 @@ fun HomeBottomBar(
 @Composable
 fun HomeScreenPreview() {
     ComposeMemoAppTheme {
-        HomeScreen()
+        HomeScreen({},{})
     }
 }

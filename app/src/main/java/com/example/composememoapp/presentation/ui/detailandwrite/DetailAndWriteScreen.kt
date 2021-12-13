@@ -1,6 +1,8 @@
 package com.example.composememoapp.presentation.ui.detailandwrite
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,6 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -19,47 +22,50 @@ import androidx.compose.ui.unit.dp
 import com.example.composememoapp.data.TextBlock
 import com.example.composememoapp.data.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
+import com.example.composememoapp.presentation.ui.component.MiniFloatingButton
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
+import com.example.composememoapp.util.model.IconModel
 import com.example.composememoapp.util.model.rememberTextInputState
 
 @Composable
 fun DetailAndWriteScreen(
     memoEntity: MemoEntity? = null,
-    viewModel: MemoViewModel = MemoViewModel()
+    viewModel: MemoViewModel = MemoViewModel(),
+    handleBackButtonClick: () -> Unit
 ) {
-
     Scaffold(
         topBar = {
-            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+            TopAppBar() {
+                Icon(
+                    modifier = Modifier
+                        .clickable(onClick = handleBackButtonClick)
+                        .padding(10.dp),
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null
+                )
+
+            }
         },
         modifier = Modifier
             .fillMaxSize()
     ) {
 
         memoEntity?.let {
-            MemoDetailScreen(memoEntity = it)
-        } ?: run {
-            MemoCreateScreen()
+            LazyColumn(modifier = Modifier.padding(16.dp)) {
+                items(memoEntity.contents) {
+                    val textInputState = rememberTextInputState(initialText = it.content.toString())
+                    it.drawEditableContent(state = textInputState)
+                }
+            }
         }
+
+
     }
 }
 
 @Composable
 fun MemoDetailScreen(memoEntity: MemoEntity) {
-    LazyColumn(modifier = Modifier.padding(16.dp)) {
-        items(memoEntity.contents) {
-            val textInputState = rememberTextInputState(initialText = it.content.toString())
-            it.drawEditableContent(state = textInputState)
-        }
-    }
-}
 
-@Composable
-fun MemoCreateScreen() {
-    val state = rememberTextInputState(initialText = "")
-    Column(modifier = Modifier.padding(16.dp).fillMaxSize()) {
-        BasicTextField(value = state.text, onValueChange = { state.text = it }, modifier = Modifier.fillMaxWidth().focusTarget())
-    }
 }
 
 @Preview(showBackground = true)
@@ -71,11 +77,13 @@ fun DetailAndWriteScreenPreview() {
             contents = List(10) {
                 TextBlock(
                     seq = it,
-                    content = "this is text block content $it this is text block content $it this is text block content $it"
+                    content = "this is text block content $it" +
+                            " this is text block content $it" +
+                            " this is text block content $it"
                 )
             }
         )
-        DetailAndWriteScreen(memoEntity = memo)
+        DetailAndWriteScreen(memoEntity = memo, handleBackButtonClick = {})
     }
 }
 

@@ -57,7 +57,6 @@ fun TextInput(
             BasicTextField(
                 value = text,
                 onValueChange = { onValueChange(it) },
-                singleLine = true,
                 textStyle = LocalTextStyle.current.copy(
                     textAlign = TextAlign.Start,
                     fontSize = 12.sp
