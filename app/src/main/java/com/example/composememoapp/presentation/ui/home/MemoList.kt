@@ -54,7 +54,7 @@ fun MemoListItem(
 
         Column(modifier = Modifier.padding(10.dp)) {
             memo.contents.forEach {
-                it.drawOnlyReadContent()
+                it.drawOnlyReadContent(modifier = Modifier)
             }
         }
     }
