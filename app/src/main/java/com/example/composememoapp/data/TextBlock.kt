@@ -8,8 +8,8 @@ import androidx.compose.ui.unit.sp
 import com.example.composememoapp.presentation.ui.component.TextInput
 import com.example.composememoapp.util.model.InputState
 import com.example.composememoapp.util.model.TextInputSate
-import java.lang.reflect.Modifier
 import kotlinx.android.parcel.Parcelize
+import java.lang.reflect.Modifier
 
 @Parcelize
 data class TextBlock(

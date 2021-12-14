@@ -28,20 +28,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.composememoapp.R
 import com.example.composememoapp.data.TextBlock
 import com.example.composememoapp.data.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
-import com.example.composememoapp.presentation.ui.MemoAppScreen
 import com.example.composememoapp.util.model.rememberTextInputState
 import com.example.composememoapp.util.toPx
 
 @Composable
 fun HomeScreen(
-   handleClickAddMemoButton: () -> Unit,
-   handleClickMemoItem:(MemoEntity) ->Unit
+    handleClickAddMemoButton: () -> Unit,
+    handleClickMemoItem: (MemoEntity) -> Unit
 ) {
 
     Box(modifier = Modifier.fillMaxWidth()) {
@@ -161,6 +158,6 @@ fun HomeBottomBar(
 @Composable
 fun HomeScreenPreview() {
     ComposeMemoAppTheme {
-        HomeScreen({},{})
+        HomeScreen({}, {})
     }
 }

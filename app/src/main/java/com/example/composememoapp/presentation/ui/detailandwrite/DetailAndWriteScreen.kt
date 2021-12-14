@@ -1,31 +1,20 @@
 package com.example.composememoapp.presentation.ui.detailandwrite
 
-import android.util.Log
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,10 +22,7 @@ import com.example.composememoapp.data.ContentBlock
 import com.example.composememoapp.data.TextBlock
 import com.example.composememoapp.data.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
-import com.example.composememoapp.presentation.ui.component.MiniFloatingButton
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
-import com.example.composememoapp.util.model.ContentBlocksState
-import com.example.composememoapp.util.model.IconModel
 import com.example.composememoapp.util.model.rememberContentBlocksState
 import com.example.composememoapp.util.model.rememberTextInputState
 
@@ -50,7 +36,6 @@ fun DetailAndWriteScreen(
 
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
-
 
     var contentsState = rememberContentBlocksState(
         initialContents = memoEntity
@@ -69,7 +54,6 @@ fun DetailAndWriteScreen(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = null
                 )
-
             }
         },
         modifier = Modifier
@@ -117,8 +101,8 @@ fun DetailAndWriteScreenPreview() {
                 TextBlock(
                     seq = it,
                     content = "this is text block content $it" +
-                            " this is text block content $it" +
-                            " this is text block content $it"
+                        " this is text block content $it" +
+                        " this is text block content $it"
                 )
             }
         )

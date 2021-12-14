@@ -28,13 +28,13 @@ fun MemoAppNavHost(
     ) {
 
         val handleClickAddMemoButton = {
-            navController.navigate(MemoAppScreen.Write.name){
+            navController.navigate(MemoAppScreen.Write.name) {
                 popUpTo(MemoAppScreen.Home.name)
             }
         }
 
-        val handleClickMemoItem = { memo:MemoEntity ->
-            navController.navigate("${MemoAppScreen.Detail.name}/${memo.id}"){
+        val handleClickMemoItem = { memo: MemoEntity ->
+            navController.navigate("${MemoAppScreen.Detail.name}/${memo.id}") {
                 popUpTo(MemoAppScreen.Home.name)
             }
         }
@@ -63,7 +63,7 @@ fun MemoAppNavHost(
             val memoId = entry.arguments?.getInt(Key.MEMO_ARGS_KEY)
             val memo = viewModel.getMemo(memoId ?: kotlin.run { return@composable })
 
-            DetailAndWriteScreen(memoEntity = memo, handleBackButtonClick = {handleBackButtonClick()})
+            DetailAndWriteScreen(memoEntity = memo, handleBackButtonClick = { handleBackButtonClick() })
         }
 
         composable(MemoAppScreen.Write.name) {

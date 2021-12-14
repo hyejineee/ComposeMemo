@@ -8,7 +8,6 @@ import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.example.composememoapp.data.ContentBlock
-import kotlinx.android.parcel.Parcelize
 
 class ContentBlocksState(
     initialContents: MutableList<ContentBlock<*>>,
