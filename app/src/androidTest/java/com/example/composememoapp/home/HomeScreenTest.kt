@@ -33,7 +33,10 @@ class HomeScreenTest {
     private fun setContentWithHomeScreen() {
         composeTestRule.setContent {
             ComposeMemoAppTheme() {
-                HomeScreen()
+                HomeScreen(
+                    handleClickMemoItem = {},
+                    handleClickAddMemoButton = {}
+                )
             }
         }
     }

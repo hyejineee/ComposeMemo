@@ -127,6 +127,8 @@ dependencies {
     //mockito
     androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
     testImplementation "org.mockito:mockito-android:$mockitoVersion"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKtVersion"
+    androidTestImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKtVersion"
 
     //Rx
     implementation "io.reactivex.rxjava3:rxandroid:$rxVersion"

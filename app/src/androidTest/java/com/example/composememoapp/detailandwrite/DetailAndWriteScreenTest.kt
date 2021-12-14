@@ -1,5 +1,6 @@
 package com.example.composememoapp.detailandwrite
 
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasSetTextAction
@@ -16,6 +17,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@ExperimentalComposeUiApi
 @RunWith(AndroidJUnit4::class)
 class DetailAndWriteScreenTest {
     @get:Rule
@@ -38,7 +40,8 @@ class DetailAndWriteScreenTest {
             ComposeMemoAppTheme() {
                 DetailAndWriteScreen(
                     memoEntity = memoEntity,
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    {}
                 )
             }
         }
