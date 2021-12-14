@@ -13,3 +13,11 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+/build
+app/build
+!app/build/jacoco
+
+
+
+
