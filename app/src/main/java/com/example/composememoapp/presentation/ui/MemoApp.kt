@@ -28,12 +28,6 @@ import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 @Composable
 fun MemoApp() {
     val navController = rememberNavController()
-    val lazyListState = rememberLazyListState()
-
-    val handleClickAddMemoButton = {
-        navController.navigate(MemoAppScreen.Write.name)
-    }
-
     ComposeMemoAppTheme() {
         Scaffold() {
             MemoAppNavHost(

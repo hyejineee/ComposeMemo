@@ -29,7 +29,6 @@ fun MemoList(
             for (memo in memos) {
                 MemoListItem(
                     memo = memo,
-                    onItemClick = onItemClick,
                     modifier = Modifier.clickable { onItemClick(memo) }
                 )
             }
@@ -40,7 +39,6 @@ fun MemoList(
 @Composable
 fun MemoListItem(
     memo: MemoEntity,
-    onItemClick: (MemoEntity) -> Unit,
     modifier: Modifier = Modifier
 ) {
     androidx.compose.material.Surface(
@@ -125,7 +123,7 @@ fun MemoListItemPreview() {
                 TextBlock(seq = 1, content = "adskfeiwnocono"),
             ),
         )
-        MemoListItem(memo = memo, onItemClick = {})
+        MemoListItem(memo = memo)
     }
 }
 

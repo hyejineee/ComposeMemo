@@ -13,7 +13,7 @@ import com.example.composememoapp.presentation.ui.detailandwrite.DetailAndWriteS
 import com.example.composememoapp.presentation.ui.home.HomeScreen
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 
-@OptIn(ExperimentalComposeUiApi::class)
+@ExperimentalComposeUiApi
 @Composable
 fun MemoAppNavHost(
     modifier: Modifier = Modifier,
