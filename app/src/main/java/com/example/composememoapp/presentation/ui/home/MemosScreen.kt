@@ -6,11 +6,9 @@ import com.example.composememoapp.data.entity.MemoEntity
 
 @Composable
 fun MemosScreen(
-    isGridMode: Boolean = false,
     memos: List<MemoEntity>,
     onItemClick: (MemoEntity) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     MemoList(memos = memos, onItemClick = onItemClick, modifier = modifier)
 }

@@ -3,9 +3,12 @@ package com.example.composememoapp.detailandwrite
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.hasAnyChild
+import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.composememoapp.data.TextBlock
@@ -61,10 +64,14 @@ class DetailAndWriteScreenTest {
     }
 
     @Test
-    fun 새로운_메모를_작성하는_모드일_때_바로_메로를_작성할_수_있다() {
+    fun 새로운_메모를_작성하는_모드일_때_화면을_클릭하면_바로_메로를_작성할_수_있다() {
         setContentWithDetailAndWriteScreen(
             viewModel = memoViewModel
         )
+
+        composeTestRule
+            .onNode(hasAnyChild(hasSetTextAction()))
+            .performClick()
 
         composeTestRule
             .onNode(hasSetTextAction())
