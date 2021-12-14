@@ -5,6 +5,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'jacoco'
     id 'kotlin-parcelize'
+    id 'de.mannodermaus.android-junit5'
 }
 
 android {
@@ -140,6 +141,12 @@ dependencies {
     kapt "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-rxjava3:$roomVersion"
 
+    //junit5
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit5Version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit5Version"
+
+    //truth
+    testImplementation "com.google.truth:truth:1.1.3"
 }
 
 

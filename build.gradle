@@ -15,6 +15,7 @@ buildscript {
         jacocoVersion = '0.8.7'
         rxVersion = '3.0.0'
         roomVersion = '2.3.0'
+        junit5Version = '5.8.0'
 
     }
     repositories {
@@ -26,6 +27,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
         classpath "org.jacoco:org.jacoco.core:$jacocoVersion"
+        classpath "de.mannodermaus.gradle.plugins:android-junit5:1.8.0.0"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
