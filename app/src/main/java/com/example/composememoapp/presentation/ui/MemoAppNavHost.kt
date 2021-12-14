@@ -1,6 +1,7 @@
 package com.example.composememoapp.presentation.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -12,6 +13,7 @@ import com.example.composememoapp.presentation.ui.detailandwrite.DetailAndWriteS
 import com.example.composememoapp.presentation.ui.home.HomeScreen
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MemoAppNavHost(
     modifier: Modifier = Modifier,
