@@ -39,7 +39,7 @@ fun TextInput(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = modifier.padding(horizontal = 10.dp, vertical = 3.dp)
+        modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)
     ) {
 
         iconModel?.let { it ->
@@ -53,20 +53,24 @@ fun TextInput(
             Spacer(Modifier.width(5.dp))
         }
 
-        Box(modifier = modifier.weight(5f)) {
+        Box(modifier = Modifier.weight(5f)) {
             BasicTextField(
+                modifier = modifier,
                 value = text,
                 onValueChange = { onValueChange(it) },
-                singleLine = true,
                 textStyle = LocalTextStyle.current.copy(
                     textAlign = TextAlign.Start,
-                    fontSize = 12.sp
+                    fontSize = 14.sp
                 ),
             )
 
             hint?.let {
                 if ((text.isNotEmpty()).not()) {
-                    Text(text = it, fontSize = 12.sp, color = Color.LightGray)
+                    Text(
+                        text = it, fontSize = 12.sp, color = Color.LightGray,
+                        modifier = Modifier
+                            .align(alignment = Alignment.CenterStart)
+                    )
                 }
             }
         }

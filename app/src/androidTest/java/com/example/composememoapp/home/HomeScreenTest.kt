@@ -1,4 +1,4 @@
-package com.example.composememoapp.container
+package com.example.composememoapp.home
 
 import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
@@ -33,7 +33,10 @@ class HomeScreenTest {
     private fun setContentWithHomeScreen() {
         composeTestRule.setContent {
             ComposeMemoAppTheme() {
-                HomeScreen()
+                HomeScreen(
+                    handleClickMemoItem = {},
+                    handleClickAddMemoButton = {}
+                )
             }
         }
     }
@@ -60,5 +63,13 @@ class HomeScreenTest {
         composeTestRule
             .onAllNodes(hasScrollAction())[0]
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun 저장된_메모를_보여준다() {
+    }
+
+    @Test
+    fun 메모_추가_버튼을_누르면_메모_작성_화면으로_이동한다() {
     }
 }

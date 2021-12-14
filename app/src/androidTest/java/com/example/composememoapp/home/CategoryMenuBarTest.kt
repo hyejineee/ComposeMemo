@@ -1,4 +1,4 @@
-package com.example.composememoapp.container
+package com.example.composememoapp.home
 
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.getValue

@@ -13,6 +13,8 @@ buildscript {
         mockitoVersion = '4.1.0'
         mockitoKtVersion= '4.0.0'
         jacocoVersion = '0.8.7'
+        rxVersion = '3.0.0'
+        roomVersion = '2.3.0'
 
     }
     repositories {
