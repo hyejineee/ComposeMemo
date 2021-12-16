@@ -40,13 +40,13 @@ class MemoViewModel @Inject constructor(
             )
     }
 
-    private fun sortContentBlocks(memoEntity: MemoEntity?, contentsState: ContentBlocksState):MemoEntity{
+    private fun sortContentBlocks(memoEntity: MemoEntity?, contentsState: ContentBlocksState): MemoEntity {
         val contentBlocks = contentsState.contents
             .asSequence()
             .map { block ->
                 block.convertToContentBlockEntity()
             }
-            .filter { block->
+            .filter { block ->
                 block.content.isNotBlank()
             }
             .mapIndexed { index, contentBlockEntity ->
@@ -56,7 +56,7 @@ class MemoViewModel @Inject constructor(
 
         return memoEntity?.let {
             it.copy(contents = contentBlocks)
-        }?: MemoEntity(contents = contentBlocks)
+        } ?: MemoEntity(contents = contentBlocks)
     }
 
     private fun handleSuccess(state: MemoState) {

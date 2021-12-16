@@ -57,8 +57,6 @@ fun MemoListItem(
     }
 }
 
-
-
 @Preview
 @Composable
 fun MemoListItemPreview() {

@@ -2,7 +2,6 @@ package com.example.composememoapp.presentation.ui.detailandwrite
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
@@ -28,9 +27,7 @@ import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.component.ContentBlocks
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
-import com.example.composememoapp.util.model.ContentBlocksState
 import com.example.composememoapp.util.model.rememberContentBlocksState
-import com.example.composememoapp.util.model.rememberTextInputState
 
 @ExperimentalComposeUiApi
 @Composable
@@ -113,7 +110,6 @@ fun DetailAndWriteScreenContent(
         )
     }
 }
-
 
 @ExperimentalComposeUiApi
 @Preview(showBackground = true)
