@@ -17,7 +17,7 @@ class TypeConverters {
     fun contentTypeToString(value: ContentType?) = value?.name
 
     @TypeConverter
-    fun stringToContentType(value: String?) =  when (value) {
+    fun stringToContentType(value: String?) = when (value) {
         ContentType.Text.name -> ContentType.Text
         else -> ContentType.Unknown
     }
@@ -26,9 +26,7 @@ class TypeConverters {
     fun contentListToContentJson(value: List<ContentBlockEntity>?) = value?.let { Gson().toJson(it) }
 
     @TypeConverter
-    fun contentJsonToContentList(value:String?) = value?.let {
+    fun contentJsonToContentList(value: String?) = value?.let {
         Gson().fromJson(value, Array<ContentBlockEntity>::class.java).toList()
     }
-
-
 }

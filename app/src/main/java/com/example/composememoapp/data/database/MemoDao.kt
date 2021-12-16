@@ -11,8 +11,8 @@ import io.reactivex.rxjava3.core.Flowable
 @Dao
 interface MemoDao {
     @Query("select * from MemoEntity")
-    fun getAllMemo():Flowable<List<MemoEntity>>
+    fun getAllMemo(): Flowable<List<MemoEntity>>
 
     @Insert(onConflict = REPLACE)
-    fun insertMemo(memoEntity: MemoEntity):Completable
+    fun insertMemo(memoEntity: MemoEntity): Completable
 }

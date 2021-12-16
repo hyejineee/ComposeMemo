@@ -2,7 +2,6 @@ package com.example.composememoapp.data.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.composememoapp.data.ContentBlock
 import java.util.Date
 
 @Entity

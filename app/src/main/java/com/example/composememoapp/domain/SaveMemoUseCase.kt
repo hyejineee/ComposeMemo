@@ -8,5 +8,4 @@ class SaveMemoUseCase @Inject constructor(
     private val memoRepository: MemoRepository
 ) {
     operator fun invoke(memoEntity: MemoEntity) = memoRepository.insertMemo(memoEntity = memoEntity)
-
 }

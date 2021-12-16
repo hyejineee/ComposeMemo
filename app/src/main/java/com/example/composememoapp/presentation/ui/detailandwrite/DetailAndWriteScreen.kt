@@ -114,10 +114,12 @@ fun DetailAndWriteScreenContent(
             TopAppBar() {
                 Icon(
                     modifier = Modifier
-                        .clickable(onClick = {
-                            handleSaveMemo()
-                            handleBackButtonClick()
-                        })
+                        .clickable(
+                            onClick = {
+                                handleSaveMemo()
+                                handleBackButtonClick()
+                            }
+                        )
                         .padding(10.dp),
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = null
@@ -166,8 +168,8 @@ fun DetailAndWriteScreenPreview() {
                     type = ContentType.Text,
                     seq = it.toLong(),
                     content = "this is text block content $it" +
-                            " this is text block content $it" +
-                            " this is text block content $it"
+                        " this is text block content $it" +
+                        " this is text block content $it"
                 )
             }
         )

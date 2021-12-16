@@ -7,5 +7,4 @@ class GetAllMemoUseCase @Inject constructor(
     private val memoRepository: MemoRepository
 ) {
     operator fun invoke() = memoRepository.getAllMemo()
-
 }

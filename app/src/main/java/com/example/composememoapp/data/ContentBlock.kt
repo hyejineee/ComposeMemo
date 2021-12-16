@@ -15,5 +15,5 @@ interface ContentBlock<T> {
     @Composable
     fun drawEditableContent(state: InputState, modifier: Modifier)
 
-    fun convertToContentBlockEntity():ContentBlockEntity
+    fun convertToContentBlockEntity(): ContentBlockEntity
 }

@@ -1,17 +1,14 @@
 package com.example.composememoapp.viewModel
 
 import com.example.composememoapp.data.ContentType
-import com.example.composememoapp.data.TextBlock
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.data.repository.MemoRepository
 import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
-import com.example.composememoapp.presentation.ui.detailandwrite.ContentBlocks
 import com.example.composememoapp.presentation.viewModel.MemoState
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.google.common.truth.Truth.assertThat
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.kotlin.toFlowable
 import io.reactivex.rxjava3.observers.TestObserver
@@ -63,7 +60,6 @@ class MemoViewModelTest {
         )
     }
 
-
     @Test
     @DisplayName("메모를 저장 성공시 저장 성공 상태를 발행한다.")
     fun insertMemoSuccessTest() {
@@ -107,5 +103,4 @@ class MemoViewModelTest {
         memoViewModel.getAllMemo()
         memoViewModel.memoList.test().assertValue(memoListMock)
     }
-
 }

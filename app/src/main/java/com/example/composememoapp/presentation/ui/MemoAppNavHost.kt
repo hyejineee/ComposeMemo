@@ -2,8 +2,6 @@ package com.example.composememoapp.presentation.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -17,7 +15,6 @@ import androidx.navigation.compose.navArgument
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.ui.detailandwrite.DetailAndWriteScreen
 import com.example.composememoapp.presentation.ui.home.HomeScreen
-import com.example.composememoapp.presentation.viewModel.MemoState
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 
 @ExperimentalComposeUiApi
@@ -53,7 +50,7 @@ fun MemoAppNavHost(
 
         composable(MemoAppScreen.Home.name) {
             HomeScreen(
-                memoViewModel= memoViewModel,
+                memoViewModel = memoViewModel,
                 handleClickAddMemoButton = handleClickAddMemoButton,
                 handleClickMemoItem = handleClickMemoItem
             )

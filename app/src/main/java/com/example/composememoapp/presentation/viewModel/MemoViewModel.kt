@@ -8,12 +8,8 @@ import com.example.composememoapp.di.IOScheduler
 import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.annotations.NonNull
 import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Scheduler
-import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
 
@@ -26,7 +22,7 @@ class MemoViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val statePublishSubject: PublishSubject<MemoState> = PublishSubject.create()
-    var memoList:Flowable<List<MemoEntity>> = getAllMemoUseCase()
+    var memoList: Flowable<List<MemoEntity>> = getAllMemoUseCase()
 
     val state = statePublishSubject.publish().autoConnect()
 
@@ -41,12 +37,12 @@ class MemoViewModel @Inject constructor(
     }
 
     private fun handleSuccess(state: MemoState) {
-        Log.d("MemoViewModel", "handleSuccess : ${state} ")
+        Log.d("MemoViewModel", "handleSuccess : $state ")
         statePublishSubject.onNext(state)
     }
 
     private fun handleError(errorMsg: String?) {
-        Log.d("MemoViewModel", "handleError : ${errorMsg} ")
+        Log.d("MemoViewModel", "handleError : $errorMsg ")
         statePublishSubject.onNext(MemoState.Error(errorMsg ?: "에러가 발생했습니다."))
     }
 
@@ -55,5 +51,4 @@ class MemoViewModel @Inject constructor(
     fun getAllMemo() {
         memoList = getAllMemoUseCase()
     }
-
 }
