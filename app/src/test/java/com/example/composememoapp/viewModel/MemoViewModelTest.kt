@@ -8,6 +8,7 @@ import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
 import com.example.composememoapp.presentation.viewModel.MemoState
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
+import com.example.composememoapp.util.model.ContentBlocksState
 import com.google.common.truth.Truth.assertThat
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.kotlin.toFlowable
@@ -16,7 +17,9 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
+import org.mockito.kotlin.any
 import org.mockito.kotlin.given
+import org.mockito.kotlin.whenever
 
 class MemoViewModelTest {
 
@@ -29,11 +32,12 @@ class MemoViewModelTest {
     private val saveMemoUseCaseMock = SaveMemoUseCase(testMemoRepository)
     private val getAllMemoUseCase = GetAllMemoUseCase(testMemoRepository)
 
+    private val schedulers = Schedulers.newThread()
     private val memoViewModel = MemoViewModel(
-        ioScheduler = Schedulers.io(),
+        ioScheduler = schedulers,
         saveMemoUseCase = saveMemoUseCaseMock,
         getAllMemoUseCase = getAllMemoUseCase,
-        androidSchedulers = Schedulers.newThread()
+        androidSchedulers = schedulers
     )
 
     private val memoEntityMock = MemoEntity(
@@ -46,6 +50,10 @@ class MemoViewModelTest {
             )
         }
     )
+
+    private val contentState =
+        ContentBlocksState(memoEntityMock.contents.map { it.convertToContentBlockModel() }
+            .toMutableList())
 
     private val memoListMock = List(20) {
         MemoEntity(
@@ -63,7 +71,7 @@ class MemoViewModelTest {
     @Test
     @DisplayName("메모를 저장 성공시 저장 성공 상태를 발행한다.")
     fun insertMemoSuccessTest() {
-        given(testMemoRepository.insertMemo(memoEntity = memoEntityMock))
+        given(testMemoRepository.insertMemo(memoEntity = any()))
             .willReturn(Completable.complete())
 
         val testObserver: TestObserver<MemoState> = TestObserver()
@@ -71,16 +79,17 @@ class MemoViewModelTest {
             .state
             .subscribe(testObserver)
 
-        memoViewModel.saveMemo(memoEntityMock)
+        memoViewModel.saveMemo(memoEntityMock, contentState.contents)
 
         testObserver.awaitCount(1)
         assertThat(testObserver.values().first()).isEqualTo(MemoState.SaveSuccess)
+
     }
 
     @Test
     @DisplayName("메모를 저장 실패시 저장 실패 상태를 발행한다.")
     fun insertMemoFailTest() {
-        given(testMemoRepository.insertMemo(memoEntity = memoEntityMock))
+        given(testMemoRepository.insertMemo(memoEntity = any()))
             .willReturn(Completable.error(Throwable("메모 저장 에러")))
 
         val testObserver: TestObserver<MemoState> = TestObserver()
@@ -88,7 +97,7 @@ class MemoViewModelTest {
             .state
             .subscribe(testObserver)
 
-        memoViewModel.saveMemo(memoEntityMock)
+        memoViewModel.saveMemo(memoEntityMock, contents =contentState.contents )
 
         testObserver.awaitCount(1)
         assertThat(testObserver.values().first()).isEqualTo(MemoState.Error("메모 저장 에러"))

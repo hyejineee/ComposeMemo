@@ -2,6 +2,7 @@ package com.example.composememoapp.presentation.viewModel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.example.composememoapp.data.ContentBlock
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.di.AndroidMainScheduler
 import com.example.composememoapp.di.IOScheduler
@@ -27,11 +28,9 @@ class MemoViewModel @Inject constructor(
 
     val state = statePublishSubject.publish().autoConnect()
 
-    fun saveMemo(memoEntity: MemoEntity?, contentsState: ContentBlocksState) {
-
-        val memo = sortContentBlocks(memoEntity = memoEntity, contentsState = contentsState)
-
-        saveMemoUseCase(memo)
+    fun saveMemo(memoEntity: MemoEntity?, contents: List<ContentBlock<*>>) {
+        val memo = sortContentBlocks(memoEntity = memoEntity, contents = contents)
+        saveMemoUseCase(memoEntity = memo)
             .subscribeOn(ioScheduler)
             .observeOn(androidSchedulers)
             .subscribe(
@@ -40,8 +39,11 @@ class MemoViewModel @Inject constructor(
             )
     }
 
-    private fun sortContentBlocks(memoEntity: MemoEntity?, contentsState: ContentBlocksState): MemoEntity {
-        val contentBlocks = contentsState.contents
+    private fun sortContentBlocks(
+        memoEntity: MemoEntity?,
+        contents: List<ContentBlock<*>>
+    ): MemoEntity {
+        val contentBlocks = contents
             .asSequence()
             .map { block ->
                 block.convertToContentBlockEntity()

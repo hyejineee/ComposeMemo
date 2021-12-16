@@ -46,7 +46,7 @@ fun DetailAndWriteScreen(
     )
 
     val handleSaveMemo = {
-        memoViewModel.saveMemo(memoEntity = memoEntity, contentsState = contentsState)
+        memoViewModel.saveMemo(memoEntity = memoEntity, contentsState.contents)
     }
 
     val handleAddDefaultBlock: (FocusRequester, SoftwareKeyboardController?) -> Unit =
