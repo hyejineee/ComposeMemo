@@ -1,6 +1,6 @@
 package com.example.composememoapp.domain
 
-import com.example.composememoapp.data.entity.MemoEntity
+import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.data.repository.MemoRepository
 import javax.inject.Inject
 

@@ -5,13 +5,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.sp
+import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.presentation.ui.component.TextInput
 import com.example.composememoapp.util.model.InputState
 import com.example.composememoapp.util.model.TextInputSate
 
 @kotlinx.parcelize.Parcelize
 data class TextBlock(
-    override var seq: Int,
+    override var seq: Long,
     override var content: String
 ) : ContentBlock<String>, Parcelable {
 
@@ -29,8 +30,15 @@ data class TextBlock(
                 text = textInputState.text,
                 onValueChange = {
                     textInputState.text = it
+                    content = textInputState.text
                 }
             )
         }
     }
+
+    override fun convertToContentBlockEntity() = ContentBlockEntity(
+        type = ContentType.Text,
+        seq = seq,
+        content = content
+    )
 }

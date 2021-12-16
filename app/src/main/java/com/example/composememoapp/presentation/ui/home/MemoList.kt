@@ -13,8 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.TextBlock
-import com.example.composememoapp.data.entity.MemoEntity
+import com.example.composememoapp.data.database.entity.ContentBlockEntity
+import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 
 @Composable
@@ -49,9 +51,8 @@ fun MemoListItem(
             .padding(4.dp)
 
     ) {
-
         Column(modifier = Modifier.padding(10.dp)) {
-            memo.contents.forEach {
+            memo.contents.map { it.convertToContentBlockModel() }.forEach {
                 it.drawOnlyReadContent(modifier = Modifier)
             }
         }
@@ -119,8 +120,8 @@ fun MemoListItemPreview() {
         val memo = MemoEntity(
             id = 1,
             contents = listOf(
-                TextBlock(seq = 1, content = "adskfeiwnocono"),
-                TextBlock(seq = 1, content = "adskfeiwnocono"),
+                ContentBlockEntity(type = ContentType.Text, seq = 1L, content = "adskfeiwnocono"),
+                ContentBlockEntity(type = ContentType.Text, seq = 2L, content = "adskfeiwnocono"),
             ),
         )
         MemoListItem(memo = memo)
@@ -134,8 +135,10 @@ fun MemoListPreview() {
     ComposeMemoAppTheme() {
         val memos = List(10) {
             MemoEntity(
-                id = it,
-                contents = List(5) { seq -> TextBlock(seq = seq, content = "content $seq") }
+                id = it.toLong(),
+                contents = List(5) { seq ->
+                    ContentBlockEntity(type = ContentType.Text, seq = seq.toLong(), content = "content $seq")
+                }
             )
         }
         MemoList(memos = memos, onItemClick = {})

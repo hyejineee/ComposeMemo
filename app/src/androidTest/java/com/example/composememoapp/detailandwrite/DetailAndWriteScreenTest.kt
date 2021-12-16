@@ -11,10 +11,9 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.composememoapp.data.TextBlock
-import com.example.composememoapp.data.entity.MemoEntity
+import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.detailandwrite.DetailAndWriteScreen
-import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,7 +24,6 @@ class DetailAndWriteScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val memoViewModel = MemoViewModel()
     private val memo = MemoEntity(
         id = 0,
         contents = List(10) {
@@ -34,15 +32,13 @@ class DetailAndWriteScreenTest {
     )
 
     private fun setContentWithDetailAndWriteScreen(
-        memoEntity: MemoEntity? = null,
-        viewModel: MemoViewModel
+        memoEntity: MemoEntity? = null
     ) {
 
         composeTestRule.setContent {
             ComposeMemoAppTheme() {
                 DetailAndWriteScreen(
                     memoEntity = memoEntity,
-                    viewModel = viewModel,
                     {}
                 )
             }
@@ -54,7 +50,6 @@ class DetailAndWriteScreenTest {
 
         setContentWithDetailAndWriteScreen(
             memoEntity = memo,
-            viewModel = memoViewModel
         )
 
         composeTestRule
@@ -64,9 +59,7 @@ class DetailAndWriteScreenTest {
 
     @Test
     fun 새로운_메모를_작성하는_모드일_때_화면을_클릭하면_바로_메로를_작성할_수_있다() {
-        setContentWithDetailAndWriteScreen(
-            viewModel = memoViewModel
-        )
+        setContentWithDetailAndWriteScreen()
 
         composeTestRule
             .onNode(hasAnyChild(hasSetTextAction()))

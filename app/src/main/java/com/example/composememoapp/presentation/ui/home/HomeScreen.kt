@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -29,14 +30,60 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composememoapp.R
-import com.example.composememoapp.data.TextBlock
-import com.example.composememoapp.data.entity.MemoEntity
+import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
+import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.util.model.rememberTextInputState
 import com.example.composememoapp.util.toPx
 
 @Composable
 fun HomeScreen(
+    memoViewModel: MemoViewModel,
+    handleClickAddMemoButton: () -> Unit,
+    handleClickMemoItem: (MemoEntity) -> Unit
+) {
+    val memoList by memoViewModel.memoList.subscribeAsState(initial = emptyList())
+
+    HomeScreenContent(
+        memoList = memoList,
+        handleClickAddMemoButton =handleClickAddMemoButton,
+        handleClickMemoItem = handleClickMemoItem
+    )
+}
+
+@Composable
+fun HomeBottomBar(
+    handleClickAddMemoButton: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier =
+        modifier
+            .fillMaxWidth()
+            .height(150.dp)
+            .background(
+                Brush.verticalGradient(
+                    listOf(Color(0x00000000), Color.White),
+                    startY = 0.dp.toPx(),
+                    endY = 100.dp.toPx()
+                )
+            )
+    ) {
+        FloatingActionButton(
+            backgroundColor = MaterialTheme.colors.primaryVariant,
+            onClick = handleClickAddMemoButton,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(12.dp)
+        ) {
+            Icon(imageVector = Icons.Default.Add, contentDescription = "add memo")
+        }
+    }
+}
+
+@Composable
+fun HomeScreenContent(
+    memoList: List<MemoEntity>,
     handleClickAddMemoButton: () -> Unit,
     handleClickMemoItem: (MemoEntity) -> Unit
 ) {
@@ -90,25 +137,6 @@ fun HomeScreen(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 5.dp)
             )
 
-            val memoList = List(10) {
-
-                if (it == 0 || it == 4 || it == 5) {
-                    MemoEntity(
-                        id = it,
-                        contents = List(11) { s ->
-                            TextBlock(seq = s, content = "content$s")
-                        }
-                    )
-                } else {
-                    MemoEntity(
-                        id = it,
-                        contents = List(5) { s ->
-                            TextBlock(seq = s, content = "content$s")
-                        }
-                    )
-                }
-            }
-
             MemosScreen(
                 memos = memoList,
                 onItemClick = handleClickMemoItem,
@@ -122,42 +150,15 @@ fun HomeScreen(
                 .align(Alignment.BottomCenter)
         )
     }
+
 }
 
-@Composable
-fun HomeBottomBar(
-    handleClickAddMemoButton: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .background(
-                    Brush.verticalGradient(
-                        listOf(Color(0x00000000), Color.White),
-                        startY = 0.dp.toPx(),
-                        endY = 100.dp.toPx()
-                    )
-                )
-    ) {
-        FloatingActionButton(
-            backgroundColor = MaterialTheme.colors.primaryVariant,
-            onClick = handleClickAddMemoButton,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(12.dp)
-        ) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = "add memo")
-        }
-    }
-}
 
 @Preview
 @Composable
 fun HomeScreenPreview() {
+
     ComposeMemoAppTheme {
-        HomeScreen({}, {})
+        HomeScreenContent(memoList = emptyList(), {}, {})
     }
 }
