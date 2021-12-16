@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import com.example.composememoapp.data.database.entity.MemoEntity
 
 @Composable
-fun MemosScreen(
+fun MemosListScreen(
     memos: List<MemoEntity>,
     onItemClick: (MemoEntity) -> Unit,
     modifier: Modifier = Modifier,

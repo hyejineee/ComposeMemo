@@ -5,15 +5,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,9 +27,9 @@ import androidx.compose.ui.unit.sp
 import com.example.composememoapp.R
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
+import com.example.composememoapp.presentation.ui.component.BottomBar
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.util.model.rememberTextInputState
-import com.example.composememoapp.util.toPx
 
 @Composable
 fun HomeScreen(
@@ -51,35 +46,6 @@ fun HomeScreen(
     )
 }
 
-@Composable
-fun HomeBottomBar(
-    handleClickAddMemoButton: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .background(
-                    Brush.verticalGradient(
-                        listOf(Color(0x00000000), Color.White),
-                        startY = 0.dp.toPx(),
-                        endY = 100.dp.toPx()
-                    )
-                )
-    ) {
-        FloatingActionButton(
-            backgroundColor = MaterialTheme.colors.primaryVariant,
-            onClick = handleClickAddMemoButton,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(12.dp)
-        ) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = "add memo")
-        }
-    }
-}
 
 @Composable
 fun HomeScreenContent(
@@ -137,14 +103,14 @@ fun HomeScreenContent(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 5.dp)
             )
 
-            MemosScreen(
+            MemosListScreen(
                 memos = memoList,
                 onItemClick = handleClickMemoItem,
                 modifier = Modifier.padding(vertical = 10.dp)
             )
         }
 
-        HomeBottomBar(
+        BottomBar(
             handleClickAddMemoButton = handleClickAddMemoButton,
             modifier = Modifier
                 .align(Alignment.BottomCenter)

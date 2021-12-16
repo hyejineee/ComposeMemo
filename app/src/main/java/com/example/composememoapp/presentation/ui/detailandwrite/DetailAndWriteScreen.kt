@@ -26,6 +26,7 @@ import com.example.composememoapp.data.TextBlock
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
+import com.example.composememoapp.presentation.ui.component.ContentBlocks
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.util.model.ContentBlocksState
 import com.example.composememoapp.util.model.rememberContentBlocksState
@@ -48,8 +49,7 @@ fun DetailAndWriteScreen(
     )
 
     val handleSaveMemo = {
-        val newMemo = saveMemo(memoEntity = memoEntity, contentsState = contentsState)
-        memoViewModel.saveMemo(newMemo)
+        memoViewModel.saveMemo(memoEntity = memoEntity, contentsState = contentsState)
     }
 
     val handleAddDefaultBlock: (FocusRequester, SoftwareKeyboardController?) -> Unit =
@@ -60,6 +60,7 @@ fun DetailAndWriteScreen(
         }
 
     BackHandler() {
+        handleSaveMemo()
         handleBackButtonClick()
     }
 
@@ -70,31 +71,6 @@ fun DetailAndWriteScreen(
         handleSaveMemo = handleSaveMemo,
         handleAddDefaultBlock = handleAddDefaultBlock,
     )
-}
-
-private fun saveMemo(memoEntity: MemoEntity?, contentsState: ContentBlocksState): MemoEntity {
-    val newContents = contentsState
-        .contents
-        .map { block ->
-            block.convertToContentBlockEntity()
-        }
-        .filter { block ->
-            block.content.isNotBlank()
-        }
-        .mapIndexed { index, contentBlockEntity ->
-            contentBlockEntity.seq = index + 1L
-            contentBlockEntity
-        }
-
-    val newMemo = memoEntity?.let {
-        it.copy(
-            contents = newContents
-        )
-    } ?: MemoEntity(
-        contents = newContents
-    )
-
-    return newMemo
 }
 
 @ExperimentalComposeUiApi
@@ -138,23 +114,6 @@ fun DetailAndWriteScreenContent(
     }
 }
 
-@Composable
-fun ContentBlocks(contents: List<ContentBlock<*>>, focusRequester: FocusRequester) {
-    Column(modifier = Modifier.padding(16.dp)) {
-        for (content in contents) {
-            when (content) {
-                is TextBlock -> {
-                    val textInputState = rememberTextInputState(initialText = content.content)
-                    content.drawEditableContent(
-                        state = textInputState,
-                        modifier = Modifier
-                            .focusRequester(focusRequester)
-                    )
-                }
-            }
-        }
-    }
-}
 
 @ExperimentalComposeUiApi
 @Preview(showBackground = true)

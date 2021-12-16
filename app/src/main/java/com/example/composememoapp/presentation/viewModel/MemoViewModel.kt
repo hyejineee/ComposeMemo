@@ -7,6 +7,7 @@ import com.example.composememoapp.di.AndroidMainScheduler
 import com.example.composememoapp.di.IOScheduler
 import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
+import com.example.composememoapp.util.model.ContentBlocksState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Scheduler
@@ -26,14 +27,36 @@ class MemoViewModel @Inject constructor(
 
     val state = statePublishSubject.publish().autoConnect()
 
-    fun saveMemo(memoEntity: MemoEntity) {
-        saveMemoUseCase(memoEntity)
+    fun saveMemo(memoEntity: MemoEntity?, contentsState: ContentBlocksState) {
+
+        val memo = sortContentBlocks(memoEntity = memoEntity, contentsState = contentsState)
+
+        saveMemoUseCase(memo)
             .subscribeOn(ioScheduler)
             .observeOn(androidSchedulers)
             .subscribe(
                 { handleSuccess(MemoState.SaveSuccess) },
                 { error -> handleError(error.message) }
             )
+    }
+
+    private fun sortContentBlocks(memoEntity: MemoEntity?, contentsState: ContentBlocksState):MemoEntity{
+        val contentBlocks = contentsState.contents
+            .asSequence()
+            .map { block ->
+                block.convertToContentBlockEntity()
+            }
+            .filter { block->
+                block.content.isNotBlank()
+            }
+            .mapIndexed { index, contentBlockEntity ->
+                contentBlockEntity.seq = index + 1L
+                contentBlockEntity
+            }.toList()
+
+        return memoEntity?.let {
+            it.copy(contents = contentBlocks)
+        }?: MemoEntity(contents = contentBlocks)
     }
 
     private fun handleSuccess(state: MemoState) {
