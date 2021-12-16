@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.given
-import org.mockito.kotlin.whenever
 
 class MemoViewModelTest {
 
@@ -52,8 +51,10 @@ class MemoViewModelTest {
     )
 
     private val contentState =
-        ContentBlocksState(memoEntityMock.contents.map { it.convertToContentBlockModel() }
-            .toMutableList())
+        ContentBlocksState(
+            memoEntityMock.contents.map { it.convertToContentBlockModel() }
+                .toMutableList()
+        )
 
     private val memoListMock = List(20) {
         MemoEntity(
@@ -83,7 +84,6 @@ class MemoViewModelTest {
 
         testObserver.awaitCount(1)
         assertThat(testObserver.values().first()).isEqualTo(MemoState.SaveSuccess)
-
     }
 
     @Test
@@ -97,7 +97,7 @@ class MemoViewModelTest {
             .state
             .subscribe(testObserver)
 
-        memoViewModel.saveMemo(memoEntityMock, contents =contentState.contents )
+        memoViewModel.saveMemo(memoEntityMock, contents = contentState.contents)
 
         testObserver.awaitCount(1)
         assertThat(testObserver.values().first()).isEqualTo(MemoState.Error("메모 저장 에러"))

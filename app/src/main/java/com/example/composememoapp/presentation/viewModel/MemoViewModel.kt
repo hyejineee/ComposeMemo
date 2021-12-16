@@ -8,7 +8,6 @@ import com.example.composememoapp.di.AndroidMainScheduler
 import com.example.composememoapp.di.IOScheduler
 import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
-import com.example.composememoapp.util.model.ContentBlocksState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Scheduler
