@@ -101,6 +101,6 @@ class MemoViewModelTest {
             .willReturn(listOf(memoListMock).toFlowable())
 
         memoViewModel.getAllMemo()
-        memoViewModel.memoList.test().assertValue(memoListMock)
+        memoViewModel.memoList.test().await().assertValue(memoListMock)
     }
 }

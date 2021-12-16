@@ -7,7 +7,8 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.composememoapp.data.TextBlock
+import com.example.composememoapp.data.ContentType
+import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.home.MemoList
@@ -30,9 +31,9 @@ class MemoListTest {
 
     private val memoList = List(5) {
         MemoEntity(
-            id = it,
+            id = it.toLong(),
             contents = List(5) { s ->
-                TextBlock(seq = s, content = "content$s")
+                ContentBlockEntity(type = ContentType.Text, seq = s.toLong(), content = "content$s")
             }
         )
     }

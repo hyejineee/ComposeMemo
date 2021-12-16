@@ -22,7 +22,7 @@ class MemoViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val statePublishSubject: PublishSubject<MemoState> = PublishSubject.create()
-    var memoList: Flowable<List<MemoEntity>> = getAllMemoUseCase()
+    lateinit var memoList: Flowable<List<MemoEntity>>
 
     val state = statePublishSubject.publish().autoConnect()
 
@@ -50,5 +50,7 @@ class MemoViewModel @Inject constructor(
 
     fun getAllMemo() {
         memoList = getAllMemoUseCase()
+            .subscribeOn(ioScheduler)
+            .observeOn(androidSchedulers)
     }
 }

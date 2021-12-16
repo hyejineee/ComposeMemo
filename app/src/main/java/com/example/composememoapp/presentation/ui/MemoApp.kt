@@ -31,8 +31,6 @@ fun MemoApp(
     memoViewModel: MemoViewModel
 ) {
     val navController = rememberNavController()
-    memoViewModel.getAllMemo()
-
     ComposeMemoAppTheme() {
         Scaffold() {
             MemoAppNavHost(

@@ -10,13 +10,20 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.composememoapp.data.TextBlock
+import com.example.composememoapp.data.ContentType
+import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
+import com.example.composememoapp.data.repository.MemoRepository
+import com.example.composememoapp.domain.GetAllMemoUseCase
+import com.example.composememoapp.domain.SaveMemoUseCase
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.detailandwrite.DetailAndWriteScreen
+import com.example.composememoapp.presentation.viewModel.MemoViewModel
+import io.reactivex.rxjava3.schedulers.Schedulers
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
 
 @ExperimentalComposeUiApi
 @RunWith(AndroidJUnit4::class)
@@ -24,10 +31,22 @@ class DetailAndWriteScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
+    private val testMemoRepository = Mockito.mock(MemoRepository::class.java)
+
+    private val saveMemoUseCaseMock = SaveMemoUseCase(testMemoRepository)
+    private val getAllMemoUseCase = GetAllMemoUseCase(testMemoRepository)
+
+    private val memoViewModel = MemoViewModel(
+        ioScheduler = Schedulers.io(),
+        saveMemoUseCase = saveMemoUseCaseMock,
+        getAllMemoUseCase = getAllMemoUseCase,
+        androidSchedulers = Schedulers.newThread()
+    )
+
     private val memo = MemoEntity(
         id = 0,
         contents = List(10) {
-            TextBlock(seq = it, content = "this is text block content $it")
+            ContentBlockEntity(type = ContentType.Text, seq = it.toLong(), content = "this is text block content $it")
         }
     )
 
@@ -39,7 +58,8 @@ class DetailAndWriteScreenTest {
             ComposeMemoAppTheme() {
                 DetailAndWriteScreen(
                     memoEntity = memoEntity,
-                    {}
+                    memoViewModel = memoViewModel,
+                    handleBackButtonClick = {}
                 )
             }
         }
