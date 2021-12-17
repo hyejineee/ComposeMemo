@@ -8,8 +8,20 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.composememoapp.R
+import com.example.composememoapp.data.ContentType
+import com.example.composememoapp.data.database.entity.ContentBlockEntity
+import com.example.composememoapp.data.database.entity.MemoEntity
+import com.example.composememoapp.data.repository.MemoRepository
+import com.example.composememoapp.domain.DeleteMemoUseCase
+import com.example.composememoapp.domain.GetAllMemoUseCase
+import com.example.composememoapp.domain.SaveMemoUseCase
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.home.HomeScreen
+import com.example.composememoapp.presentation.viewModel.MemoViewModel
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.kotlin.toFlowable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -23,11 +35,51 @@ class HomeScreenTest {
 
     lateinit var context: Context
 
+    private val testMemoRepository = object : MemoRepository {
+        override fun getAllMemo(): Flowable<List<MemoEntity>> {
+            return listOf(memoListMock).toFlowable()
+        }
+
+        override fun insertMemo(memoEntity: MemoEntity): Completable {
+            return Completable.complete()
+        }
+
+        override fun deleteMemo(memoEntity: MemoEntity): Completable {
+            return Completable.complete()
+        }
+    }
+
+    private val saveMemoUseCaseMock = SaveMemoUseCase(testMemoRepository)
+    private val getAllMemoUseCase = GetAllMemoUseCase(testMemoRepository)
+    private val deleteMemoUseCase = DeleteMemoUseCase(testMemoRepository)
+
+    private val memoViewModel = MemoViewModel(
+        ioScheduler = Schedulers.io(),
+        saveMemoUseCase = saveMemoUseCaseMock,
+        getAllMemoUseCase = getAllMemoUseCase,
+        deleteMemoUseCase = deleteMemoUseCase,
+        androidSchedulers = Schedulers.newThread()
+    )
+
+    private val memoListMock = List(20) {
+        MemoEntity(
+            id = it.toLong(),
+            contents = List(10) {
+                ContentBlockEntity(
+                    type = ContentType.Text,
+                    seq = it.toLong(),
+                    content = "this is textBlock$it"
+                )
+            }
+        )
+    }
+
     @Before
     fun init() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         composeTestRule.mainClock.autoAdvance = false
         composeTestRule.mainClock.advanceTimeBy(50L)
+        memoViewModel.getAllMemo()
     }
 
     private fun setContentWithHomeScreen() {
@@ -35,7 +87,8 @@ class HomeScreenTest {
             ComposeMemoAppTheme() {
                 HomeScreen(
                     handleClickMemoItem = {},
-                    handleClickAddMemoButton = {}
+                    handleClickAddMemoButton = {},
+                    memoViewModel = memoViewModel
                 )
             }
         }

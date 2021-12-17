@@ -10,12 +10,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.composememoapp.data.TextBlock
-import com.example.composememoapp.data.entity.MemoEntity
+import com.example.composememoapp.data.ContentType
+import com.example.composememoapp.data.database.entity.ContentBlockEntity
+import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
+import com.example.composememoapp.presentation.ui.component.StaggeredGridColumn
 
 @Composable
 fun MemoList(
@@ -23,13 +24,11 @@ fun MemoList(
     onItemClick: (MemoEntity) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
-        PinterestGrid(modifier = modifier.padding(horizontal = 20.dp)) {
+        StaggeredGridColumn(modifier = modifier.padding(horizontal = 20.dp)) {
             for (memo in memos) {
                 MemoListItem(
                     memo = memo,
-                    onItemClick = onItemClick,
                     modifier = Modifier.clickable { onItemClick(memo) }
                 )
             }
@@ -40,7 +39,6 @@ fun MemoList(
 @Composable
 fun MemoListItem(
     memo: MemoEntity,
-    onItemClick: (MemoEntity) -> Unit,
     modifier: Modifier = Modifier
 ) {
     androidx.compose.material.Surface(
@@ -51,64 +49,9 @@ fun MemoListItem(
             .padding(4.dp)
 
     ) {
-
         Column(modifier = Modifier.padding(10.dp)) {
-            memo.contents.forEach {
+            memo.contents.map { it.convertToContentBlockModel() }.forEach {
                 it.drawOnlyReadContent(modifier = Modifier)
-            }
-        }
-    }
-}
-
-@Composable
-fun PinterestGrid(
-    modifier: Modifier = Modifier,
-    cols: Int = 2,
-    content: @Composable () -> Unit
-) {
-    Layout(
-        modifier = modifier,
-        content = content
-    ) { measurables, constraints ->
-        val cellWidths = IntArray(cols) { 0 }
-        val cellHeights = IntArray(cols) { 0 }
-
-        val placeables = measurables.mapIndexed { index, measurable ->
-
-            val childConstraints = constraints.copy(
-                minWidth = constraints.maxWidth / cols,
-                maxWidth = constraints.maxWidth / cols
-            )
-            val placeable = measurable.measure(childConstraints)
-
-            val cell = index % cols
-            cellWidths[cell] = constraints.maxWidth / cols
-            cellHeights[cell] += placeable.height
-
-            placeable
-        }
-
-        val w = constraints.maxWidth
-        val h =
-            cellHeights.maxOrNull()?.coerceIn(constraints.minHeight.rangeTo(constraints.maxHeight))
-                ?: constraints.minHeight
-
-        val cellX = IntArray(cols) { 0 }
-
-        for (i in 1 until cols) {
-            cellX[i] = cellX[i - 1] + cellWidths[i - 1]
-        }
-
-        layout(w, h) {
-            val cellY = IntArray(cols) { 0 }
-
-            placeables.forEachIndexed { index, placeable ->
-                val cell = index % cols
-                placeable.placeRelative(
-                    x = cellX[cell],
-                    y = cellY[cell],
-                )
-                cellY[cell] += placeable.height
             }
         }
     }
@@ -121,11 +64,11 @@ fun MemoListItemPreview() {
         val memo = MemoEntity(
             id = 1,
             contents = listOf(
-                TextBlock(seq = 1, content = "adskfeiwnocono"),
-                TextBlock(seq = 1, content = "adskfeiwnocono"),
+                ContentBlockEntity(type = ContentType.Text, seq = 1L, content = "adskfeiwnocono"),
+                ContentBlockEntity(type = ContentType.Text, seq = 2L, content = "adskfeiwnocono"),
             ),
         )
-        MemoListItem(memo = memo, onItemClick = {})
+        MemoListItem(memo = memo)
     }
 }
 
@@ -136,8 +79,10 @@ fun MemoListPreview() {
     ComposeMemoAppTheme() {
         val memos = List(10) {
             MemoEntity(
-                id = it,
-                contents = List(5) { seq -> TextBlock(seq = seq, content = "content $seq") }
+                id = it.toLong(),
+                contents = List(5) { seq ->
+                    ContentBlockEntity(type = ContentType.Text, seq = seq.toLong(), content = "content $seq")
+                }
             )
         }
         MemoList(memos = memos, onItemClick = {})
