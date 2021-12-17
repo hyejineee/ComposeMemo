@@ -5,18 +5,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -29,17 +26,47 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composememoapp.R
-import com.example.composememoapp.data.TextBlock
-import com.example.composememoapp.data.entity.MemoEntity
+import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
+import com.example.composememoapp.presentation.ui.component.BottomBar
+import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.util.model.rememberTextInputState
-import com.example.composememoapp.util.toPx
 
 @Composable
 fun HomeScreen(
+    memoViewModel: MemoViewModel,
     handleClickAddMemoButton: () -> Unit,
     handleClickMemoItem: (MemoEntity) -> Unit
 ) {
+
+    LaunchedEffect(key1 = true) {
+        memoViewModel.getAllMemo()
+    }
+
+    val memoList by memoViewModel.memoList.subscribeAsState(initial = emptyList())
+
+    val handleChangeSearchInput = { text: String ->
+        memoViewModel.searchMemo(text)
+    }
+
+    HomeScreenContent(
+        memoList = memoList,
+        handleChangeSearchInput = handleChangeSearchInput,
+        handleClickAddMemoButton = handleClickAddMemoButton,
+        handleClickMemoItem = handleClickMemoItem
+    )
+}
+
+@Composable
+fun HomeScreenContent(
+    handleChangeSearchInput: (String) -> Unit,
+    memoList: List<MemoEntity>,
+    handleClickAddMemoButton: () -> Unit,
+    handleClickMemoItem: (MemoEntity) -> Unit
+) {
+
+    val searchTextInputState = rememberTextInputState(initialText = "")
+    handleChangeSearchInput(searchTextInputState.text)
 
     Box(modifier = Modifier.fillMaxWidth()) {
         Column(
@@ -62,7 +89,6 @@ fun HomeScreen(
                     .padding(20.dp)
             )
 
-            val searchTextInputState = rememberTextInputState(initialText = "")
             SearchMemoTextInput(
                 state = searchTextInputState,
                 modifier = Modifier
@@ -90,33 +116,14 @@ fun HomeScreen(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 5.dp)
             )
 
-            val memoList = List(10) {
-
-                if (it == 0 || it == 4 || it == 5) {
-                    MemoEntity(
-                        id = it,
-                        contents = List(11) { s ->
-                            TextBlock(seq = s, content = "content$s")
-                        }
-                    )
-                } else {
-                    MemoEntity(
-                        id = it,
-                        contents = List(5) { s ->
-                            TextBlock(seq = s, content = "content$s")
-                        }
-                    )
-                }
-            }
-
-            MemosScreen(
+            MemosListScreen(
                 memos = memoList,
                 onItemClick = handleClickMemoItem,
                 modifier = Modifier.padding(vertical = 10.dp)
             )
         }
 
-        HomeBottomBar(
+        BottomBar(
             handleClickAddMemoButton = handleClickAddMemoButton,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -124,40 +131,11 @@ fun HomeScreen(
     }
 }
 
-@Composable
-fun HomeBottomBar(
-    handleClickAddMemoButton: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .background(
-                    Brush.verticalGradient(
-                        listOf(Color(0x00000000), Color.White),
-                        startY = 0.dp.toPx(),
-                        endY = 100.dp.toPx()
-                    )
-                )
-    ) {
-        FloatingActionButton(
-            backgroundColor = MaterialTheme.colors.primaryVariant,
-            onClick = handleClickAddMemoButton,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(12.dp)
-        ) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = "add memo")
-        }
-    }
-}
-
 @Preview
 @Composable
 fun HomeScreenPreview() {
+
     ComposeMemoAppTheme {
-        HomeScreen({}, {})
+//        HomeScreenContent(memoList = emptyList(), {}, {})
     }
 }
