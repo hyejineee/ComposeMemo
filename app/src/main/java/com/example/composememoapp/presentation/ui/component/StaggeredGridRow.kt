@@ -51,7 +51,7 @@ fun StaggeredGridRow(
             var y = 0
 
             placeables.forEachIndexed { index, placeable ->
-                if(cellX[index] == 0) {
+                if(index >0 && cellX[index] == 0) {
                     y += placeable.height
                 }
                 placeable.placeRelative(
