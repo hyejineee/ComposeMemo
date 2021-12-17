@@ -1,6 +1,8 @@
 package com.example.composememoapp.data.database
 
+import androidx.compose.runtime.Composable
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
@@ -15,4 +17,7 @@ interface MemoDao {
 
     @Insert(onConflict = REPLACE)
     fun insertMemo(memoEntity: MemoEntity): Completable
+
+    @Delete
+    fun deleteMemo(memoEntity: MemoEntity) : Completable
 }

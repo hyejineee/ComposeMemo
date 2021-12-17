@@ -1,6 +1,7 @@
 package com.example.composememoapp.di
 
 import com.example.composememoapp.data.repository.MemoRepository
+import com.example.composememoapp.domain.DeleteMemoUseCase
 import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
 import dagger.Module
@@ -16,4 +17,7 @@ object UseCaseModule {
 
     @Provides
     fun provideSaveMemoUseCase(repository: MemoRepository) = SaveMemoUseCase(repository)
+
+    @Provides
+    fun provideDeleteMemoUseCase(repository: MemoRepository) = DeleteMemoUseCase(repository)
 }

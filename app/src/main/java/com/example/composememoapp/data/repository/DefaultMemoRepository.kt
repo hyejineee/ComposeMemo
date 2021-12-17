@@ -15,4 +15,7 @@ class DefaultMemoRepository @Inject constructor(
 
     override fun insertMemo(memoEntity: MemoEntity): Completable =
         memoDao.insertMemo(memoEntity = memoEntity)
+
+    override fun deleteMemo(memoEntity: MemoEntity): Completable =
+        memoDao.deleteMemo(memoEntity = memoEntity)
 }

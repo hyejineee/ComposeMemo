@@ -4,6 +4,7 @@ import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.data.repository.MemoRepository
+import com.example.composememoapp.domain.DeleteMemoUseCase
 import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
 import com.example.composememoapp.presentation.viewModel.MemoState
@@ -31,12 +32,14 @@ class MemoViewModelTest {
 
     private val saveMemoUseCaseMock = SaveMemoUseCase(testMemoRepository)
     private val getAllMemoUseCase = GetAllMemoUseCase(testMemoRepository)
+    private val deleteMemoUseCase = DeleteMemoUseCase(testMemoRepository)
 
     private val schedulers = Schedulers.newThread()
     private val memoViewModel = MemoViewModel(
         ioScheduler = schedulers,
         saveMemoUseCase = saveMemoUseCaseMock,
         getAllMemoUseCase = getAllMemoUseCase,
+        deleteMemoUseCase = deleteMemoUseCase,
         androidSchedulers = schedulers
     )
 
@@ -131,5 +134,23 @@ class MemoViewModelTest {
         val actual = memoViewModel.memoList.test().awaitDone(1000, TimeUnit.MILLISECONDS).values().first()
 
         assertThat(actual).isEqualTo(expected)
+    }
+
+    @Test
+    @DisplayName("메모 삭제 성공 시 삭제 성공 상태를 발행한다.")
+    fun deleteMemoSuccessTest(){
+        given(testMemoRepository.deleteMemo(any()))
+            .willReturn(Completable.complete())
+
+        val testObserver: TestObserver<MemoState> = TestObserver()
+        memoViewModel
+            .state
+            .subscribe(testObserver)
+
+        memoViewModel.deleteMemo(memoEntityMock)
+
+        testObserver.awaitCount(1)
+        assertThat(testObserver.values().first()).isEqualTo(MemoState.DeleteSuccess)
+
     }
 }

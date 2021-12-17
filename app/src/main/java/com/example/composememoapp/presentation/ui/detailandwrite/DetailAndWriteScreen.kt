@@ -2,15 +2,21 @@ package com.example.composememoapp.presentation.ui.detailandwrite
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.twotone.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -49,6 +55,10 @@ fun DetailAndWriteScreen(
         memoViewModel.saveMemo(memoEntity = memoEntity, contentsState.contents)
     }
 
+    val handleDeleteMemo = { memo: MemoEntity ->
+        memoViewModel.deleteMemo(memo)
+    }
+
     val handleAddDefaultBlock: (FocusRequester, SoftwareKeyboardController?) -> Unit =
         { f: FocusRequester, k: SoftwareKeyboardController? ->
             contentsState.contents.add(TextBlock(contentsState.contents.last().seq + 1, ""))
@@ -64,6 +74,7 @@ fun DetailAndWriteScreen(
     DetailAndWriteScreenContent(
         memoEntity = memoEntity,
         contents = contentsState.contents,
+        handleDeleteMemo = handleDeleteMemo,
         handleBackButtonClick = handleBackButtonClick,
         handleSaveMemo = handleSaveMemo,
         handleAddDefaultBlock = handleAddDefaultBlock,
@@ -75,6 +86,7 @@ fun DetailAndWriteScreen(
 fun DetailAndWriteScreenContent(
     memoEntity: MemoEntity?,
     contents: List<ContentBlock<*>>,
+    handleDeleteMemo :(MemoEntity) -> Unit,
     handleAddDefaultBlock: (FocusRequester, SoftwareKeyboardController?) -> Unit,
     handleBackButtonClick: () -> Unit,
     handleSaveMemo: () -> Unit
@@ -84,19 +96,40 @@ fun DetailAndWriteScreenContent(
 
     Scaffold(
         topBar = {
-            TopAppBar() {
-                Icon(
+            TopAppBar(
+            ) {
+                Box(
                     modifier = Modifier
-                        .clickable(
-                            onClick = {
-                                handleSaveMemo()
+                        .fillMaxWidth()
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .clickable(
+                                onClick = {
+                                    handleSaveMemo()
+                                    handleBackButtonClick()
+                                }
+                            )
+                            .padding(10.dp),
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = null
+                    )
+
+                    Icon(
+                        imageVector = Icons.TwoTone.Delete,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clickable {
+                                memoEntity?.let {
+                                    handleDeleteMemo(it)
+                                }
                                 handleBackButtonClick()
                             }
-                        )
-                        .padding(10.dp),
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = null
-                )
+                            .align(Alignment.CenterEnd)
+                            .padding(end = 16.dp)
+                    )
+                }
+
             }
         },
         modifier = Modifier
@@ -123,8 +156,8 @@ fun DetailAndWriteScreenPreview() {
                     type = ContentType.Text,
                     seq = it.toLong(),
                     content = "this is text block content $it" +
-                        " this is text block content $it" +
-                        " this is text block content $it"
+                            " this is text block content $it" +
+                            " this is text block content $it"
                 )
             }
         )
@@ -133,6 +166,7 @@ fun DetailAndWriteScreenPreview() {
             handleBackButtonClick = {},
             handleAddDefaultBlock = { f, k -> },
             handleSaveMemo = {},
+            handleDeleteMemo = {},
             contents = memo.contents.map { it.convertToContentBlockModel() }
         )
     }

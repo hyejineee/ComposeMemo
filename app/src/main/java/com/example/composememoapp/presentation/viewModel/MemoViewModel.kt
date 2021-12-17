@@ -6,6 +6,7 @@ import com.example.composememoapp.data.ContentBlock
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.di.AndroidMainScheduler
 import com.example.composememoapp.di.IOScheduler
+import com.example.composememoapp.domain.DeleteMemoUseCase
 import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class MemoViewModel @Inject constructor(
     private val saveMemoUseCase: SaveMemoUseCase,
     private val getAllMemoUseCase: GetAllMemoUseCase,
+    private val deleteMemoUseCase: DeleteMemoUseCase,
     @AndroidMainScheduler private val androidSchedulers: Scheduler,
     @IOScheduler private val ioScheduler: Scheduler,
 ) : ViewModel() {
@@ -59,6 +61,33 @@ class MemoViewModel @Inject constructor(
             )
     }
 
+    fun getMemo(memoId: Long) = _memoList.find { it.id == memoId }
+
+    fun getAllMemo() {
+        getAllMemoUseCase()
+            .subscribeOn(ioScheduler)
+            .observeOn(androidSchedulers)
+            .subscribe { memos ->
+                _querySource.onNext("")
+                _memoListSource.onNext(memos)
+                _memoList = memos
+            }
+    }
+
+    fun searchMemo(word: String) {
+        _querySource.onNext(word)
+    }
+
+    fun deleteMemo(memoEntity: MemoEntity){
+        deleteMemoUseCase(memoEntity)
+            .subscribeOn(ioScheduler)
+            .observeOn(androidSchedulers)
+            .subscribe(
+                { handleSuccess(MemoState.DeleteSuccess) },
+                { error -> handleError(error.message) }
+            )
+    }
+
     private fun sortContentBlocks(
         memoEntity: MemoEntity?,
         contents: List<ContentBlock<*>>
@@ -89,22 +118,5 @@ class MemoViewModel @Inject constructor(
     private fun handleError(errorMsg: String?) {
         Log.d("MemoViewModel", "handleError : $errorMsg ")
         _stateSource.onNext(MemoState.Error(errorMsg ?: "에러가 발생했습니다."))
-    }
-
-    fun getMemo(memoId: Long) = _memoList.find { it.id == memoId }
-
-    fun getAllMemo() {
-        getAllMemoUseCase()
-            .subscribeOn(ioScheduler)
-            .observeOn(androidSchedulers)
-            .subscribe { memos ->
-                _querySource.onNext("")
-                _memoListSource.onNext(memos)
-                _memoList = memos
-            }
-    }
-
-    fun searchMemo(word: String) {
-        _querySource.onNext(word)
     }
 }
