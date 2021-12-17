@@ -138,7 +138,7 @@ class MemoViewModelTest {
 
     @Test
     @DisplayName("메모 삭제 성공 시 삭제 성공 상태를 발행한다.")
-    fun deleteMemoSuccessTest(){
+    fun deleteMemoSuccessTest() {
         given(testMemoRepository.deleteMemo(any()))
             .willReturn(Completable.complete())
 
@@ -151,6 +151,5 @@ class MemoViewModelTest {
 
         testObserver.awaitCount(1)
         assertThat(testObserver.values().first()).isEqualTo(MemoState.DeleteSuccess)
-
     }
 }

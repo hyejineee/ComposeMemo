@@ -86,7 +86,7 @@ fun DetailAndWriteScreen(
 fun DetailAndWriteScreenContent(
     memoEntity: MemoEntity?,
     contents: List<ContentBlock<*>>,
-    handleDeleteMemo :(MemoEntity) -> Unit,
+    handleDeleteMemo: (MemoEntity) -> Unit,
     handleAddDefaultBlock: (FocusRequester, SoftwareKeyboardController?) -> Unit,
     handleBackButtonClick: () -> Unit,
     handleSaveMemo: () -> Unit
@@ -96,8 +96,7 @@ fun DetailAndWriteScreenContent(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-            ) {
+            TopAppBar() {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -129,7 +128,6 @@ fun DetailAndWriteScreenContent(
                             .padding(end = 16.dp)
                     )
                 }
-
             }
         },
         modifier = Modifier
@@ -156,8 +154,8 @@ fun DetailAndWriteScreenPreview() {
                     type = ContentType.Text,
                     seq = it.toLong(),
                     content = "this is text block content $it" +
-                            " this is text block content $it" +
-                            " this is text block content $it"
+                        " this is text block content $it" +
+                        " this is text block content $it"
                 )
             }
         )

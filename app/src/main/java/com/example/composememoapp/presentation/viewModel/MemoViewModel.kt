@@ -78,7 +78,7 @@ class MemoViewModel @Inject constructor(
         _querySource.onNext(word)
     }
 
-    fun deleteMemo(memoEntity: MemoEntity){
+    fun deleteMemo(memoEntity: MemoEntity) {
         deleteMemoUseCase(memoEntity)
             .subscribeOn(ioScheduler)
             .observeOn(androidSchedulers)

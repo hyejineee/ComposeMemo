@@ -1,6 +1,5 @@
 package com.example.composememoapp.data.database
 
-import androidx.compose.runtime.Composable
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -19,5 +18,5 @@ interface MemoDao {
     fun insertMemo(memoEntity: MemoEntity): Completable
 
     @Delete
-    fun deleteMemo(memoEntity: MemoEntity) : Completable
+    fun deleteMemo(memoEntity: MemoEntity): Completable
 }
