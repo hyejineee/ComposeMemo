@@ -1,5 +1,6 @@
 package com.example.composememoapp.viewModel
 
+import android.util.Log
 import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
@@ -14,6 +15,7 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.kotlin.toFlowable
 import io.reactivex.rxjava3.observers.TestObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
@@ -41,7 +43,7 @@ class MemoViewModelTest {
 
     private val memoEntityMock = MemoEntity(
         id = 1,
-        contents = List(10) {
+        contents = List(5) {
             ContentBlockEntity(
                 type = ContentType.Text,
                 seq = it.toLong(),
@@ -56,10 +58,10 @@ class MemoViewModelTest {
                 .toMutableList()
         )
 
-    private val memoListMock = List(20) {
+    private val memoListMock = List(5) {
         MemoEntity(
             id = it.toLong(),
-            contents = List(10) {
+            contents = List(5) {
                 ContentBlockEntity(
                     type = ContentType.Text,
                     seq = it.toLong(),
@@ -110,6 +112,25 @@ class MemoViewModelTest {
             .willReturn(listOf(memoListMock).toFlowable())
 
         memoViewModel.getAllMemo()
-        memoViewModel.memoList.test().await().assertValue(memoListMock)
+        memoViewModel.memoList.test().awaitCount(1).assertValue(memoListMock)
+    }
+
+    @Test
+    @DisplayName("검색어 1이 포함된 메모만 리스트에 표시한다.")
+    fun filterMemoList() {
+
+        val expected = memoListMock.filter {
+            it.contents.any { block -> block.content.contains("1") }
+        }
+
+        given(testMemoRepository.getAllMemo())
+            .willReturn(listOf(memoListMock).toFlowable())
+
+        memoViewModel.getAllMemo()
+        memoViewModel.searchMemo("1")
+
+        val actual = memoViewModel.memoList.test().awaitDone(1000, TimeUnit.MILLISECONDS).values().first()
+
+        assertThat(actual).isEqualTo(expected)
     }
 }

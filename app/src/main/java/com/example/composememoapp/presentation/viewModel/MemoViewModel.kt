@@ -9,9 +9,11 @@ import com.example.composememoapp.di.IOScheduler
 import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.functions.BiFunction
 import io.reactivex.rxjava3.subjects.PublishSubject
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,10 +24,26 @@ class MemoViewModel @Inject constructor(
     @IOScheduler private val ioScheduler: Scheduler,
 ) : ViewModel() {
 
-    private val statePublishSubject: PublishSubject<MemoState> = PublishSubject.create()
-    lateinit var memoList: Flowable<List<MemoEntity>>
+    private val _stateSource: PublishSubject<MemoState> = PublishSubject.create()
+    private val _querySource: PublishSubject<String> = PublishSubject.create()
+    private val _memoListSource: PublishSubject<List<MemoEntity>> = PublishSubject.create()
+    private var _memoList :List<MemoEntity> = emptyList()
 
-    val state = statePublishSubject.publish().autoConnect()
+    val memoList:Observable<List<MemoEntity>> =
+        Observable.combineLatest(_memoListSource, _querySource, BiFunction { t1, t2 ->
+            if (t2.isBlank() or t2.isNullOrEmpty()) {
+                t1
+            } else {
+                t1.filter { it.contents.any { block -> block.content.contains(t2) } }
+            }
+        }).publish().autoConnect()
+
+    val state:Observable<MemoState> = _stateSource.publish().autoConnect()
+
+    init {
+        _querySource.debounce(500L,TimeUnit.MILLISECONDS)
+        memoList.subscribe()
+    }
 
     fun saveMemo(memoEntity: MemoEntity?, contents: List<ContentBlock<*>>) {
         val memo = sortContentBlocks(memoEntity = memoEntity, contents = contents)
@@ -62,19 +80,30 @@ class MemoViewModel @Inject constructor(
 
     private fun handleSuccess(state: MemoState) {
         Log.d("MemoViewModel", "handleSuccess : $state ")
-        statePublishSubject.onNext(state)
+        _stateSource.onNext(state)
     }
 
     private fun handleError(errorMsg: String?) {
         Log.d("MemoViewModel", "handleError : $errorMsg ")
-        statePublishSubject.onNext(MemoState.Error(errorMsg ?: "에러가 발생했습니다."))
+        _stateSource.onNext(MemoState.Error(errorMsg ?: "에러가 발생했습니다."))
     }
 
-    fun getMemo(memoId: Long) = memoList.map { list -> list.find { it.id == memoId } }
+    fun getMemo(memoId: Long) = _memoList.find { it.id == memoId }
 
     fun getAllMemo() {
-        memoList = getAllMemoUseCase()
+        getAllMemoUseCase()
             .subscribeOn(ioScheduler)
             .observeOn(androidSchedulers)
+            .subscribe { memos ->
+                _querySource.onNext("")
+                _memoListSource.onNext(memos)
+                _memoList = memos
+            }
+    }
+
+    fun searchMemo(word: String) {
+        _querySource.onNext(word)
     }
 }
+
+

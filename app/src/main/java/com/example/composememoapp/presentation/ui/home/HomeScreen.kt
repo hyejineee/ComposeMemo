@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rxjava3.subscribeAsState
@@ -37,10 +38,20 @@ fun HomeScreen(
     handleClickAddMemoButton: () -> Unit,
     handleClickMemoItem: (MemoEntity) -> Unit
 ) {
+
+    LaunchedEffect(key1 = true){
+        memoViewModel.getAllMemo()
+    }
+
     val memoList by memoViewModel.memoList.subscribeAsState(initial = emptyList())
+
+    val handleChangeSearchInput = { text:String->
+        memoViewModel.searchMemo(text)
+    }
 
     HomeScreenContent(
         memoList = memoList,
+        handleChangeSearchInput = handleChangeSearchInput,
         handleClickAddMemoButton = handleClickAddMemoButton,
         handleClickMemoItem = handleClickMemoItem
     )
@@ -48,10 +59,15 @@ fun HomeScreen(
 
 @Composable
 fun HomeScreenContent(
+    handleChangeSearchInput :(String)->Unit,
     memoList: List<MemoEntity>,
     handleClickAddMemoButton: () -> Unit,
     handleClickMemoItem: (MemoEntity) -> Unit
 ) {
+
+
+    val searchTextInputState = rememberTextInputState(initialText = "")
+    handleChangeSearchInput(searchTextInputState.text)
 
     Box(modifier = Modifier.fillMaxWidth()) {
         Column(
@@ -74,7 +90,7 @@ fun HomeScreenContent(
                     .padding(20.dp)
             )
 
-            val searchTextInputState = rememberTextInputState(initialText = "")
+
             SearchMemoTextInput(
                 state = searchTextInputState,
                 modifier = Modifier
@@ -122,6 +138,6 @@ fun HomeScreenContent(
 fun HomeScreenPreview() {
 
     ComposeMemoAppTheme {
-        HomeScreenContent(memoList = emptyList(), {}, {})
+//        HomeScreenContent(memoList = emptyList(), {}, {})
     }
 }

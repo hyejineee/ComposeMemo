@@ -1,9 +1,6 @@
 package com.example.composememoapp.presentation.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rxjava3.subscribeAsState
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -66,11 +63,11 @@ fun MemoAppNavHost(
             ),
         ) { entry ->
             val memoId = entry.arguments?.getLong(Key.MEMO_ARGS_KEY) ?: -1L
-            val memo = memoViewModel.getMemo(memoId = memoId).subscribeAsState(initial = null)
+            val memo = memoViewModel.getMemo(memoId = memoId)
 
             DetailAndWriteScreen(
                 memoViewModel = memoViewModel,
-                memoEntity = memo.value,
+                memoEntity = memo,
                 handleBackButtonClick = { handleBackButtonClick() },
             )
         }
