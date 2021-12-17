@@ -3,6 +3,7 @@ package com.example.composememoapp.presentation.ui.detailandwrite
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -134,14 +135,20 @@ fun DetailAndWriteScreenContent(
             .clickable { handleAddDefaultBlock(focusRequester, keyboardController) }
             .fillMaxSize()
     ) {
+        Column() {
+            TagScreen(
+                tagList = memoEntity?.tagEntities ?: emptyList(),
+                modifier = Modifier.padding(10.dp)
+            )
 
-
-        ContentBlocks(
-            contents = contents,
-            focusRequester = focusRequester
-        )
+            ContentBlocks(
+                contents = contents,
+                focusRequester = focusRequester
+            )
+        }
     }
 }
+
 
 @ExperimentalComposeUiApi
 @Preview(showBackground = true)
@@ -155,8 +162,8 @@ fun DetailAndWriteScreenPreview() {
                     type = ContentType.Text,
                     seq = it.toLong(),
                     content = "this is text block content $it" +
-                        " this is text block content $it" +
-                        " this is text block content $it"
+                            " this is text block content $it" +
+                            " this is text block content $it"
                 )
             }
         )

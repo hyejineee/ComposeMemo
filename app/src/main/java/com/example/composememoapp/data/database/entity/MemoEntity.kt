@@ -10,5 +10,5 @@ data class MemoEntity(
     val updatedDate: Date = Date(System.currentTimeMillis()),
     val contents: List<ContentBlockEntity>,
     val isBookMarked: Boolean = false,
-    val tagEntities: String = ""
+    val tagEntities: List<String> = listOf()
 )
