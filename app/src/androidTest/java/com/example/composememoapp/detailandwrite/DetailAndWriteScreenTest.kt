@@ -14,6 +14,7 @@ import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.data.repository.MemoRepository
+import com.example.composememoapp.domain.DeleteMemoUseCase
 import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
@@ -35,11 +36,13 @@ class DetailAndWriteScreenTest {
 
     private val saveMemoUseCaseMock = SaveMemoUseCase(testMemoRepository)
     private val getAllMemoUseCase = GetAllMemoUseCase(testMemoRepository)
+    private val deleteMemoUseCase = DeleteMemoUseCase(testMemoRepository)
 
     private val memoViewModel = MemoViewModel(
         ioScheduler = Schedulers.io(),
         saveMemoUseCase = saveMemoUseCaseMock,
         getAllMemoUseCase = getAllMemoUseCase,
+        deleteMemoUseCase = deleteMemoUseCase,
         androidSchedulers = Schedulers.newThread()
     )
 
