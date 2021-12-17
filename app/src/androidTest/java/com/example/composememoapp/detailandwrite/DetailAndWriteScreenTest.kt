@@ -6,7 +6,9 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasAnyChild
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -85,15 +87,17 @@ class DetailAndWriteScreenTest {
         setContentWithDetailAndWriteScreen()
 
         composeTestRule
-            .onNode(hasAnyChild(hasSetTextAction()))
+            .onRoot()
             .performClick()
 
         composeTestRule
-            .onNode(hasSetTextAction())
+            .onAllNodes(hasSetTextAction())
+            .onLast()
             .performTextInput("hello")
 
         composeTestRule
-            .onNode(hasSetTextAction())
+            .onAllNodes(hasSetTextAction())
+            .onLast()
             .assertTextEquals("hello")
     }
 }
