@@ -9,17 +9,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.example.composememoapp.data.ContentBlock
 
-class ContentBlocksState(
-    initialContents: List<ContentBlock<*>>,
-) : InputState {
-
-    var contents by mutableStateOf(initialContents)
+class TagListState(
+    initialContents: List<String>,
+) {
+    var tags by mutableStateOf(initialContents)
 
     companion object {
-        val Saver: Saver<ContentBlocksState, *> = listSaver(
-            save = { listOf(it.contents) },
+        val Saver: Saver<TagListState, *> = listSaver(
+            save = { listOf(it.tags) },
             restore = {
-                ContentBlocksState(
+                TagListState(
                     initialContents = it[0]
                 )
             }
@@ -28,8 +27,8 @@ class ContentBlocksState(
 }
 
 @Composable
-fun rememberContentBlocksState(initialContents: List<ContentBlock<*>>): ContentBlocksState {
-    return rememberSaveable(initialContents, saver = ContentBlocksState.Saver) {
-        ContentBlocksState(initialContents = initialContents)
+fun rememberTagListState(initialContents: List<String>): TagListState {
+    return rememberSaveable(initialContents, saver = TagListState.Saver) {
+        TagListState(initialContents = initialContents)
     }
 }
