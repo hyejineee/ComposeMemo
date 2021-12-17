@@ -39,13 +39,13 @@ fun HomeScreen(
     handleClickMemoItem: (MemoEntity) -> Unit
 ) {
 
-    LaunchedEffect(key1 = true){
+    LaunchedEffect(key1 = true) {
         memoViewModel.getAllMemo()
     }
 
     val memoList by memoViewModel.memoList.subscribeAsState(initial = emptyList())
 
-    val handleChangeSearchInput = { text:String->
+    val handleChangeSearchInput = { text: String ->
         memoViewModel.searchMemo(text)
     }
 
@@ -59,12 +59,11 @@ fun HomeScreen(
 
 @Composable
 fun HomeScreenContent(
-    handleChangeSearchInput :(String)->Unit,
+    handleChangeSearchInput: (String) -> Unit,
     memoList: List<MemoEntity>,
     handleClickAddMemoButton: () -> Unit,
     handleClickMemoItem: (MemoEntity) -> Unit
 ) {
-
 
     val searchTextInputState = rememberTextInputState(initialText = "")
     handleChangeSearchInput(searchTextInputState.text)
@@ -89,7 +88,6 @@ fun HomeScreenContent(
                     .fillMaxWidth()
                     .padding(20.dp)
             )
-
 
             SearchMemoTextInput(
                 state = searchTextInputState,

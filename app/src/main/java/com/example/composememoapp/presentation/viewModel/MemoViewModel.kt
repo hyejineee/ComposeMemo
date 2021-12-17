@@ -27,21 +27,24 @@ class MemoViewModel @Inject constructor(
     private val _stateSource: PublishSubject<MemoState> = PublishSubject.create()
     private val _querySource: PublishSubject<String> = PublishSubject.create()
     private val _memoListSource: PublishSubject<List<MemoEntity>> = PublishSubject.create()
-    private var _memoList :List<MemoEntity> = emptyList()
+    private var _memoList: List<MemoEntity> = emptyList()
 
-    val memoList:Observable<List<MemoEntity>> =
-        Observable.combineLatest(_memoListSource, _querySource, BiFunction { t1, t2 ->
-            if (t2.isBlank() or t2.isNullOrEmpty()) {
-                t1
-            } else {
-                t1.filter { it.contents.any { block -> block.content.contains(t2) } }
+    val memoList: Observable<List<MemoEntity>> =
+        Observable.combineLatest(
+            _memoListSource, _querySource,
+            BiFunction { t1, t2 ->
+                if (t2.isBlank() or t2.isNullOrEmpty()) {
+                    t1
+                } else {
+                    t1.filter { it.contents.any { block -> block.content.contains(t2) } }
+                }
             }
-        }).publish().autoConnect()
+        ).publish().autoConnect()
 
-    val state:Observable<MemoState> = _stateSource.publish().autoConnect()
+    val state: Observable<MemoState> = _stateSource.publish().autoConnect()
 
     init {
-        _querySource.debounce(500L,TimeUnit.MILLISECONDS)
+        _querySource.debounce(500L, TimeUnit.MILLISECONDS)
         memoList.subscribe()
     }
 
@@ -105,5 +108,3 @@ class MemoViewModel @Inject constructor(
         _querySource.onNext(word)
     }
 }
-
-

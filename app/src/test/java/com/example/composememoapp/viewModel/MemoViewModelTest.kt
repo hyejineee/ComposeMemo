@@ -1,6 +1,5 @@
 package com.example.composememoapp.viewModel
 
-import android.util.Log
 import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
@@ -15,12 +14,12 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.kotlin.toFlowable
 import io.reactivex.rxjava3.observers.TestObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.given
+import java.util.concurrent.TimeUnit
 
 class MemoViewModelTest {
 
