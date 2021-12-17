@@ -135,6 +135,7 @@ fun DetailAndWriteScreenContent(
             .fillMaxSize()
     ) {
 
+
         ContentBlocks(
             contents = contents,
             focusRequester = focusRequester

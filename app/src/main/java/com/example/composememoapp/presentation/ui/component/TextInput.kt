@@ -29,10 +29,10 @@ import com.example.composememoapp.util.model.IconModel
 fun TextInput(
     iconModel: IconModel? = null,
     clickableIconModel: IconModel? = null,
-    showHint: Boolean = false,
     hint: String? = null,
     text: String,
     onValueChange: (s: String) -> Unit,
+    singleLine:Boolean = false,
     modifier: Modifier = Modifier,
 ) {
 
@@ -57,6 +57,7 @@ fun TextInput(
             BasicTextField(
                 modifier = modifier,
                 value = text,
+                singleLine = singleLine,
                 onValueChange = { onValueChange(it) },
                 textStyle = LocalTextStyle.current.copy(
                     textAlign = TextAlign.Start,
@@ -122,7 +123,6 @@ fun TextInputNoIconPreview() {
                 description = "last icon",
                 onClick = {}
             ),
-            showHint = true,
             hint = "this is hint"
         )
     }
