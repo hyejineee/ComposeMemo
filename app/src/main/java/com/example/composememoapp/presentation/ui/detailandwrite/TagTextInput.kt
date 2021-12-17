@@ -23,14 +23,14 @@ import java.util.regex.Pattern
 @Composable
 fun TagTextInput(
     state: TextInputSate,
-    handleClickAddTag: () -> Unit,
+    handleClickAddTag: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
     val clickableIconModel = IconModel(
         iconId = R.drawable.ic_round_add_circle_outline_24,
         onClick = {
-            handleClickAddTag()
+            handleClickAddTag(state.text)
             state.text = ""
         },
         description = Descriptions.ClearIcon.text
@@ -58,7 +58,7 @@ fun TagTextInput(
         }
 
         val regex = "^[a-zA-Z0-9]+$"
-        if (!Pattern.matches(regex, state.text)) {
+        if (!Pattern.matches(regex, state.text) && state.text.isNotBlank()) {
             state.text = state.text.dropLast(1)
             Text(
                 text = "특수문자를 입력할 수 없습니다.",
