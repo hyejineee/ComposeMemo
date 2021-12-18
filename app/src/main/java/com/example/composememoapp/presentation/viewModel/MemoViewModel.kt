@@ -32,10 +32,10 @@ class MemoViewModel @Inject constructor(
     private var _memoList: List<MemoEntity> = emptyList()
 
     val memoList: Observable<List<MemoEntity>> =
-        Observable.zip(
+        Observable.combineLatest(
             _memoListSource, _querySource,
-            BiFunction { t1, t2 ->
-                if (t2.isBlank() or t2.isNullOrEmpty()) {
+            BiFunction { t1: List<MemoEntity>, t2: String ->
+                if (t2.isNullOrEmpty() or (t2 == "")) {
                     t1
                 } else {
                     t1.filter { it.contents.any { block -> block.content.contains(t2) } }

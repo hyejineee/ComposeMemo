@@ -14,15 +14,15 @@ import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 
 @Composable
 fun Chip(
-    text:String
-){
+    text: String
+) {
     Surface(
         elevation = 6.dp,
         modifier = Modifier.padding(3.dp),
         shape = RoundedCornerShape(50.dp)
-    ){
+    ) {
         Text(
-            text= text,
+            text = text,
             modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp),
             fontSize = 12.sp,
             fontWeight = FontWeight.Light
@@ -32,7 +32,7 @@ fun Chip(
 
 @Preview
 @Composable
-fun ChipPreview(){
+fun ChipPreview() {
     ComposeMemoAppTheme() {
         Chip(text = "#hello")
     }

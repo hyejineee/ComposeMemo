@@ -6,6 +6,6 @@ import androidx.room.PrimaryKey
 
 @Entity(indices = arrayOf(Index(value = ["tag"], unique = true)))
 data class TagEntity(
-    @PrimaryKey(autoGenerate = true) val id:Long? = null,
-    val tag:String? = null
+    @PrimaryKey(autoGenerate = true) val id: Long? = null,
+    val tag: String? = null
 )

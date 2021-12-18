@@ -9,7 +9,6 @@ import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.presentation.ui.component.TextInput
 import com.example.composememoapp.util.model.InputState
 import com.example.composememoapp.util.model.TextInputSate
-import com.example.composememoapp.util.model.rememberTextInputState
 
 @kotlinx.parcelize.Parcelize
 data class TextBlock(

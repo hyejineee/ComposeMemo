@@ -19,7 +19,7 @@ fun TagList(
             modifier = Modifier.padding(horizontal = 20.dp)
         ) {
             for (tag in tagList) {
-                Chip(text = "#${tag}")
+                Chip(text = "#$tag")
             }
         }
     }

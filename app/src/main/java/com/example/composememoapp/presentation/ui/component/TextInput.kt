@@ -32,7 +32,7 @@ fun TextInput(
     hint: String? = null,
     text: String,
     onValueChange: (s: String) -> Unit,
-    singleLine:Boolean = false,
+    singleLine: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
 

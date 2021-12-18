@@ -70,7 +70,6 @@ fun TagTextInput(
             )
         }
     }
-
 }
 
 @Preview(showBackground = true)

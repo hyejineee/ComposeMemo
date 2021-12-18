@@ -51,7 +51,7 @@ fun StaggeredGridRow(
         }
 
         val w = constraints.maxWidth
-        val h =((cellHeights.maxOrNull()?:0)+( cellY.maxOrNull()?:0))
+        val h = ((cellHeights.maxOrNull() ?: 0) + (cellY.maxOrNull() ?: 0))
             .coerceIn(constraints.minHeight.rangeTo(constraints.maxHeight))
 
         // 위치 정하기

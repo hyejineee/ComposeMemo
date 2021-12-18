@@ -28,12 +28,11 @@ class TypeConverters {
     }
 
     @TypeConverter
-    fun stringListToJson(value:List<String>?) = value?.let {
+    fun stringListToJson(value: List<String>?) = value?.let {
         Gson().toJson(it)
     }
     @TypeConverter
-    fun jsonToStringList(value: String?) = value?.let{
+    fun jsonToStringList(value: String?) = value?.let {
         Gson().fromJson(it, Array<String>::class.java).toList()
     }
-
 }

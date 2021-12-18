@@ -1,6 +1,5 @@
 package com.example.composememoapp.presentation.ui.detailandwrite
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -16,9 +15,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.twotone.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -61,7 +58,7 @@ fun DetailAndWriteScreen(
     val handleSaveMemo = {
 
         val contents = contentsState.contents.map {
-            when(it){
+            when (it) {
                 is TextBlock -> it.content = it.textInputState.text
             }
             it
@@ -73,7 +70,7 @@ fun DetailAndWriteScreen(
             tags = tagState.tags
         )
 
-        if (newMemoEntity.contents.isNotEmpty()){
+        if (newMemoEntity.contents.isNotEmpty()) {
             memoViewModel.saveMemo(memoEntity = memoEntity, contentsState.contents, tagState.tags)
         }
     }
@@ -100,7 +97,6 @@ fun DetailAndWriteScreen(
         handleSaveMemo()
         handleBackButtonClick()
     }
-
 
     DetailAndWriteScreenContent(
         memoEntity = memoEntity,
@@ -184,7 +180,6 @@ fun DetailAndWriteScreenContent(
     }
 }
 
-
 @ExperimentalComposeUiApi
 @Preview(showBackground = true)
 @Composable
@@ -197,8 +192,8 @@ fun DetailAndWriteScreenPreview() {
                     type = ContentType.Text,
                     seq = it.toLong(),
                     content = "this is text block content $it" +
-                            " this is text block content $it" +
-                            " this is text block content $it"
+                        " this is text block content $it" +
+                        " this is text block content $it"
                 )
             }
         )
