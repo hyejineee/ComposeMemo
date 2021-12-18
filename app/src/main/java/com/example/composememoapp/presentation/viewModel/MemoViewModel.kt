@@ -3,6 +3,7 @@ package com.example.composememoapp.presentation.viewModel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.composememoapp.data.ContentBlock
+import com.example.composememoapp.data.TextBlock
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.di.AndroidMainScheduler
 import com.example.composememoapp.di.IOScheduler
@@ -50,7 +51,7 @@ class MemoViewModel @Inject constructor(
     }
 
     fun saveMemo(memoEntity: MemoEntity?, contents: List<ContentBlock<*>>, tags: List<String>) {
-        val memo = sortContentBlocks(memoEntity = memoEntity, contents = contents, tags)
+        val memo = makeMemoEntity(memoEntity = memoEntity, contents = contents, tags)
         saveMemoUseCase(memoEntity = memo)
             .subscribeOn(ioScheduler)
             .observeOn(androidSchedulers)
@@ -87,15 +88,19 @@ class MemoViewModel @Inject constructor(
             )
     }
 
-    fun sortContentBlocks(
+    fun makeMemoEntity(
         memoEntity: MemoEntity?,
         contents: List<ContentBlock<*>>,
         tags: List<String>
     ): MemoEntity {
+
         val contentBlocks = contents
             .asSequence()
-            .map { block ->
-                block.convertToContentBlockEntity()
+            .map {
+                when (it) {
+                    is TextBlock -> it.content = it.textInputState.text
+                }
+                it.convertToContentBlockEntity()
             }
             .filter { block ->
                 block.content.isNotBlank()

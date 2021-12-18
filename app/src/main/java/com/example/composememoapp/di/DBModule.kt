@@ -21,4 +21,7 @@ object DBModule {
 
     @Provides
     fun provideMemoDao(appDatabase: MemoAppDatabase) = appDatabase.memoDao()
+
+    @Provides
+    fun provideTagDao(appDatabase: MemoAppDatabase) = appDatabase.tagDao()
 }

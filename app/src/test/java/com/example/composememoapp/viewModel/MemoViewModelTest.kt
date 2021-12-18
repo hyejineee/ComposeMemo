@@ -3,7 +3,7 @@ package com.example.composememoapp.viewModel
 import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
-import com.example.composememoapp.data.repository.MemoRepository
+import com.example.composememoapp.data.repository.MemoAppRepository
 import com.example.composememoapp.domain.DeleteMemoUseCase
 import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
@@ -29,7 +29,7 @@ class MemoViewModelTest {
     // 메모를 저장한다, 수정한다.
     // 메모를 삭제한다.
 
-    private val testMemoRepository = Mockito.mock(MemoRepository::class.java)
+    private val testMemoRepository = Mockito.mock(MemoAppRepository::class.java)
 
     private val saveMemoUseCaseMock = SaveMemoUseCase(testMemoRepository)
     private val getAllMemoUseCase = GetAllMemoUseCase(testMemoRepository)

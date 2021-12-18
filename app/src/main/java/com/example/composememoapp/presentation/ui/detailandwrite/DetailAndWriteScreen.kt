@@ -14,9 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.twotone.Delete
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -56,17 +54,9 @@ fun DetailAndWriteScreen(
     )
 
     val handleSaveMemo = {
-
-        val contents = contentsState.contents.map {
-            when (it) {
-                is TextBlock -> it.content = it.textInputState.text
-            }
-            it
-        }
-
-        val newMemoEntity = memoViewModel.sortContentBlocks(
+        val newMemoEntity = memoViewModel.makeMemoEntity(
             memoEntity = memoEntity,
-            contents = contents,
+            contents = contentsState.contents,
             tags = tagState.tags
         )
 

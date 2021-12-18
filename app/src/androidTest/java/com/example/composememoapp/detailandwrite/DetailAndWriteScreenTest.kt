@@ -14,7 +14,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
-import com.example.composememoapp.data.repository.MemoRepository
+import com.example.composememoapp.data.repository.MemoAppRepository
 import com.example.composememoapp.domain.DeleteMemoUseCase
 import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
@@ -33,7 +33,7 @@ class DetailAndWriteScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val testMemoRepository = Mockito.mock(MemoRepository::class.java)
+    private val testMemoRepository = Mockito.mock(MemoAppRepository::class.java)
 
     private val saveMemoUseCaseMock = SaveMemoUseCase(testMemoRepository)
     private val getAllMemoUseCase = GetAllMemoUseCase(testMemoRepository)

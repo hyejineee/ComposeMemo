@@ -1,7 +1,7 @@
 package com.example.composememoapp.di
 
-import com.example.composememoapp.data.repository.DefaultMemoRepository
-import com.example.composememoapp.data.repository.MemoRepository
+import com.example.composememoapp.data.repository.DefaultMemoAppRepository
+import com.example.composememoapp.data.repository.MemoAppRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -12,6 +12,6 @@ import dagger.hilt.components.SingletonComponent
 abstract class RepositoryModule {
     @Binds
     abstract fun bindsDefaultMemoRepository(
-        defaultMemoRepository: DefaultMemoRepository
-    ): MemoRepository
+        defaultMemoRepository: DefaultMemoAppRepository
+    ): MemoAppRepository
 }
