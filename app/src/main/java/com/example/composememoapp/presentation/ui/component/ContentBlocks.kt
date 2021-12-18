@@ -17,9 +17,9 @@ fun ContentBlocks(contents: List<ContentBlock<*>>, focusRequester: FocusRequeste
         for (content in contents) {
             when (content) {
                 is TextBlock -> {
-                    val textInputState = rememberTextInputState(initialText = content.content)
+                    content.textInputState = rememberTextInputState(initialText = content.content)
                     content.drawEditableContent(
-                        state = textInputState,
+                        state = content.textInputState,
                         modifier = Modifier
                             .focusRequester(focusRequester)
                     )

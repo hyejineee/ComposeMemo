@@ -1,6 +1,11 @@
 package com.example.composememoapp.data.database.entity
 
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
+
+@Entity(indices = arrayOf(Index(value = ["tag"], unique = true)))
 data class TagEntity(
-    val id: Int,
-    val name: String
+    @PrimaryKey(autoGenerate = true) val id: Long? = null,
+    val tag: String? = null
 )
