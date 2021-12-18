@@ -15,6 +15,7 @@ interface MemoDao {
     fun getAllMemo(): Flowable<List<MemoEntity>>
 
     @Insert(onConflict = REPLACE)
+
     abstract fun insertMemoEntity(memoEntity: MemoEntity): Completable
 
     @Insert(onConflict = REPLACE)
