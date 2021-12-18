@@ -1,5 +1,6 @@
 package com.example.composememoapp.viewModel
 
+import android.util.Log
 import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
@@ -21,6 +22,9 @@ import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.given
 import java.util.concurrent.TimeUnit
+import org.junit.Before
+import org.junit.jupiter.api.BeforeEach
+import org.mockito.kotlin.whenever
 
 class MemoViewModelTest {
 
@@ -35,13 +39,7 @@ class MemoViewModelTest {
     private val deleteMemoUseCase = DeleteMemoUseCase(testMemoRepository)
 
     private val schedulers = Schedulers.newThread()
-    private val memoViewModel = MemoViewModel(
-        ioScheduler = schedulers,
-        saveMemoUseCase = saveMemoUseCaseMock,
-        getAllMemoUseCase = getAllMemoUseCase,
-        deleteMemoUseCase = deleteMemoUseCase,
-        androidSchedulers = schedulers
-    )
+    lateinit var memoViewModel: MemoViewModel
 
     private val memoEntityMock = MemoEntity(
         id = 1,
@@ -51,7 +49,8 @@ class MemoViewModelTest {
                 seq = it.toLong(),
                 content = "this is textBlock$it"
             )
-        }
+        },
+        tagEntities = listOf("hi", "hello")
     )
 
     private val contentState =
@@ -73,6 +72,21 @@ class MemoViewModelTest {
         )
     }
 
+    @BeforeEach
+    fun init() {
+        memoViewModel = MemoViewModel(
+            ioScheduler = schedulers,
+            saveMemoUseCase = saveMemoUseCaseMock,
+            getAllMemoUseCase = getAllMemoUseCase,
+            deleteMemoUseCase = deleteMemoUseCase,
+            androidSchedulers = schedulers
+        )
+
+        whenever(testMemoRepository.getAllMemo())
+            .thenReturn(listOf(memoListMock).toFlowable())
+
+    }
+
     @Test
     @DisplayName("메모를 저장 성공시 저장 성공 상태를 발행한다.")
     fun insertMemoSuccessTest() {
@@ -84,7 +98,11 @@ class MemoViewModelTest {
             .state
             .subscribe(testObserver)
 
-        memoViewModel.saveMemo(memoEntityMock, contentState.contents)
+        memoViewModel.saveMemo(
+            memoEntityMock,
+            contentState.contents,
+            tags = memoEntityMock.tagEntities
+        )
 
         testObserver.awaitCount(1)
         assertThat(testObserver.values().first()).isEqualTo(MemoState.SaveSuccess)
@@ -101,7 +119,11 @@ class MemoViewModelTest {
             .state
             .subscribe(testObserver)
 
-        memoViewModel.saveMemo(memoEntityMock, contents = contentState.contents)
+        memoViewModel.saveMemo(
+            memoEntityMock,
+            contents = contentState.contents,
+            tags = memoEntityMock.tagEntities
+        )
 
         testObserver.awaitCount(1)
         assertThat(testObserver.values().first()).isEqualTo(MemoState.Error("메모 저장 에러"))
@@ -110,10 +132,8 @@ class MemoViewModelTest {
     @Test
     @DisplayName("저장되어 있는 메모 전체를 가져온다.")
     fun getAllMemoTest() {
-        given(testMemoRepository.getAllMemo())
-            .willReturn(listOf(memoListMock).toFlowable())
-
         memoViewModel.getAllMemo()
+
         memoViewModel.memoList.test().awaitCount(1).assertValue(memoListMock)
     }
 
@@ -125,13 +145,11 @@ class MemoViewModelTest {
             it.contents.any { block -> block.content.contains("1") }
         }
 
-        given(testMemoRepository.getAllMemo())
-            .willReturn(listOf(memoListMock).toFlowable())
-
         memoViewModel.getAllMemo()
         memoViewModel.searchMemo("1")
 
-        val actual = memoViewModel.memoList.test().awaitDone(1000, TimeUnit.MILLISECONDS).values().first()
+        val actual =
+            memoViewModel.memoList.test().awaitDone(1000, TimeUnit.MILLISECONDS).values().first()
 
         assertThat(actual).isEqualTo(expected)
     }
@@ -152,4 +170,35 @@ class MemoViewModelTest {
         testObserver.awaitCount(1)
         assertThat(testObserver.values().first()).isEqualTo(MemoState.DeleteSuccess)
     }
+
+    @Test
+    @DisplayName("메모 삭제 실패 시 삭제 실패 상태 를 발행한다.")
+    fun deleteMemoFailTest() {
+        given(testMemoRepository.deleteMemo(any()))
+            .willReturn(Completable.error(Exception("메모 삭제 실패")))
+
+        val testObserver: TestObserver<MemoState> = TestObserver()
+        memoViewModel
+            .state
+            .subscribe(testObserver)
+
+        memoViewModel.deleteMemo(memoEntityMock)
+
+        testObserver.awaitCount(1)
+        assertThat(testObserver.values().first()).isEqualTo(MemoState.Error("메모 삭제 실패"))
+    }
+
+    @Test
+    @DisplayName("메모 아이디에 해당하는 메모를 찾아서 리턴한다.")
+    fun findMemoByMemoId() {
+        memoViewModel.getAllMemo()
+
+        Thread.sleep(500)
+
+        val actual = memoViewModel.getMemo(1L)
+
+        assertThat(actual).isEqualTo(memoListMock.find { it.id == 1L })
+    }
+
+
 }

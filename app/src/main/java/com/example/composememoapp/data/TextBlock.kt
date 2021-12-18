@@ -9,12 +9,15 @@ import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.presentation.ui.component.TextInput
 import com.example.composememoapp.util.model.InputState
 import com.example.composememoapp.util.model.TextInputSate
+import com.example.composememoapp.util.model.rememberTextInputState
 
 @kotlinx.parcelize.Parcelize
 data class TextBlock(
     override var seq: Long,
     override var content: String
 ) : ContentBlock<String>, Parcelable {
+
+    var textInputState = TextInputSate(content)
 
     @Composable
     override fun drawOnlyReadContent(modifier: androidx.compose.ui.Modifier) {
@@ -23,7 +26,7 @@ data class TextBlock(
 
     @Composable
     override fun drawEditableContent(state: InputState, modifier: androidx.compose.ui.Modifier) {
-        val textInputState = (state as TextInputSate)
+//        val textInputState = (state as TextInputSate)
 
         Box(modifier = modifier) {
             TextInput(

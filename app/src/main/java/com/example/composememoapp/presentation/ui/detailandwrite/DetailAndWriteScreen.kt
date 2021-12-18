@@ -13,19 +13,17 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.twotone.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,8 +36,6 @@ import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.component.ContentBlocks
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
-import com.example.composememoapp.util.model.ContentBlocksState
-import com.example.composememoapp.util.model.TagListState
 import com.example.composememoapp.util.model.rememberContentBlocksState
 import com.example.composememoapp.util.model.rememberTagListState
 
@@ -51,19 +47,35 @@ fun DetailAndWriteScreen(
     handleBackButtonClick: () -> Unit,
 ) {
 
-    var contentsState = rememberContentBlocksState(
+    val contentsState = rememberContentBlocksState(
         initialContents = memoEntity
             ?.contents
             ?.map { it.convertToContentBlockModel() }
             ?: listOf(TextBlock(1, ""))
     )
 
-    var tagState = rememberTagListState(
+    val tagState = rememberTagListState(
         initialContents = memoEntity?.tagEntities ?: listOf()
     )
 
     val handleSaveMemo = {
-        memoViewModel.saveMemo(memoEntity = memoEntity, contentsState.contents)
+
+        val contents = contentsState.contents.map {
+            when(it){
+                is TextBlock -> it.content = it.textInputState.text
+            }
+            it
+        }
+
+        val newMemoEntity = memoViewModel.sortContentBlocks(
+            memoEntity = memoEntity,
+            contents = contents,
+            tags = tagState.tags
+        )
+
+        if (newMemoEntity.contents.isNotEmpty()){
+            memoViewModel.saveMemo(memoEntity = memoEntity, contentsState.contents, tagState.tags)
+        }
     }
 
     val handleDeleteMemo = { memo: MemoEntity ->
@@ -73,7 +85,9 @@ fun DetailAndWriteScreen(
     val handleAddDefaultBlock: (FocusRequester, SoftwareKeyboardController?) -> Unit =
         { f: FocusRequester, k: SoftwareKeyboardController? ->
             contentsState.contents =
-                contentsState.contents.plus(TextBlock(contentsState.contents.last().seq + 1, ""))
+                contentsState.contents.plus(
+                    TextBlock(contentsState.contents.last().seq + 1, "")
+                )
             f.requestFocus()
             k?.show()
         }
