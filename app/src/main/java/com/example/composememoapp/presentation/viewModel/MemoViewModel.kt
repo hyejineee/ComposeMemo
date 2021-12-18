@@ -34,8 +34,8 @@ class MemoViewModel @Inject constructor(
     val memoList: Observable<List<MemoEntity>> =
         Observable.combineLatest(
             _memoListSource, _querySource,
-            BiFunction { t1: List<MemoEntity>, t2: String ->
-                if (t2.isNullOrEmpty() or (t2 == "")) {
+            BiFunction { t1, t2 ->
+                if (t2.isBlank() or t2.isNullOrEmpty()) {
                     t1
                 } else {
                     t1.filter { it.contents.any { block -> block.content.contains(t2) } }
@@ -47,10 +47,11 @@ class MemoViewModel @Inject constructor(
 
     init {
         _querySource.debounce(500L, TimeUnit.MILLISECONDS)
+        memoList.subscribe()
     }
 
-    fun saveMemo(memoEntity: MemoEntity?, contents: List<ContentBlock<*>>, tags: List<String>) {
-        val memo = sortContentBlocks(memoEntity = memoEntity, contents = contents, tags)
+    fun saveMemo(memoEntity: MemoEntity?, contents: List<ContentBlock<*>>) {
+        val memo = sortContentBlocks(memoEntity = memoEntity, contents = contents)
         saveMemoUseCase(memoEntity = memo)
             .subscribeOn(ioScheduler)
             .observeOn(androidSchedulers)
@@ -87,10 +88,9 @@ class MemoViewModel @Inject constructor(
             )
     }
 
-    fun sortContentBlocks(
+    private fun sortContentBlocks(
         memoEntity: MemoEntity?,
-        contents: List<ContentBlock<*>>,
-        tags: List<String>
+        contents: List<ContentBlock<*>>
     ): MemoEntity {
         val contentBlocks = contents
             .asSequence()
@@ -106,8 +106,8 @@ class MemoViewModel @Inject constructor(
             }.toList()
 
         return memoEntity?.let {
-            it.copy(contents = contentBlocks, tagEntities = tags)
-        } ?: MemoEntity(contents = contentBlocks, tagEntities = tags)
+            it.copy(contents = contentBlocks)
+        } ?: MemoEntity(contents = contentBlocks)
     }
 
     private fun handleSuccess(state: MemoState) {

@@ -10,7 +10,7 @@ import androidx.compose.runtime.setValue
 import com.example.composememoapp.data.ContentBlock
 
 class ContentBlocksState(
-    initialContents: List<ContentBlock<*>>,
+    initialContents: MutableList<ContentBlock<*>>,
 ) : InputState {
 
     var contents by mutableStateOf(initialContents)
@@ -28,7 +28,7 @@ class ContentBlocksState(
 }
 
 @Composable
-fun rememberContentBlocksState(initialContents: List<ContentBlock<*>>): ContentBlocksState {
+fun rememberContentBlocksState(initialContents: MutableList<ContentBlock<*>>): ContentBlocksState {
     return rememberSaveable(initialContents, saver = ContentBlocksState.Saver) {
         ContentBlocksState(initialContents = initialContents)
     }
