@@ -6,28 +6,17 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
 import com.example.composememoapp.data.database.entity.MemoEntity
-import com.example.composememoapp.data.database.entity.TagEntity
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 
 @Dao
-abstract class MemoDao {
+interface MemoDao {
     @Query("select * from MemoEntity")
-    abstract fun getAllMemo(): Flowable<List<MemoEntity>>
+    fun getAllMemo(): Flowable<List<MemoEntity>>
 
     @Insert(onConflict = REPLACE)
-    abstract fun insertMemoEntity(memoEntity: MemoEntity): Completable
-
-    @Insert(onConflict = REPLACE)
-    abstract fun insertTagEntity(tags: List<TagEntity>): Completable
-
-    fun insertMemo(memoEntity: MemoEntity): Completable {
-        val tags: List<TagEntity> = memoEntity.tagEntities.map { TagEntity(tag = it) }
-
-        return insertMemoEntity(memoEntity = memoEntity)
-            .mergeWith(insertTagEntity(tags = tags))
-    }
+    fun insertMemo(memoEntity: MemoEntity): Completable
 
     @Delete
-    abstract fun deleteMemo(memoEntity: MemoEntity): Completable
+    fun deleteMemo(memoEntity: MemoEntity): Completable
 }
