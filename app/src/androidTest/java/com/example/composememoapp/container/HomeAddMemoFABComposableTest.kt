@@ -11,7 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.composememoapp.R
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
-import com.example.composememoapp.presentation.ui.HomeAddMemoFAB
+import com.example.composememoapp.presentation.ui.component.AddMemoFloatingButton
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -43,7 +43,7 @@ class HomeAddMemoFABComposableTest {
     ) {
         composeTestRule.setContent {
             ComposeMemoAppTheme() {
-                HomeAddMemoFAB(
+                AddMemoFloatingButton(
                     extended = extended,
                     onClick = onClick
                 )
