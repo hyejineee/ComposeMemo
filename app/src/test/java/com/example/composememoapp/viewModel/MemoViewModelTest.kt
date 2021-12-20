@@ -59,7 +59,8 @@ class MemoViewModelTest {
                     seq = it.toLong(),
                     content = "this is textBlock$it"
                 )
-            }
+            },
+            isBookMarked = it==1
         )
     }
 
@@ -193,5 +194,15 @@ class MemoViewModelTest {
         val actual = memoViewModel.getMemo(1L)
 
         assertThat(actual).isEqualTo(memoListMock.find { it.id == 1L })
+    }
+
+    @Test
+    @DisplayName("북마크된 메모만 찾아서 메모 리스트에 표시한다.")
+    fun filterMemoListByBookmarkedTest(){
+        memoViewModel.getAllMemo()
+        memoViewModel.filterMemoByFavorite(true)
+
+        memoViewModel.memoList.test().awaitCount(1).assertValue(memoListMock.filter { it.isBookMarked })
+
     }
 }
