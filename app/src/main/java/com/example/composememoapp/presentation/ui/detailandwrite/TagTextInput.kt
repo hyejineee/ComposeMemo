@@ -1,11 +1,18 @@
 package com.example.composememoapp.presentation.ui.detailandwrite
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -13,7 +20,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composememoapp.R
+import com.example.composememoapp.data.database.entity.TagEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
+import com.example.composememoapp.presentation.ui.component.DropDownList
 import com.example.composememoapp.presentation.ui.component.TextInput
 import com.example.composememoapp.util.Descriptions
 import com.example.composememoapp.util.model.IconModel
@@ -23,6 +32,7 @@ import java.util.regex.Pattern
 @Composable
 fun TagTextInput(
     state: TextInputSate,
+    tagList: List<TagEntity> = listOf(TagEntity(tag = "hi"), TagEntity(tag = "hello")),
     handleClickAddTag: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -30,7 +40,7 @@ fun TagTextInput(
     val clickableIconModel = IconModel(
         iconId = R.drawable.ic_round_add_circle_outline_24,
         onClick = {
-            if(state.text.isNotBlank()){
+            if (state.text.isNotBlank()) {
                 handleClickAddTag(state.text)
                 state.text = ""
             }
@@ -38,7 +48,7 @@ fun TagTextInput(
         description = Descriptions.ClearIcon.text
     )
 
-    Column() {
+    Column {
         androidx.compose.material.Surface(
             elevation = 5.dp,
             shape = RoundedCornerShape(50.dp),
@@ -56,7 +66,17 @@ fun TagTextInput(
                     .fillMaxWidth(),
                 clickableIconModel = clickableIconModel,
                 hint = stringResource(id = R.string.addTagCaption),
-                singleLine = true
+                singleLine = true,
+            )
+        }
+
+        if (state.text.isNotBlank() && tagList.count { it.tag.contains(state.text) } > 0) {
+            DropDownList(
+                list = tagList.filter { it.tag.contains(state.text) }.map { it.tag },
+                onClick = {
+                    handleClickAddTag(it)
+                    state.text = ""
+                }
             )
         }
 
@@ -90,7 +110,7 @@ fun TagTextInput(
 @Composable
 fun SearchMemoTextInput() {
     ComposeMemoAppTheme {
-        val state = TextInputSate("")
+        val state = TextInputSate("hell")
         TagTextInput(
             state = state,
             handleClickAddTag = {}

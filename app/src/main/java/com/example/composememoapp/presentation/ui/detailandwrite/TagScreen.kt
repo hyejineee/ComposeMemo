@@ -18,7 +18,10 @@ fun TagScreen(
     Column(
         modifier = modifier
     ) {
-        TagTextInput(state = textState, handleClickAddTag = handleClickAddTag)
+        TagTextInput(
+            state = textState,
+            handleClickAddTag = handleClickAddTag,
+        )
         TagList(tagList = tagList)
     }
 }
