@@ -50,7 +50,8 @@ fun TagTextInput(
                     state.text = it
                 },
                 modifier = Modifier
-                    .padding(5.dp),
+                    .padding(5.dp)
+                    .fillMaxWidth(),
                 clickableIconModel = clickableIconModel,
                 hint = stringResource(id = R.string.addTagCaption),
                 singleLine = true
