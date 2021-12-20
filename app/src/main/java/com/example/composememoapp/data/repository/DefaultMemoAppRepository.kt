@@ -3,6 +3,7 @@ package com.example.composememoapp.data.repository
 import com.example.composememoapp.data.database.MemoDao
 import com.example.composememoapp.data.database.TagDao
 import com.example.composememoapp.data.database.entity.MemoEntity
+import com.example.composememoapp.data.database.entity.TagEntity
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import javax.inject.Inject
@@ -20,6 +21,8 @@ class DefaultMemoAppRepository @Inject constructor(
 
     override fun deleteMemo(memoEntity: MemoEntity): Completable =
         memoDao.deleteMemo(memoEntity = memoEntity)
+
+    override fun getAllTag(): Flowable<List<TagEntity>> = tagDao.getAllTag()
 
 
 }
