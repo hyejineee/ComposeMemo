@@ -13,6 +13,7 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.printToLog
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.composememoapp.data.database.entity.TagEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.home.CategoryMenuBar
 import org.junit.Rule
@@ -27,16 +28,16 @@ class CategoryMenuBarTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val categories = listOf("ALL") + List(10) {
-        "#Category$it"
+    private val categories = listOf(TagEntity(tag = "ALL")) + List(10) {
+        TagEntity(tag = "#Category$it")
     }
 
-    private val onClickMock = mock<(String) -> Unit>()
+    private val onClickMock = mock<(TagEntity) -> Unit>()
 
     private fun setContentWithCategoryMenuBar(
-        categories: List<String>,
-        onClick: (String) -> Unit,
-        selected: String? = null
+        categories: List<TagEntity>,
+        onClick: (TagEntity) -> Unit,
+        selected: TagEntity? = null
     ) {
         composeTestRule.setContent {
             ComposeMemoAppTheme {
@@ -53,7 +54,8 @@ class CategoryMenuBarTest {
                     CategoryMenuBar(
                         categories = categories,
                         onClick = onClick,
-                        listState = listState
+                        listState = listState,
+                        selected = TagEntity(tag = "ALL")
                     )
                 }
             }
@@ -71,7 +73,7 @@ class CategoryMenuBarTest {
         composeTestRule.mainClock.advanceTimeBy(50L)
 
         composeTestRule
-            .onNodeWithText(categories.first())
+            .onNodeWithText(categories.first().tag)
             .performClick()
 
         verify(onClickMock).invoke(categories.first())
@@ -84,7 +86,7 @@ class CategoryMenuBarTest {
 
         composeTestRule.setContent {
             ComposeMemoAppTheme() {
-                var selected by remember { mutableStateOf("ALL") }
+                var selected by remember { mutableStateOf(TagEntity(tag = "ALL")) }
                 val listState = rememberLazyListState()
 
                 CategoryMenuBar(
@@ -97,14 +99,14 @@ class CategoryMenuBarTest {
         }
 
         composeTestRule
-            .onNodeWithText(categories[1])
+            .onNodeWithText(categories[1].tag)
             .performClick()
 
         composeTestRule.mainClock.advanceTimeBy(50L)
 
         composeTestRule.onRoot(useUnmergedTree = true).printToLog("categoryBarTest")
         composeTestRule
-            .onNodeWithText(categories[1])
+            .onNodeWithText(categories[1].tag)
             .assert(isSelected())
     }
 }

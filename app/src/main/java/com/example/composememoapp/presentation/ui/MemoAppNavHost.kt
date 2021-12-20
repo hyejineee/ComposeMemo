@@ -8,18 +8,20 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navArgument
+import androidx.navigation.navArgument
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.ui.detailandwrite.DetailAndWriteScreen
 import com.example.composememoapp.presentation.ui.home.HomeScreen
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
+import com.example.composememoapp.presentation.viewModel.TagViewModel
 
 @ExperimentalComposeUiApi
 @Composable
 fun MemoAppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    memoViewModel: MemoViewModel
+    memoViewModel: MemoViewModel,
+    tagViewModel: TagViewModel
 ) {
     val context = LocalContext.current
 
@@ -49,11 +51,13 @@ fun MemoAppNavHost(
             HomeScreen(
                 memoViewModel = memoViewModel,
                 handleClickAddMemoButton = handleClickAddMemoButton,
-                handleClickMemoItem = handleClickMemoItem
+                handleClickMemoItem = handleClickMemoItem,
+                tagViewModel = tagViewModel
             )
         }
 
         val detailScreenName = MemoAppScreen.Detail
+
         composable(
             route = "$detailScreenName/{${Key.MEMO_ARGS_KEY}}",
             arguments = listOf(

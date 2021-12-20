@@ -16,6 +16,8 @@ data class TextBlock(
     override var content: String
 ) : ContentBlock<String>, Parcelable {
 
+    var textInputState = TextInputSate(content)
+
     @Composable
     override fun drawOnlyReadContent(modifier: androidx.compose.ui.Modifier) {
         Text(text = content, fontSize = 13.sp)
@@ -23,7 +25,7 @@ data class TextBlock(
 
     @Composable
     override fun drawEditableContent(state: InputState, modifier: androidx.compose.ui.Modifier) {
-        val textInputState = (state as TextInputSate)
+//        val textInputState = (state as TextInputSate)
 
         Box(modifier = modifier) {
             TextInput(

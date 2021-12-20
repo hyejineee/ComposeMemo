@@ -1,8 +1,9 @@
 package com.example.composememoapp.di
 
-import com.example.composememoapp.data.repository.MemoRepository
+import com.example.composememoapp.data.repository.MemoAppRepository
 import com.example.composememoapp.domain.DeleteMemoUseCase
 import com.example.composememoapp.domain.GetAllMemoUseCase
+import com.example.composememoapp.domain.GetAllTagUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
 import dagger.Module
 import dagger.Provides
@@ -13,11 +14,14 @@ import dagger.hilt.android.components.ViewModelComponent
 @Module
 object UseCaseModule {
     @Provides
-    fun provideGetAllMemoUseCase(repository: MemoRepository) = GetAllMemoUseCase(repository)
+    fun provideGetAllMemoUseCase(appRepository: MemoAppRepository) = GetAllMemoUseCase(appRepository)
 
     @Provides
-    fun provideSaveMemoUseCase(repository: MemoRepository) = SaveMemoUseCase(repository)
+    fun provideSaveMemoUseCase(appRepository: MemoAppRepository) = SaveMemoUseCase(appRepository)
 
     @Provides
-    fun provideDeleteMemoUseCase(repository: MemoRepository) = DeleteMemoUseCase(repository)
+    fun provideDeleteMemoUseCase(appRepository: MemoAppRepository) = DeleteMemoUseCase(appRepository)
+
+    @Provides
+    fun provideGetAllTagUseCase(appRepository: MemoAppRepository) = GetAllTagUseCase(appRepository)
 }

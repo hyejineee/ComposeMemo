@@ -3,17 +3,18 @@ package com.example.composememoapp.detailandwrite
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
-import androidx.compose.ui.test.hasAnyChild
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
-import com.example.composememoapp.data.repository.MemoRepository
+import com.example.composememoapp.data.repository.MemoAppRepository
 import com.example.composememoapp.domain.DeleteMemoUseCase
 import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
@@ -32,7 +33,7 @@ class DetailAndWriteScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val testMemoRepository = Mockito.mock(MemoRepository::class.java)
+    private val testMemoRepository = Mockito.mock(MemoAppRepository::class.java)
 
     private val saveMemoUseCaseMock = SaveMemoUseCase(testMemoRepository)
     private val getAllMemoUseCase = GetAllMemoUseCase(testMemoRepository)
@@ -85,15 +86,17 @@ class DetailAndWriteScreenTest {
         setContentWithDetailAndWriteScreen()
 
         composeTestRule
-            .onNode(hasAnyChild(hasSetTextAction()))
+            .onRoot()
             .performClick()
 
         composeTestRule
-            .onNode(hasSetTextAction())
+            .onAllNodes(hasSetTextAction())
+            .onLast()
             .performTextInput("hello")
 
         composeTestRule
-            .onNode(hasSetTextAction())
+            .onAllNodes(hasSetTextAction())
+            .onLast()
             .assertTextEquals("hello")
     }
 }

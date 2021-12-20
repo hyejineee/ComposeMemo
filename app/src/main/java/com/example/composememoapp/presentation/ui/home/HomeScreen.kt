@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rxjava3.subscribeAsState
@@ -27,30 +26,36 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composememoapp.R
 import com.example.composememoapp.data.database.entity.MemoEntity
+import com.example.composememoapp.data.database.entity.TagEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.component.BottomBar
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
+import com.example.composememoapp.presentation.viewModel.TagViewModel
 import com.example.composememoapp.util.model.rememberTextInputState
 
 @Composable
 fun HomeScreen(
     memoViewModel: MemoViewModel,
+    tagViewModel: TagViewModel,
     handleClickAddMemoButton: () -> Unit,
     handleClickMemoItem: (MemoEntity) -> Unit
 ) {
 
-    LaunchedEffect(key1 = true) {
-        memoViewModel.getAllMemo()
-    }
-
     val memoList by memoViewModel.memoList.subscribeAsState(initial = emptyList())
+    val tagList by tagViewModel.tagList.subscribeAsState(initial = emptyList())
 
     val handleChangeSearchInput = { text: String ->
         memoViewModel.searchMemo(text)
     }
 
+    val handleChangeSelectedTag = { tag: TagEntity ->
+        memoViewModel.filterMemoByTag(tag = tag.tag)
+    }
+
     HomeScreenContent(
         memoList = memoList,
+        tagList = listOf(TagEntity(tag = "ALL")) + tagList,
+        handleChangeSelectedTag = handleChangeSelectedTag,
         handleChangeSearchInput = handleChangeSearchInput,
         handleClickAddMemoButton = handleClickAddMemoButton,
         handleClickMemoItem = handleClickMemoItem
@@ -61,6 +66,8 @@ fun HomeScreen(
 fun HomeScreenContent(
     handleChangeSearchInput: (String) -> Unit,
     memoList: List<MemoEntity>,
+    tagList: List<TagEntity>,
+    handleChangeSelectedTag: (TagEntity) -> Unit,
     handleClickAddMemoButton: () -> Unit,
     handleClickMemoItem: (MemoEntity) -> Unit
 ) {
@@ -96,21 +103,15 @@ fun HomeScreenContent(
                     .padding(horizontal = 30.dp, vertical = 10.dp)
             )
 
-            var selectedCategory by rememberSaveable { mutableStateOf("ALL") }
+            var selectedCategory by rememberSaveable { mutableStateOf(TagEntity(tag = "ALL")) }
             var listState = rememberLazyListState()
-            val categories = listOf(
-                "ALL",
-                "#category1",
-                "#category2",
-                "#category3",
-                "#category4",
-                "#category5",
-                "#category6"
-            )
 
             CategoryMenuBar(
-                categories = categories,
-                onClick = { selectedCategory = it },
+                categories = tagList,
+                onClick = {
+                    handleChangeSelectedTag(it)
+                    selectedCategory = it
+                },
                 selected = selectedCategory,
                 listState = listState,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 5.dp)
