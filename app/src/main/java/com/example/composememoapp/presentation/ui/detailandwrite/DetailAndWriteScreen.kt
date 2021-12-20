@@ -68,7 +68,7 @@ fun DetailAndWriteScreen(
         )
 
         if (newMemoEntity.contents.isNotEmpty()) {
-            memoViewModel.saveMemo(memoEntity = memoEntity, contentsState.contents, tagState.tags)
+            memoViewModel.saveMemo(memoEntity = newMemoEntity)
         }
     }
 
