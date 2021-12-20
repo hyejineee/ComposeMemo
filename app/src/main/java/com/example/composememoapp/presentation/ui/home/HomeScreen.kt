@@ -34,7 +34,6 @@ import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
 import com.example.composememoapp.util.model.rememberTextInputState
 
-@ExperimentalAnimationApi
 @Composable
 fun HomeScreen(
     memoViewModel: MemoViewModel,
@@ -69,7 +68,6 @@ fun HomeScreen(
     )
 }
 
-@ExperimentalAnimationApi
 @Composable
 fun HomeScreenContent(
     handleChangeSearchInput: (String) -> Unit,
@@ -148,7 +146,6 @@ fun HomeScreenContent(
     }
 }
 
-@ExperimentalAnimationApi
 @Preview
 @Composable
 fun HomeScreenPreview() {

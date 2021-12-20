@@ -25,7 +25,6 @@ import com.example.composememoapp.R
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.util.toPx
 
-@ExperimentalAnimationApi
 @Composable
 fun BottomBar(
     handleClickAddMemoButton: () -> Unit,

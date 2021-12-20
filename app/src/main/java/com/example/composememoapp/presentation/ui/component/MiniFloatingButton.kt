@@ -23,7 +23,6 @@ data class MiniFloatingButtonModel(
     val description: String?
 )
 
-@ExperimentalAnimationApi
 @Composable
 fun MiniFloatingButton(
     model: MiniFloatingButtonModel,
