@@ -91,6 +91,8 @@ class MemoViewModel @Inject constructor(
         memoList.subscribe {
             Log.d("MemoViewModel", "memoList : $it")
         }
+
+        getAllMemo()
     }
 
     fun saveMemo(memoEntity: MemoEntity) {

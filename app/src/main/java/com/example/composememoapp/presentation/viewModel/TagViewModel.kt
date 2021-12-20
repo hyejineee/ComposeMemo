@@ -34,6 +34,7 @@ class TagViewModel @Inject constructor(
         tagList.subscribe {
             Log.d("TagViewModel", "tag : $it")
         }
+        getAllTag()
     }
 
     fun getAllTag() {
