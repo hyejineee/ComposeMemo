@@ -18,17 +18,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.composememoapp.data.database.entity.TagEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun CategoryMenuBar(
-    categories: List<String>,
-    onClick: (selected: String) -> Unit,
+    categories: List<TagEntity>,
+    onClick: (TagEntity) -> Unit,
     listState: LazyListState,
     modifier: Modifier = Modifier,
-    selected: String = "ALL"
+    selected: TagEntity
 ) {
     val scope = rememberCoroutineScope()
 
@@ -39,11 +40,11 @@ fun CategoryMenuBar(
     LazyRow(modifier = modifier, state = listState) {
         items(categories) { category ->
             CategoryMenuRow(
-                category,
-                modifier = Modifier.selectable(category == selected) {
+                category.tag!!,
+                modifier = Modifier.selectable(category.tag == selected.tag) {
                     onClick(category)
                 },
-                isSelected = category == selected
+                isSelected = category.tag == selected.tag
             )
         }
     }
@@ -68,18 +69,12 @@ fun CategoryMenuRow(
 @Preview(showBackground = true)
 @Composable
 fun CategoryMenuBarPreview() {
-    val categories = listOf(
-        "All",
-        "#category1",
-        "#category2",
-        "#category3",
-        "#category4",
-        "#category5",
-        "#category6"
-    )
+    val categories = List(5){
+        TagEntity(tag = "tag$it")
+    }
 
     ComposeMemoAppTheme() {
-        CategoryMenuBar(categories = categories, {}, listState = rememberLazyListState())
+        CategoryMenuBar(categories = categories, {}, listState = rememberLazyListState(), selected = categories.first())
     }
 }
 

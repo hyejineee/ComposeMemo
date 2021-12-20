@@ -1,5 +1,6 @@
 package com.example.composememoapp.presentation.ui
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Row
@@ -19,22 +20,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.composememoapp.R
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
+import com.example.composememoapp.presentation.viewModel.TagViewModel
 
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @Composable
 fun MemoApp(
-    memoViewModel: MemoViewModel
+    memoViewModel: MemoViewModel = hiltViewModel(),
+    tagViewModel: TagViewModel = hiltViewModel()
 ) {
     val navController = rememberNavController()
+
+    memoViewModel.getAllMemo()
+    tagViewModel.getAllTag()
+
     ComposeMemoAppTheme() {
         Scaffold() {
             MemoAppNavHost(
                 memoViewModel = memoViewModel,
+                tagViewModel = tagViewModel,
                 navController = navController,
                 modifier = Modifier
                     .padding(it),

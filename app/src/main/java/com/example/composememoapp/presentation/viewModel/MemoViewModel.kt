@@ -1,8 +1,10 @@
 package com.example.composememoapp.presentation.viewModel
 
 import android.util.Log
+import android.widget.ListAdapter
 import androidx.lifecycle.ViewModel
 import com.example.composememoapp.data.ContentBlock
+import com.example.composememoapp.data.TextBlock
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.di.AndroidMainScheduler
 import com.example.composememoapp.di.IOScheduler
@@ -13,6 +15,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.functions.BiFunction
+import io.reactivex.rxjava3.functions.Function3
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -27,30 +31,64 @@ class MemoViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _stateSource: PublishSubject<MemoState> = PublishSubject.create()
-    private val _querySource: PublishSubject<String> = PublishSubject.create()
-    private val _memoListSource: PublishSubject<List<MemoEntity>> = PublishSubject.create()
+    private val _querySource: BehaviorSubject<String> = BehaviorSubject.create()
+    private val _memoListSource: BehaviorSubject<List<MemoEntity>> = BehaviorSubject.create()
+    private val _tagSource: BehaviorSubject<String> = BehaviorSubject.create()
+
     private var _memoList: List<MemoEntity> = emptyList()
 
     val memoList: Observable<List<MemoEntity>> =
         Observable.combineLatest(
-            _memoListSource, _querySource,
-            BiFunction { t1: List<MemoEntity>, t2: String ->
-                if (t2.isNullOrEmpty() or (t2 == "")) {
-                    t1
-                } else {
-                    t1.filter { it.contents.any { block -> block.content.contains(t2) } }
-                }
+            _memoListSource,
+            _querySource,
+            _tagSource,
+            Function3 { list: List<MemoEntity>, query: String, tag: String ->
+                list.asSequence()
+                    .filter { memo ->
+                        if (query.isNotBlank()) {
+                            memo.contents.any { block -> block.content.contains(query) }
+                        } else {
+                            true
+                        }
+                    }
+                    .filter { memo ->
+                        if (tag != "ALL") {
+                            memo.tagEntities.any { it == tag }
+                        } else {
+                            true
+                        }
+                    }
+                    .toList()
             }
-        ).publish().autoConnect()
+        )
 
     val state: Observable<MemoState> = _stateSource.publish().autoConnect()
 
     init {
         _querySource.debounce(500L, TimeUnit.MILLISECONDS)
+
+        _tagSource.onNext("ALL")
+        _querySource.onNext("")
+
+
+        _querySource.subscribe {
+            Log.d("MemoViewModel", "_query : $it")
+        }
+        _tagSource.subscribe {
+            Log.d("MemoViewModel", "_tag : $it")
+        }
+        _memoListSource.subscribe {
+            Log.d("MemoViewModel", "_memolist : $it")
+        }
+
+        memoList.subscribe {
+            Log.d("MemoViewModel", "memoList : $it")
+        }
+
     }
 
     fun saveMemo(memoEntity: MemoEntity?, contents: List<ContentBlock<*>>, tags: List<String>) {
-        val memo = sortContentBlocks(memoEntity = memoEntity, contents = contents, tags)
+        val memo = makeMemoEntity(memoEntity = memoEntity, contents = contents, tags)
         saveMemoUseCase(memoEntity = memo)
             .subscribeOn(ioScheduler)
             .observeOn(androidSchedulers)
@@ -67,7 +105,6 @@ class MemoViewModel @Inject constructor(
             .subscribeOn(ioScheduler)
             .observeOn(androidSchedulers)
             .subscribe { memos ->
-                _querySource.onNext("")
                 _memoListSource.onNext(memos)
                 _memoList = memos
             }
@@ -87,15 +124,23 @@ class MemoViewModel @Inject constructor(
             )
     }
 
-    fun sortContentBlocks(
+    fun filterMemoByTag(tag: String) {
+        _tagSource.onNext(tag)
+    }
+
+    fun makeMemoEntity(
         memoEntity: MemoEntity?,
         contents: List<ContentBlock<*>>,
         tags: List<String>
     ): MemoEntity {
+
         val contentBlocks = contents
             .asSequence()
-            .map { block ->
-                block.convertToContentBlockEntity()
+            .map {
+                when (it) {
+                    is TextBlock -> it.content = it.textInputState.text
+                }
+                it.convertToContentBlockEntity()
             }
             .filter { block ->
                 block.content.isNotBlank()

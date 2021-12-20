@@ -11,7 +11,7 @@ import com.example.composememoapp.R
 import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
-import com.example.composememoapp.data.repository.MemoRepository
+import com.example.composememoapp.data.repository.MemoAppRepository
 import com.example.composememoapp.domain.DeleteMemoUseCase
 import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
@@ -35,7 +35,7 @@ class HomeScreenTest {
 
     lateinit var context: Context
 
-    private val testMemoRepository = object : MemoRepository {
+    private val testMemoRepository = object : MemoAppRepository {
         override fun getAllMemo(): Flowable<List<MemoEntity>> {
             return listOf(memoListMock).toFlowable()
         }

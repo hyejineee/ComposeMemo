@@ -153,6 +153,10 @@ dependencies {
 
     //compose-rx
     implementation "androidx.compose.runtime:runtime-rxjava3:1.0.5"
+
+    //compose-viewmodel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0-beta01'
 }
 
 
