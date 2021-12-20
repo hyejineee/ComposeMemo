@@ -141,7 +141,7 @@ class MemoViewModelTest {
 
         memoViewModel.getAllMemo()
 
-        memoViewModel.memoList.test().awaitCount(2).assertValue(memoListMock)
+        memoViewModel.memoList.test().awaitCount(3).assertValue(memoListMock)
     }
 
     @Test
