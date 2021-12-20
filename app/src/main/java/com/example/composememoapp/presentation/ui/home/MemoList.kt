@@ -84,7 +84,6 @@ fun MemoListItem(
                 tint = MaterialTheme.colors.primary
             )
         }
-
     }
 }
 

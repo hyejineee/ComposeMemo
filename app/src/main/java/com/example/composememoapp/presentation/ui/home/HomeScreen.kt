@@ -1,6 +1,5 @@
 package com.example.composememoapp.presentation.ui.home
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

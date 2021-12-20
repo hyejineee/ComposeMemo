@@ -13,7 +13,6 @@ import com.example.composememoapp.domain.SaveMemoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
-import io.reactivex.rxjava3.functions.Function3
 import io.reactivex.rxjava3.functions.Function4
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
@@ -43,7 +42,7 @@ class MemoViewModel @Inject constructor(
             _querySource,
             _tagSource,
             _favoriteSource,
-            Function4 { list: List<MemoEntity>, query: String, tag: String, favorite:Boolean ->
+            Function4 { list: List<MemoEntity>, query: String, tag: String, favorite: Boolean ->
                 list.asSequence()
                     .filter { memo ->
                         if (query.isNotBlank()) {
@@ -60,9 +59,9 @@ class MemoViewModel @Inject constructor(
                         }
                     }
                     .filter { memo ->
-                        if(favorite){
+                        if (favorite) {
                             memo.isBookMarked == favorite
-                        }else{
+                        } else {
                             true
                         }
                     }
@@ -135,7 +134,7 @@ class MemoViewModel @Inject constructor(
         _tagSource.onNext(tag)
     }
 
-    fun filterMemoByFavorite(isFavorite : Boolean){
+    fun filterMemoByFavorite(isFavorite: Boolean) {
         _favoriteSource.onNext(isFavorite)
     }
 

@@ -60,7 +60,7 @@ class MemoViewModelTest {
                     content = "this is textBlock$it"
                 )
             },
-            isBookMarked = it==1
+            isBookMarked = it == 1
         )
     }
 
@@ -198,11 +198,10 @@ class MemoViewModelTest {
 
     @Test
     @DisplayName("북마크된 메모만 찾아서 메모 리스트에 표시한다.")
-    fun filterMemoListByBookmarkedTest(){
+    fun filterMemoListByBookmarkedTest() {
         memoViewModel.getAllMemo()
         memoViewModel.filterMemoByFavorite(true)
 
         memoViewModel.memoList.test().awaitCount(1).assertValue(memoListMock.filter { it.isBookMarked })
-
     }
 }

@@ -34,24 +34,23 @@ fun BottomBar(
 ) {
     Box(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .height(150.dp)
-            .background(
-                Brush.verticalGradient(
-                    listOf(Color(0x00000000), Color.White),
-                    startY = 0.dp.toPx(),
-                    endY = 100.dp.toPx()
+            modifier
+                .fillMaxWidth()
+                .height(150.dp)
+                .background(
+                    Brush.verticalGradient(
+                        listOf(Color(0x00000000), Color.White),
+                        startY = 0.dp.toPx(),
+                        endY = 100.dp.toPx()
+                    )
                 )
-            )
     ) {
-
 
         val favoriteIconModel = if (isFavoriteFilter) {
             MiniFloatingButtonModel(
                 icon = ImageVector.vectorResource(id = R.drawable.ic_round_star_24),
                 description = "Favorite filter icon",
-                onClick =  handleClickFavoriteFilterButton
+                onClick = handleClickFavoriteFilterButton
             )
         } else {
             MiniFloatingButtonModel(

@@ -26,7 +26,7 @@ data class MiniFloatingButtonModel(
 @Composable
 fun MiniFloatingButton(
     model: MiniFloatingButtonModel,
-    tint : Color = MaterialTheme.colors.onPrimary,
+    tint: Color = MaterialTheme.colors.onPrimary,
     modifier: Modifier = Modifier,
 ) {
 
@@ -44,7 +44,7 @@ fun MiniFloatingButton(
 fun MiniFloatingButtonContent(
     isFirstItem: Boolean = false,
     model: MiniFloatingButtonModel,
-    tint : Color = MaterialTheme.colors.onPrimary,
+    tint: Color = MaterialTheme.colors.onPrimary,
     modifier: Modifier = Modifier
 ) {
 
