@@ -1,7 +1,6 @@
 package com.example.composememoapp.presentation.viewModel
 
 import android.util.Log
-import android.widget.ListAdapter
 import androidx.lifecycle.ViewModel
 import com.example.composememoapp.data.ContentBlock
 import com.example.composememoapp.data.TextBlock
@@ -14,7 +13,6 @@ import com.example.composememoapp.domain.SaveMemoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
-import io.reactivex.rxjava3.functions.BiFunction
 import io.reactivex.rxjava3.functions.Function3
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
@@ -70,7 +68,6 @@ class MemoViewModel @Inject constructor(
         _tagSource.onNext("ALL")
         _querySource.onNext("")
 
-
         _querySource.subscribe {
             Log.d("MemoViewModel", "_query : $it")
         }
@@ -84,7 +81,6 @@ class MemoViewModel @Inject constructor(
         memoList.subscribe {
             Log.d("MemoViewModel", "memoList : $it")
         }
-
     }
 
     fun saveMemo(memoEntity: MemoEntity?, contents: List<ContentBlock<*>>, tags: List<String>) {

@@ -23,6 +23,4 @@ class DefaultMemoAppRepository @Inject constructor(
         memoDao.deleteMemo(memoEntity = memoEntity)
 
     override fun getAllTag(): Flowable<List<TagEntity>> = tagDao.getAllTag()
-
-
 }

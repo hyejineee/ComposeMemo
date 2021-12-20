@@ -9,6 +9,5 @@ interface MemoAppRepository {
     fun getAllMemo(): Flowable<List<MemoEntity>>
     fun insertMemo(memoEntity: MemoEntity): Completable
     fun deleteMemo(memoEntity: MemoEntity): Completable
-    fun getAllTag():Flowable<List<TagEntity>>
-
+    fun getAllTag(): Flowable<List<TagEntity>>
 }

@@ -11,13 +11,16 @@ import com.example.composememoapp.R
 import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
+import com.example.composememoapp.data.database.entity.TagEntity
 import com.example.composememoapp.data.repository.MemoAppRepository
 import com.example.composememoapp.domain.DeleteMemoUseCase
 import com.example.composememoapp.domain.GetAllMemoUseCase
+import com.example.composememoapp.domain.GetAllTagUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.home.HomeScreen
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
+import com.example.composememoapp.presentation.viewModel.TagViewModel
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.kotlin.toFlowable
@@ -47,6 +50,10 @@ class HomeScreenTest {
         override fun deleteMemo(memoEntity: MemoEntity): Completable {
             return Completable.complete()
         }
+
+        override fun getAllTag(): Flowable<List<TagEntity>> {
+            return listOf(tagListMock).toFlowable()
+        }
     }
 
     private val saveMemoUseCaseMock = SaveMemoUseCase(testMemoRepository)
@@ -59,6 +66,13 @@ class HomeScreenTest {
         getAllMemoUseCase = getAllMemoUseCase,
         deleteMemoUseCase = deleteMemoUseCase,
         androidSchedulers = Schedulers.newThread()
+    )
+
+    private val getAllTagUseCase = GetAllTagUseCase(testMemoRepository)
+    private val tagViewModel = TagViewModel(
+        ioScheduler = Schedulers.io(),
+        androidScheduler = Schedulers.newThread(),
+        getAllTagUseCase = getAllTagUseCase
     )
 
     private val memoListMock = List(20) {
@@ -74,6 +88,9 @@ class HomeScreenTest {
         )
     }
 
+    private val tagListMock = List(5) {
+        TagEntity(tag = "tag $it")
+    }
     @Before
     fun init() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -88,7 +105,8 @@ class HomeScreenTest {
                 HomeScreen(
                     handleClickMemoItem = {},
                     handleClickAddMemoButton = {},
-                    memoViewModel = memoViewModel
+                    memoViewModel = memoViewModel,
+                    tagViewModel = tagViewModel
                 )
             }
         }
