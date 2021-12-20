@@ -67,7 +67,8 @@ fun BottomBar(
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .padding(start = 20.dp, bottom = 16.dp)
-                .size(35.dp)
+                .size(35.dp),
+            tint = MaterialTheme.colors.primary
         )
 
         FloatingActionButton(
