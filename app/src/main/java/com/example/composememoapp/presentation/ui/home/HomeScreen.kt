@@ -1,5 +1,6 @@
 package com.example.composememoapp.presentation.ui.home
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,6 +34,7 @@ import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
 import com.example.composememoapp.util.model.rememberTextInputState
 
+@ExperimentalAnimationApi
 @Composable
 fun HomeScreen(
     memoViewModel: MemoViewModel,
@@ -52,9 +54,14 @@ fun HomeScreen(
         memoViewModel.filterMemoByTag(tag = tag.tag)
     }
 
+    val handleClickFavoriteFilterButton = { isFavorite: Boolean ->
+        memoViewModel.filterMemoByFavorite(isFavorite = isFavorite)
+    }
+
     HomeScreenContent(
         memoList = memoList,
         tagList = listOf(TagEntity(tag = "ALL")) + tagList,
+        handleClickFavoriteFilterButton = handleClickFavoriteFilterButton,
         handleChangeSelectedTag = handleChangeSelectedTag,
         handleChangeSearchInput = handleChangeSearchInput,
         handleClickAddMemoButton = handleClickAddMemoButton,
@@ -62,6 +69,7 @@ fun HomeScreen(
     )
 }
 
+@ExperimentalAnimationApi
 @Composable
 fun HomeScreenContent(
     handleChangeSearchInput: (String) -> Unit,
@@ -69,7 +77,8 @@ fun HomeScreenContent(
     tagList: List<TagEntity>,
     handleChangeSelectedTag: (TagEntity) -> Unit,
     handleClickAddMemoButton: () -> Unit,
-    handleClickMemoItem: (MemoEntity) -> Unit
+    handleClickMemoItem: (MemoEntity) -> Unit,
+    handleClickFavoriteFilterButton: (Boolean) -> Unit
 ) {
 
     val searchTextInputState = rememberTextInputState(initialText = "")
@@ -124,7 +133,14 @@ fun HomeScreenContent(
             )
         }
 
+        var isFavoriteFilter by rememberSaveable { mutableStateOf(false) }
+
         BottomBar(
+            isFavoriteFilter = isFavoriteFilter,
+            handleClickFavoriteFilterButton = {
+                isFavoriteFilter = !isFavoriteFilter
+                handleClickFavoriteFilterButton(isFavoriteFilter)
+            },
             handleClickAddMemoButton = handleClickAddMemoButton,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -132,11 +148,20 @@ fun HomeScreenContent(
     }
 }
 
+@ExperimentalAnimationApi
 @Preview
 @Composable
 fun HomeScreenPreview() {
 
     ComposeMemoAppTheme {
-//        HomeScreenContent(memoList = emptyList(), {}, {})
+        HomeScreenContent(
+            memoList = emptyList(),
+            handleChangeSearchInput = {},
+            handleClickAddMemoButton = {},
+            handleClickMemoItem = {},
+            handleChangeSelectedTag = {},
+            handleClickFavoriteFilterButton = {},
+            tagList = emptyList()
+        )
     }
 }
