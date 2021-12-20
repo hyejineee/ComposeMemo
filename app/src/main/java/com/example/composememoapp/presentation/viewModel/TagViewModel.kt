@@ -30,6 +30,7 @@ class TagViewModel @Inject constructor(
             }
         )
 
+
     init {
         _tagListSource.subscribe {
             Log.d("TagViewModel", "_taglist : $it")
