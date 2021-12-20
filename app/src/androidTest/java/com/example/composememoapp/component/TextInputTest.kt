@@ -62,7 +62,6 @@ class TextInputTest {
                         iconModel = iconModel,
                         clickableIconModel = clickableIconModel,
                         hint = hint,
-                        showHint = true,
                         text = text,
                         onValueChange = onValueChange
                     )

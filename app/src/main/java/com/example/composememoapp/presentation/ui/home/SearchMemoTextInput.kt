@@ -49,7 +49,7 @@ fun SearchMemoTextInput(
             iconModel = iconModel,
             clickableIconModel = clickableIconModel,
             hint = stringResource(id = R.string.putSearchWordCaption),
-            showHint = true
+            singleLine = true
         )
     }
 }

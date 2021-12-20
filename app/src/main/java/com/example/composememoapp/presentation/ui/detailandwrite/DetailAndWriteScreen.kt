@@ -3,6 +3,7 @@ package com.example.composememoapp.presentation.ui.detailandwrite
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,8 +12,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.twotone.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -20,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +32,7 @@ import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.component.ContentBlocks
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.util.model.rememberContentBlocksState
+import com.example.composememoapp.util.model.rememberTagListState
 
 @ExperimentalComposeUiApi
 @Composable
@@ -43,12 +42,15 @@ fun DetailAndWriteScreen(
     handleBackButtonClick: () -> Unit,
 ) {
 
-    var contentsState = rememberContentBlocksState(
+    val contentsState = rememberContentBlocksState(
         initialContents = memoEntity
             ?.contents
             ?.map { it.convertToContentBlockModel() }
-            ?.toMutableList()
-            ?: mutableListOf(TextBlock(1, ""))
+            ?: listOf(TextBlock(1, ""))
+    )
+
+    val tagState = rememberTagListState(
+        initialContents = memoEntity?.tagEntities ?: listOf()
     )
 
     val handleSaveMemo = {
@@ -69,10 +71,17 @@ fun DetailAndWriteScreen(
 
     val handleAddDefaultBlock: (FocusRequester, SoftwareKeyboardController?) -> Unit =
         { f: FocusRequester, k: SoftwareKeyboardController? ->
-            contentsState.contents.add(TextBlock(contentsState.contents.last().seq + 1, ""))
+            contentsState.contents =
+                contentsState.contents.plus(
+                    TextBlock(contentsState.contents.last().seq + 1, "")
+                )
             f.requestFocus()
             k?.show()
         }
+
+    val handleClickAddTag: (String) -> Unit = { s: String ->
+        tagState.tags = tagState.tags.plus(s)
+    }
 
     BackHandler() {
         handleSaveMemo()
@@ -82,10 +91,12 @@ fun DetailAndWriteScreen(
     DetailAndWriteScreenContent(
         memoEntity = memoEntity,
         contents = contentsState.contents,
+        tagList = tagState.tags,
         handleDeleteMemo = handleDeleteMemo,
         handleBackButtonClick = handleBackButtonClick,
         handleSaveMemo = handleSaveMemo,
         handleAddDefaultBlock = handleAddDefaultBlock,
+        handleClickAddTag = handleClickAddTag
     )
 }
 
@@ -93,11 +104,13 @@ fun DetailAndWriteScreen(
 @Composable
 fun DetailAndWriteScreenContent(
     memoEntity: MemoEntity?,
+    tagList: List<String>,
     contents: List<ContentBlock<*>>,
     handleDeleteMemo: (MemoEntity) -> Unit,
     handleAddDefaultBlock: (FocusRequester, SoftwareKeyboardController?) -> Unit,
     handleBackButtonClick: () -> Unit,
-    handleSaveMemo: () -> Unit
+    handleSaveMemo: () -> Unit,
+    handleClickAddTag: (String) -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
@@ -142,11 +155,18 @@ fun DetailAndWriteScreenContent(
             .clickable { handleAddDefaultBlock(focusRequester, keyboardController) }
             .fillMaxSize()
     ) {
+        Column() {
+            TagScreen(
+                tagList = tagList,
+                handleClickAddTag = handleClickAddTag,
+                modifier = Modifier.padding(10.dp)
+            )
 
-        ContentBlocks(
-            contents = contents,
-            focusRequester = focusRequester
-        )
+            ContentBlocks(
+                contents = contents,
+                focusRequester = focusRequester
+            )
+        }
     }
 }
 
@@ -169,11 +189,14 @@ fun DetailAndWriteScreenPreview() {
         )
         DetailAndWriteScreenContent(
             memoEntity = memo,
+            tagList = listOf(),
+            handleClickAddTag = {},
             handleBackButtonClick = {},
             handleAddDefaultBlock = { f, k -> },
             handleSaveMemo = {},
             handleDeleteMemo = {},
             contents = memo.contents.map { it.convertToContentBlockModel() }
+
         )
     }
 }
