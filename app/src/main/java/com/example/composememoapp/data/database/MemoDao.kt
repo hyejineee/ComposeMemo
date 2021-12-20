@@ -10,12 +10,11 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 
 @Dao
-interface MemoDao {
+abstract class MemoDao {
     @Query("select * from MemoEntity")
-    fun getAllMemo(): Flowable<List<MemoEntity>>
+    abstract fun getAllMemo(): Flowable<List<MemoEntity>>
 
     @Insert(onConflict = REPLACE)
-
     abstract fun insertMemoEntity(memoEntity: MemoEntity): Completable
 
     @Insert(onConflict = REPLACE)
@@ -28,5 +27,5 @@ interface MemoDao {
     }
 
     @Delete
-    fun deleteMemo(memoEntity: MemoEntity): Completable
+    abstract fun deleteMemo(memoEntity: MemoEntity): Completable
 }

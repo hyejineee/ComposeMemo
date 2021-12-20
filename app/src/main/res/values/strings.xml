@@ -4,4 +4,5 @@
     <string name="navHostComposableDescription">memoAppNavHost</string>
     <string name="addMemo">ADD MEMO</string>
     <string name="putSearchWordCaption">검색어를 입력하세요.</string>
+    <string name="addTagCaption">태그를 입력하세요.</string>
 </resources>
