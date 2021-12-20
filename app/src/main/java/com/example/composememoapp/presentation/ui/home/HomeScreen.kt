@@ -52,9 +52,14 @@ fun HomeScreen(
         memoViewModel.filterMemoByTag(tag = tag.tag)
     }
 
+    val handleClickFavoriteFilterButton = { isFavorite: Boolean ->
+        memoViewModel.filterMemoByFavorite(isFavorite = isFavorite)
+    }
+
     HomeScreenContent(
         memoList = memoList,
         tagList = listOf(TagEntity(tag = "ALL")) + tagList,
+        handleClickFavoriteFilterButton = handleClickFavoriteFilterButton,
         handleChangeSelectedTag = handleChangeSelectedTag,
         handleChangeSearchInput = handleChangeSearchInput,
         handleClickAddMemoButton = handleClickAddMemoButton,
@@ -69,7 +74,8 @@ fun HomeScreenContent(
     tagList: List<TagEntity>,
     handleChangeSelectedTag: (TagEntity) -> Unit,
     handleClickAddMemoButton: () -> Unit,
-    handleClickMemoItem: (MemoEntity) -> Unit
+    handleClickMemoItem: (MemoEntity) -> Unit,
+    handleClickFavoriteFilterButton: (Boolean) -> Unit
 ) {
 
     val searchTextInputState = rememberTextInputState(initialText = "")
@@ -124,7 +130,14 @@ fun HomeScreenContent(
             )
         }
 
+        var isFavoriteFilter by rememberSaveable { mutableStateOf(false) }
+
         BottomBar(
+            isFavoriteFilter = isFavoriteFilter,
+            handleClickFavoriteFilterButton = {
+                isFavoriteFilter = !isFavoriteFilter
+                handleClickFavoriteFilterButton(isFavoriteFilter)
+            },
             handleClickAddMemoButton = handleClickAddMemoButton,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -137,6 +150,14 @@ fun HomeScreenContent(
 fun HomeScreenPreview() {
 
     ComposeMemoAppTheme {
-//        HomeScreenContent(memoList = emptyList(), {}, {})
+        HomeScreenContent(
+            memoList = emptyList(),
+            handleChangeSearchInput = {},
+            handleClickAddMemoButton = {},
+            handleClickMemoItem = {},
+            handleChangeSelectedTag = {},
+            handleClickFavoriteFilterButton = {},
+            tagList = emptyList()
+        )
     }
 }

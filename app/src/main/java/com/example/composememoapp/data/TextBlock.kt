@@ -20,7 +20,9 @@ data class TextBlock(
 
     @Composable
     override fun drawOnlyReadContent(modifier: androidx.compose.ui.Modifier) {
-        Text(text = content, fontSize = 13.sp)
+        Box(modifier = modifier) {
+            Text(text = content, fontSize = 13.sp)
+        }
     }
 
     @Composable

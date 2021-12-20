@@ -6,10 +6,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,19 +23,20 @@ data class MiniFloatingButtonModel(
     val description: String?
 )
 
-@ExperimentalAnimationApi
 @Composable
 fun MiniFloatingButton(
     model: MiniFloatingButtonModel,
+    tint: Color = MaterialTheme.colors.onPrimary,
     modifier: Modifier = Modifier,
 ) {
 
     androidx.compose.material.Surface(
+        elevation = 6.dp,
         modifier = modifier,
-        shape = RoundedCornerShape(50.dp)
+        shape = RoundedCornerShape(50.dp),
     ) {
 
-        MiniFloatingButtonContent(model = model)
+        MiniFloatingButtonContent(model = model, tint = tint)
     }
 }
 
@@ -41,22 +44,24 @@ fun MiniFloatingButton(
 fun MiniFloatingButtonContent(
     isFirstItem: Boolean = false,
     model: MiniFloatingButtonModel,
+    tint: Color = MaterialTheme.colors.onPrimary,
     modifier: Modifier = Modifier
 ) {
 
     val modifier = if (isFirstItem) {
-        modifier.padding(10.dp)
+        modifier.padding(5.dp)
     } else {
         modifier
-            .padding(5.dp)
+            .padding(2.dp)
             .clickable(onClick = model.onClick)
-            .padding(5.dp)
+            .padding(2.dp)
     }
 
     Icon(
         modifier = modifier,
         imageVector = model.icon,
-        contentDescription = model.description
+        contentDescription = model.description,
+        tint = tint
     )
 }
 

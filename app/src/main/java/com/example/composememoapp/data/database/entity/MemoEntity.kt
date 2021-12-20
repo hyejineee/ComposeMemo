@@ -9,6 +9,6 @@ data class MemoEntity(
     @PrimaryKey(autoGenerate = true) val id: Long? = null,
     val updatedDate: Date = Date(System.currentTimeMillis()),
     val contents: List<ContentBlockEntity>,
-    val isBookMarked: Boolean = false,
+    var isBookMarked: Boolean = false,
     var tagEntities: List<String> = listOf()
 )

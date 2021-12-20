@@ -13,7 +13,7 @@ import com.example.composememoapp.domain.SaveMemoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
-import io.reactivex.rxjava3.functions.Function3
+import io.reactivex.rxjava3.functions.Function4
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
@@ -30,6 +30,7 @@ class MemoViewModel @Inject constructor(
 
     private val _stateSource: PublishSubject<MemoState> = PublishSubject.create()
     private val _querySource: BehaviorSubject<String> = BehaviorSubject.create()
+    private val _favoriteSource: BehaviorSubject<Boolean> = BehaviorSubject.create()
     private val _memoListSource: BehaviorSubject<List<MemoEntity>> = BehaviorSubject.create()
     private val _tagSource: BehaviorSubject<String> = BehaviorSubject.create()
 
@@ -40,7 +41,8 @@ class MemoViewModel @Inject constructor(
             _memoListSource,
             _querySource,
             _tagSource,
-            Function3 { list: List<MemoEntity>, query: String, tag: String ->
+            _favoriteSource,
+            Function4 { list: List<MemoEntity>, query: String, tag: String, favorite: Boolean ->
                 list.asSequence()
                     .filter { memo ->
                         if (query.isNotBlank()) {
@@ -56,6 +58,13 @@ class MemoViewModel @Inject constructor(
                             true
                         }
                     }
+                    .filter { memo ->
+                        if (favorite) {
+                            memo.isBookMarked == favorite
+                        } else {
+                            true
+                        }
+                    }
                     .toList()
             }
         )
@@ -67,6 +76,7 @@ class MemoViewModel @Inject constructor(
 
         _tagSource.onNext("ALL")
         _querySource.onNext("")
+        _favoriteSource.onNext(false)
 
         _querySource.subscribe {
             Log.d("MemoViewModel", "_query : $it")
@@ -122,6 +132,10 @@ class MemoViewModel @Inject constructor(
 
     fun filterMemoByTag(tag: String) {
         _tagSource.onNext(tag)
+    }
+
+    fun filterMemoByFavorite(isFavorite: Boolean) {
+        _favoriteSource.onNext(isFavorite)
     }
 
     fun makeMemoEntity(
