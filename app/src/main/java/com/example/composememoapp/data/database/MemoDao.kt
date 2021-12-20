@@ -23,7 +23,6 @@ abstract class MemoDao {
 
     fun insertMemo(memoEntity: MemoEntity): Completable {
         val tags: List<TagEntity> = memoEntity.tagEntities.map { TagEntity(tag = it) }
-
         return insertMemoEntity(memoEntity = memoEntity)
             .mergeWith(insertTagEntity(tags = tags))
     }
