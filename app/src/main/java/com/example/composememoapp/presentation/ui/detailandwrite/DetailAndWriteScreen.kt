@@ -92,7 +92,9 @@ fun DetailAndWriteScreen(
         }
 
     val handleClickAddTag: (String) -> Unit = { s: String ->
-        tagState.tags = tagState.tags.plus(s)
+        if(s !in tagState.tags){
+            tagState.tags = tagState.tags.plus(s)
+        }
     }
 
     BackHandler() {
