@@ -29,8 +29,9 @@ fun MiniFloatingButton(
 ) {
 
     androidx.compose.material.Surface(
+        elevation = 6.dp,
         modifier = modifier,
-        shape = RoundedCornerShape(50.dp)
+        shape = RoundedCornerShape(50.dp),
     ) {
 
         MiniFloatingButtonContent(model = model)
@@ -45,12 +46,12 @@ fun MiniFloatingButtonContent(
 ) {
 
     val modifier = if (isFirstItem) {
-        modifier.padding(10.dp)
+        modifier.padding(5.dp)
     } else {
         modifier
-            .padding(5.dp)
+            .padding(2.dp)
             .clickable(onClick = model.onClick)
-            .padding(5.dp)
+            .padding(2.dp)
     }
 
     Icon(
