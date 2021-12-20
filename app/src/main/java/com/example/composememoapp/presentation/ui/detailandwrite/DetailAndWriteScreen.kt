@@ -15,10 +15,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.twotone.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -38,6 +39,7 @@ import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.component.ContentBlocks
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
+import com.example.composememoapp.presentation.viewModel.TagViewModel
 import com.example.composememoapp.util.model.rememberContentBlocksState
 import com.example.composememoapp.util.model.rememberTagListState
 
@@ -45,9 +47,12 @@ import com.example.composememoapp.util.model.rememberTagListState
 @Composable
 fun DetailAndWriteScreen(
     memoEntity: MemoEntity? = null,
+    tagViewModel: TagViewModel,
     memoViewModel: MemoViewModel,
     handleBackButtonClick: () -> Unit,
 ) {
+
+    val allTag by tagViewModel.tagList.subscribeAsState(initial = emptyList())
 
     val contentsState = rememberContentBlocksState(
         initialContents = memoEntity
@@ -97,6 +102,7 @@ fun DetailAndWriteScreen(
 
     DetailAndWriteScreenContent(
         memoEntity = memoEntity,
+        allTag = allTag.map { it.tag },
         contents = contentsState.contents,
         tagList = tagState.tags,
         handleDeleteMemo = handleDeleteMemo,
@@ -112,6 +118,7 @@ fun DetailAndWriteScreen(
 fun DetailAndWriteScreenContent(
     memoEntity: MemoEntity?,
     tagList: List<String>,
+    allTag: List<String>,
     contents: List<ContentBlock<*>>,
     handleDeleteMemo: (MemoEntity) -> Unit,
     handleAddDefaultBlock: (FocusRequester, SoftwareKeyboardController?) -> Unit,
@@ -187,6 +194,7 @@ fun DetailAndWriteScreenContent(
         Column() {
             TagScreen(
                 tagList = tagList,
+                allTag = allTag,
                 handleClickAddTag = handleClickAddTag,
                 modifier = Modifier.padding(10.dp)
             )
@@ -218,6 +226,7 @@ fun DetailAndWriteScreenPreview() {
         )
         DetailAndWriteScreenContent(
             memoEntity = memo,
+            allTag = listOf(),
             tagList = listOf(),
             handleClickAddTag = {},
             handleBackButtonClick = {},
@@ -225,7 +234,6 @@ fun DetailAndWriteScreenPreview() {
             handleSaveMemo = {},
             handleDeleteMemo = {},
             contents = memo.contents.map { it.convertToContentBlockModel() }
-
         )
     }
 }

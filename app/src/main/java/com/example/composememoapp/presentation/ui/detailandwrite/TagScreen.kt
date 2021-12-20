@@ -10,6 +10,7 @@ import com.example.composememoapp.util.model.rememberTextInputState
 @Composable
 fun TagScreen(
     tagList: List<String>,
+    allTag: List<String> = emptyList(),
     handleClickAddTag: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -21,6 +22,7 @@ fun TagScreen(
         TagTextInput(
             state = textState,
             handleClickAddTag = handleClickAddTag,
+            tagList = allTag
         )
         TagList(tagList = tagList)
     }

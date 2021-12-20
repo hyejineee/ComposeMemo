@@ -3,6 +3,7 @@ package com.example.composememoapp.data.database
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy.IGNORE
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
 import com.example.composememoapp.data.database.entity.MemoEntity
@@ -18,11 +19,13 @@ abstract class MemoDao {
     @Insert(onConflict = REPLACE)
     abstract fun insertMemoEntity(memoEntity: MemoEntity): Completable
 
-    @Insert(onConflict = REPLACE)
+    @Insert(onConflict = IGNORE)
     abstract fun insertTagEntity(tags: List<TagEntity>): Completable
+
 
     fun insertMemo(memoEntity: MemoEntity): Completable {
         val tags: List<TagEntity> = memoEntity.tagEntities.map { TagEntity(tag = it) }
+
         return insertMemoEntity(memoEntity = memoEntity)
             .mergeWith(insertTagEntity(tags = tags))
     }

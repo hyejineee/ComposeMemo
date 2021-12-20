@@ -1,18 +1,11 @@
 package com.example.composememoapp.presentation.ui.detailandwrite
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -20,7 +13,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composememoapp.R
-import com.example.composememoapp.data.database.entity.TagEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.component.DropDownList
 import com.example.composememoapp.presentation.ui.component.TextInput
@@ -32,7 +24,7 @@ import java.util.regex.Pattern
 @Composable
 fun TagTextInput(
     state: TextInputSate,
-    tagList: List<TagEntity> = listOf(TagEntity(tag = "hi"), TagEntity(tag = "hello")),
+    tagList: List<String> = emptyList(),
     handleClickAddTag: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -70,9 +62,9 @@ fun TagTextInput(
             )
         }
 
-        if (state.text.isNotBlank() && tagList.count { it.tag.contains(state.text) } > 0) {
+        if (state.text.isNotBlank() && tagList.count { it.contains(state.text) } > 0) {
             DropDownList(
-                list = tagList.filter { it.tag.contains(state.text) }.map { it.tag },
+                list = tagList.filter { it.contains(state.text) },
                 onClick = {
                     handleClickAddTag(it)
                     state.text = ""
