@@ -15,14 +15,13 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.kotlin.toFlowable
 import io.reactivex.rxjava3.observers.TestObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.given
-import org.mockito.kotlin.whenever
 import java.util.concurrent.TimeUnit
-import org.junit.jupiter.api.BeforeEach
 
 class MemoViewModelTest {
 
