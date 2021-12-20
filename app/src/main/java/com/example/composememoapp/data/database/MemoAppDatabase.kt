@@ -17,5 +17,5 @@ import com.example.composememoapp.data.database.entity.TagEntity
 @TypeConverters(com.example.composememoapp.data.database.TypeConverters::class)
 abstract class MemoAppDatabase : RoomDatabase() {
     abstract fun memoDao(): MemoDao
-    abstract fun tagDao():TagDao
+    abstract fun tagDao(): TagDao
 }

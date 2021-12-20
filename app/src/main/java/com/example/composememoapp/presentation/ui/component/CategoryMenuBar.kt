@@ -69,7 +69,7 @@ fun CategoryMenuRow(
 @Preview(showBackground = true)
 @Composable
 fun CategoryMenuBarPreview() {
-    val categories = List(5){
+    val categories = List(5) {
         TagEntity(tag = "tag$it")
     }
 
