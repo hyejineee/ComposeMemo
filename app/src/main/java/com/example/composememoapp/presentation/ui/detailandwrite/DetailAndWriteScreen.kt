@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,17 +13,26 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.twotone.Delete
+import androidx.compose.material.icons.twotone.Star
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.composememoapp.R
 import com.example.composememoapp.data.ContentBlock
 import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.TextBlock
@@ -115,6 +125,10 @@ fun DetailAndWriteScreenContent(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
 
+    var favoriteSate = rememberSaveable {
+        mutableStateOf(memoEntity?.isBookMarked ?: false)
+    }
+
     Scaffold(
         topBar = {
             TopAppBar() {
@@ -132,22 +146,40 @@ fun DetailAndWriteScreenContent(
                             )
                             .padding(10.dp),
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = null
+                        contentDescription = "Arrow Back Icon"
                     )
 
-                    Icon(
-                        imageVector = Icons.TwoTone.Delete,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-                                memoEntity?.let {
-                                    handleDeleteMemo(it)
+                    memoEntity?.let { memo ->
+                        Row(
+                            modifier = Modifier
+                                .align(Alignment.CenterEnd)
+                                .padding(end = 16.dp)
+                        ) {
+
+                            val favoriteIcon =
+                                if (favoriteSate.value) ImageVector.vectorResource(id = R.drawable.ic_round_star_24)
+                                else ImageVector.vectorResource(id = R.drawable.ic_round_star_border_24)
+
+                            Icon(
+                                imageVector = favoriteIcon,
+                                contentDescription = "Favorite Icon",
+                                Modifier.clickable {
+                                    favoriteSate.value = !favoriteSate.value
+                                    memo.isBookMarked = favoriteSate.value
                                 }
-                                handleBackButtonClick()
-                            }
-                            .align(Alignment.CenterEnd)
-                            .padding(end = 16.dp)
-                    )
+                            )
+
+                            Icon(
+                                imageVector = Icons.TwoTone.Delete,
+                                contentDescription = "Delete Icon",
+                                modifier = Modifier
+                                    .clickable {
+                                        handleDeleteMemo(memo)
+                                        handleBackButtonClick()
+                                    }
+                            )
+                        }
+                    }
                 }
             }
         },
@@ -182,8 +214,8 @@ fun DetailAndWriteScreenPreview() {
                     type = ContentType.Text,
                     seq = it.toLong(),
                     content = "this is text block content $it" +
-                        " this is text block content $it" +
-                        " this is text block content $it"
+                            " this is text block content $it" +
+                            " this is text block content $it"
                 )
             }
         )
