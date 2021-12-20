@@ -30,8 +30,10 @@ fun TagTextInput(
     val clickableIconModel = IconModel(
         iconId = R.drawable.ic_round_add_circle_outline_24,
         onClick = {
-            handleClickAddTag(state.text)
-            state.text = ""
+            if(state.text.isNotBlank()){
+                handleClickAddTag(state.text)
+                state.text = ""
+            }
         },
         description = Descriptions.ClearIcon.text
     )
@@ -70,6 +72,17 @@ fun TagTextInput(
                     .padding(start = 20.dp)
             )
         }
+
+        if (state.text.isBlank()) {
+            Text(
+                text = "빈 태그는 입력할 수 없습니다.",
+                fontSize = 10.sp,
+                color = Color.Red,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp)
+            )
+        }
     }
 }
 
@@ -77,7 +90,7 @@ fun TagTextInput(
 @Composable
 fun SearchMemoTextInput() {
     ComposeMemoAppTheme {
-        val state = TextInputSate("hello^")
+        val state = TextInputSate("")
         TagTextInput(
             state = state,
             handleClickAddTag = {}
