@@ -12,4 +12,3 @@ data class TagEntity(
     @PrimaryKey(autoGenerate = true) val id: Long? = null,
     val tag: String
 ) : Parcelable
-
