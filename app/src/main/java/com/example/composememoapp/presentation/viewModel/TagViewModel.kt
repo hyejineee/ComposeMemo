@@ -23,12 +23,9 @@ class TagViewModel @Inject constructor(
     private val _tagListSource = BehaviorSubject.create<List<TagEntity>>()
 
     val tagList: Observable<List<TagEntity>> =
-        Observable.zip(
-            _tagListSource, Observable.just(""),
-            BiFunction { t1: List<TagEntity>, t2: String ->
-                t1
-            }
-        )
+        _tagListSource.compose {
+            it
+        }
 
     init {
         _tagListSource.subscribe {
@@ -45,7 +42,9 @@ class TagViewModel @Inject constructor(
         getAllTagUseCase()
             .subscribeOn(ioScheduler)
             .observeOn(androidScheduler)
-            .sorted()
+            .map {
+                it.sortedBy { tag -> tag.tag }
+            }
             .subscribe {
                 _tagListSource.onNext(it)
             }
