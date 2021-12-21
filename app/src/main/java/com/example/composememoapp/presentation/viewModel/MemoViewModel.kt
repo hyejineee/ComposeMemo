@@ -65,10 +65,10 @@ class MemoViewModel @Inject constructor(
                             true
                         }
                     }
+                    .sortedByDescending { it.updatedDate }
                     .toList()
             }
         )
-
     val state: Observable<MemoState> = _stateSource.publish().autoConnect()
 
     init {
