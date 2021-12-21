@@ -65,10 +65,10 @@ class MemoViewModel @Inject constructor(
                             true
                         }
                     }
+                    .sortedByDescending { it.updatedDate }
                     .toList()
             }
         )
-
     val state: Observable<MemoState> = _stateSource.publish().autoConnect()
 
     init {
@@ -88,14 +88,21 @@ class MemoViewModel @Inject constructor(
             Log.d("MemoViewModel", "_memolist : $it")
         }
 
+        _stateSource.subscribe {
+            Log.d("MemoViewModel", "_state : $it")
+        }
+
         memoList.subscribe {
             Log.d("MemoViewModel", "memoList : $it")
+            _stateSource.onNext(MemoState.FetchSuccess)
         }
 
         getAllMemo()
     }
 
     fun saveMemo(memoEntity: MemoEntity) {
+        handleLoadingState()
+
         saveMemoUseCase(memoEntity = memoEntity)
             .subscribeOn(ioScheduler)
             .observeOn(androidSchedulers)
@@ -108,6 +115,8 @@ class MemoViewModel @Inject constructor(
     fun getMemo(memoId: Long) = _memoList.find { it.id == memoId }
 
     fun getAllMemo() {
+        handleLoadingState()
+
         getAllMemoUseCase()
             .subscribeOn(ioScheduler)
             .observeOn(androidSchedulers)
@@ -122,6 +131,8 @@ class MemoViewModel @Inject constructor(
     }
 
     fun deleteMemo(memoEntity: MemoEntity) {
+        handleLoadingState()
+
         deleteMemoUseCase(memoEntity)
             .subscribeOn(ioScheduler)
             .observeOn(androidSchedulers)
@@ -164,6 +175,10 @@ class MemoViewModel @Inject constructor(
         return memoEntity?.let {
             it.copy(contents = contentBlocks, tagEntities = tags)
         } ?: MemoEntity(contents = contentBlocks, tagEntities = tags)
+    }
+
+    private fun handleLoadingState() {
+        _stateSource.onNext(MemoState.Loading)
     }
 
     private fun handleSuccess(state: MemoState) {
