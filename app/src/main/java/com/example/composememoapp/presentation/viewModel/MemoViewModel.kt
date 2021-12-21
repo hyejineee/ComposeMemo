@@ -177,7 +177,7 @@ class MemoViewModel @Inject constructor(
         } ?: MemoEntity(contents = contentBlocks, tagEntities = tags)
     }
 
-    private fun handleLoadingState(){
+    private fun handleLoadingState() {
         _stateSource.onNext(MemoState.Loading)
     }
 

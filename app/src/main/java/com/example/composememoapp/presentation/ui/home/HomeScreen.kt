@@ -41,7 +41,6 @@ import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
 import com.example.composememoapp.util.model.rememberTextInputState
 
-
 @Composable
 fun HomeScreen(
     memoViewModel: MemoViewModel,
@@ -66,7 +65,6 @@ fun HomeScreen(
         memoViewModel.filterMemoByFavorite(isFavorite = isFavorite)
     }
 
-
     val snackBarMessage = when (state) {
         is MemoState.Error -> "작업 실패 : ${(state as MemoState.Error).message}"
         else -> {
@@ -90,8 +88,6 @@ fun HomeScreen(
         handleClickAddMemoButton = handleClickAddMemoButton,
         handleClickMemoItem = handleClickMemoItem
     )
-
-
 }
 
 @Composable
@@ -161,14 +157,13 @@ fun HomeScreenContent(
                     modifier = Modifier.padding(vertical = 10.dp)
                 )
             } else {
-               Box(modifier = Modifier.fillMaxSize()){
-                   CircularProgressIndicator(
-                       modifier = Modifier.size(100.dp)
-                           .align(Alignment.Center)
-                   )
-               }
+                Box(modifier = Modifier.fillMaxSize()) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(100.dp)
+                            .align(Alignment.Center)
+                    )
+                }
             }
-
         }
 
         var isFavoriteFilter by rememberSaveable { mutableStateOf(false) }
@@ -184,7 +179,6 @@ fun HomeScreenContent(
                 .align(Alignment.BottomCenter)
         )
 
-
         snackBarMessage?.let {
             LaunchedEffect(key1 = snackBarMessage) {
                 snackbarHostState.showSnackbar(
@@ -196,7 +190,6 @@ fun HomeScreenContent(
 
         SnackbarHost(hostState = snackbarHostState, Modifier.align(Alignment.BottomCenter))
     }
-
 }
 
 @Preview
