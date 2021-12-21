@@ -72,7 +72,7 @@ fun TagTextInput(
             )
         }
 
-        val regex = "^[a-zA-Z0-9]+$"
+        val regex = "^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]+$"
         if (!Pattern.matches(regex, state.text) && state.text.isNotBlank()) {
             state.text = state.text.dropLast(1)
             Text(
