@@ -21,9 +21,6 @@ fun MemoApp(
 ) {
     val navController = rememberNavController()
 
-    memoViewModel.getAllMemo()
-    tagViewModel.getAllTag()
-
     ComposeMemoAppTheme() {
         Scaffold() {
             MemoAppNavHost(

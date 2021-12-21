@@ -71,6 +71,7 @@ fun MemoAppNavHost(
 
             DetailAndWriteScreen(
                 memoViewModel = memoViewModel,
+                tagViewModel = tagViewModel,
                 memoEntity = memo,
                 handleBackButtonClick = { handleBackButtonClick() },
             )
@@ -79,6 +80,7 @@ fun MemoAppNavHost(
         composable(MemoAppScreen.Write.name) {
             DetailAndWriteScreen(
                 memoViewModel = memoViewModel,
+                tagViewModel = tagViewModel,
                 handleBackButtonClick = { handleBackButtonClick() },
             )
         }
