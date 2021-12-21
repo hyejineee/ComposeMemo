@@ -13,7 +13,6 @@ import com.example.composememoapp.util.model.ContentBlocksState
 import com.google.common.truth.Truth.assertThat
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.kotlin.toFlowable
-import io.reactivex.rxjava3.observers.TestObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -90,17 +89,12 @@ class MemoViewModelTest {
         given(testMemoRepository.insertMemo(memoEntity = any()))
             .willReturn(Completable.complete())
 
-        val testObserver: TestObserver<MemoState> = TestObserver()
-        memoViewModel
-            .state
-            .subscribe(testObserver)
-
         memoViewModel.saveMemo(
             memoEntityMock,
         )
 
-        testObserver.awaitCount(1)
-        assertThat(testObserver.values().first()).isEqualTo(MemoState.SaveSuccess)
+        val values = memoViewModel.state.test().awaitDone(500, TimeUnit.MILLISECONDS).values()
+        assertThat(values).contains(MemoState.SaveSuccess)
     }
 
     @Test
@@ -109,17 +103,12 @@ class MemoViewModelTest {
         given(testMemoRepository.insertMemo(memoEntity = any()))
             .willReturn(Completable.error(Throwable("메모 저장 에러")))
 
-        val testObserver: TestObserver<MemoState> = TestObserver()
-        memoViewModel
-            .state
-            .subscribe(testObserver)
-
         memoViewModel.saveMemo(
             memoEntityMock,
         )
 
-        testObserver.awaitCount(1)
-        assertThat(testObserver.values().first()).isEqualTo(MemoState.Error("메모 저장 에러"))
+        val values = memoViewModel.state.test().awaitDone(500, TimeUnit.MILLISECONDS).values()
+        assertThat(values).contains(MemoState.Error("메모 저장 에러"))
     }
 
     @Test
@@ -134,13 +123,12 @@ class MemoViewModelTest {
     fun filterMemoList() {
         val expected = memoListMock.filter {
             it.contents.any { block -> block.content.contains("1") }
-        }
+        }.sortedByDescending { it.updatedDate }
 
         memoViewModel.searchMemo("1")
 
         val actual =
             memoViewModel.memoList.test().awaitDone(1000, TimeUnit.MILLISECONDS).values().first()
-
         assertThat(actual).isEqualTo(expected)
     }
 
@@ -150,15 +138,10 @@ class MemoViewModelTest {
         given(testMemoRepository.deleteMemo(any()))
             .willReturn(Completable.complete())
 
-        val testObserver: TestObserver<MemoState> = TestObserver()
-        memoViewModel
-            .state
-            .subscribe(testObserver)
-
         memoViewModel.deleteMemo(memoEntityMock)
 
-        testObserver.awaitCount(1)
-        assertThat(testObserver.values().first()).isEqualTo(MemoState.DeleteSuccess)
+        val values = memoViewModel.state.test().awaitDone(500, TimeUnit.MILLISECONDS).values()
+        assertThat(values).contains(MemoState.DeleteSuccess)
     }
 
     @Test
@@ -167,15 +150,10 @@ class MemoViewModelTest {
         given(testMemoRepository.deleteMemo(any()))
             .willReturn(Completable.error(Exception("메모 삭제 실패")))
 
-        val testObserver: TestObserver<MemoState> = TestObserver()
-        memoViewModel
-            .state
-            .subscribe(testObserver)
-
         memoViewModel.deleteMemo(memoEntityMock)
 
-        testObserver.awaitCount(1)
-        assertThat(testObserver.values().first()).isEqualTo(MemoState.Error("메모 삭제 실패"))
+        val values = memoViewModel.state.test().awaitDone(500, TimeUnit.MILLISECONDS).values()
+        assertThat(values).contains(MemoState.Error("메모 삭제 실패"))
     }
 
     @Test

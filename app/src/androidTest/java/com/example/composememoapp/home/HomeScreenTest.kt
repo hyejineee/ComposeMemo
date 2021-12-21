@@ -114,6 +114,7 @@ class HomeScreenTest {
     @Test
     fun 메모_검색창을_보여준다() {
         setContentWithHomeScreen()
+        composeTestRule.mainClock.advanceTimeBy(50L)
         composeTestRule
             .onNodeWithText(context.getString(R.string.putSearchWordCaption))
             .assertIsDisplayed()
@@ -122,6 +123,7 @@ class HomeScreenTest {
     @Test
     fun 카테고리_선택_메뉴를_보여준다() {
         setContentWithHomeScreen()
+        composeTestRule.mainClock.advanceTimeBy(50L)
         composeTestRule
             .onAllNodes(hasScrollAction())[0]
             .assertIsDisplayed()
