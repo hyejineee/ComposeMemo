@@ -91,11 +91,12 @@ class MemoViewModel @Inject constructor(
         memoList.subscribe {
             Log.d("MemoViewModel", "memoList : $it")
         }
+
+        getAllMemo()
     }
 
-    fun saveMemo(memoEntity: MemoEntity?, contents: List<ContentBlock<*>>, tags: List<String>) {
-        val memo = makeMemoEntity(memoEntity = memoEntity, contents = contents, tags)
-        saveMemoUseCase(memoEntity = memo)
+    fun saveMemo(memoEntity: MemoEntity) {
+        saveMemoUseCase(memoEntity = memoEntity)
             .subscribeOn(ioScheduler)
             .observeOn(androidSchedulers)
             .subscribe(

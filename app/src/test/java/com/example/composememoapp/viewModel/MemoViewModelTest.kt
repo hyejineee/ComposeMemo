@@ -60,7 +60,8 @@ class MemoViewModelTest {
                     content = "this is textBlock$it"
                 )
             },
-            isBookMarked = it == 1
+            isBookMarked = it == 1,
+            tagEntities = if (it == 1) listOf("hi", "hello") else emptyList()
         )
     }
 
@@ -72,6 +73,8 @@ class MemoViewModelTest {
 
         val schedulers = Schedulers.newThread()
 
+        given(testMemoRepository.getAllMemo()).willReturn(listOf(memoListMock).toFlowable())
+
         memoViewModel = MemoViewModel(
             ioScheduler = schedulers,
             saveMemoUseCase = saveMemoUseCaseMock,
@@ -79,8 +82,6 @@ class MemoViewModelTest {
             deleteMemoUseCase = deleteMemoUseCase,
             androidSchedulers = schedulers
         )
-
-        given(testMemoRepository.getAllMemo()).willReturn(listOf(memoListMock).toFlowable())
     }
 
     @Test
@@ -96,8 +97,6 @@ class MemoViewModelTest {
 
         memoViewModel.saveMemo(
             memoEntityMock,
-            contentState.contents,
-            tags = memoEntityMock.tagEntities
         )
 
         testObserver.awaitCount(1)
@@ -117,8 +116,6 @@ class MemoViewModelTest {
 
         memoViewModel.saveMemo(
             memoEntityMock,
-            contents = contentState.contents,
-            tags = memoEntityMock.tagEntities
         )
 
         testObserver.awaitCount(1)
@@ -128,9 +125,8 @@ class MemoViewModelTest {
     @Test
     @DisplayName("저장되어 있는 메모 전체를 가져온다.")
     fun getAllMemoTest() {
-        memoViewModel.getAllMemo()
 
-        memoViewModel.memoList.test().awaitCount(3).assertValue(memoListMock)
+        memoViewModel.memoList.test().awaitCount(1).assertValue(memoListMock)
     }
 
     @Test
@@ -140,7 +136,6 @@ class MemoViewModelTest {
             it.contents.any { block -> block.content.contains("1") }
         }
 
-        memoViewModel.getAllMemo()
         memoViewModel.searchMemo("1")
 
         val actual =
@@ -186,9 +181,6 @@ class MemoViewModelTest {
     @Test
     @DisplayName("메모 아이디에 해당하는 메모를 찾아서 리턴한다.")
     fun findMemoByMemoId() {
-
-        memoViewModel.getAllMemo()
-
         Thread.sleep(500)
 
         val actual = memoViewModel.getMemo(1L)
@@ -199,9 +191,19 @@ class MemoViewModelTest {
     @Test
     @DisplayName("북마크된 메모만 찾아서 메모 리스트에 표시한다.")
     fun filterMemoListByBookmarkedTest() {
-        memoViewModel.getAllMemo()
+
         memoViewModel.filterMemoByFavorite(true)
 
-        memoViewModel.memoList.test().awaitCount(1).assertValue(memoListMock.filter { it.isBookMarked })
+        memoViewModel.memoList.test().awaitCount(1)
+            .assertValue(memoListMock.filter { it.isBookMarked })
+    }
+
+    @Test
+    @DisplayName("해당 태그가 있는 메모만 찾아서 메모 리스트에 표시한다.")
+    fun filterMemoListByTagTest() {
+        memoViewModel.filterMemoByTag("hi")
+
+        memoViewModel.memoList.test().awaitCount(1)
+            .assertValue(memoListMock.filter { memo -> memo.tagEntities.any { it == "hi" } })
     }
 }

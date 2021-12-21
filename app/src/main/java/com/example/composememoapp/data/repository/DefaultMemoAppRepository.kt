@@ -16,8 +16,12 @@ class DefaultMemoAppRepository @Inject constructor(
     override fun getAllMemo(): Flowable<List<MemoEntity>> =
         memoDao.getAllMemo()
 
-    override fun insertMemo(memoEntity: MemoEntity): Completable =
-        memoDao.insertMemo(memoEntity = memoEntity)
+    override fun insertMemo(memoEntity: MemoEntity): Completable {
+        val tags = memoEntity.tagEntities.map { TagEntity(tag = it) }
+
+        return memoDao.insertMemoEntity(memoEntity = memoEntity)
+            .mergeWith(tagDao.insertTagEntity(tags = tags))
+    }
 
     override fun deleteMemo(memoEntity: MemoEntity): Completable =
         memoDao.deleteMemo(memoEntity = memoEntity)

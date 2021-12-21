@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composememoapp.R
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
+import com.example.composememoapp.presentation.ui.component.DropDownList
 import com.example.composememoapp.presentation.ui.component.TextInput
 import com.example.composememoapp.util.Descriptions
 import com.example.composememoapp.util.model.IconModel
@@ -23,6 +24,7 @@ import java.util.regex.Pattern
 @Composable
 fun TagTextInput(
     state: TextInputSate,
+    tagList: List<String> = emptyList(),
     handleClickAddTag: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -30,13 +32,15 @@ fun TagTextInput(
     val clickableIconModel = IconModel(
         iconId = R.drawable.ic_round_add_circle_outline_24,
         onClick = {
-            handleClickAddTag(state.text)
-            state.text = ""
+            if (state.text.isNotBlank()) {
+                handleClickAddTag(state.text)
+                state.text = ""
+            }
         },
         description = Descriptions.ClearIcon.text
     )
 
-    Column() {
+    Column {
         androidx.compose.material.Surface(
             elevation = 5.dp,
             shape = RoundedCornerShape(50.dp),
@@ -50,10 +54,21 @@ fun TagTextInput(
                     state.text = it
                 },
                 modifier = Modifier
-                    .padding(5.dp),
+                    .padding(5.dp)
+                    .fillMaxWidth(),
                 clickableIconModel = clickableIconModel,
                 hint = stringResource(id = R.string.addTagCaption),
-                singleLine = true
+                singleLine = true,
+            )
+        }
+
+        if (state.text.isNotBlank() && tagList.count { it.contains(state.text) } > 0) {
+            DropDownList(
+                list = tagList.filter { it.contains(state.text) },
+                onClick = {
+                    handleClickAddTag(it)
+                    state.text = ""
+                }
             )
         }
 
@@ -69,6 +84,17 @@ fun TagTextInput(
                     .padding(start = 20.dp)
             )
         }
+
+        if (state.text.isBlank()) {
+            Text(
+                text = "빈 태그는 입력할 수 없습니다.",
+                fontSize = 10.sp,
+                color = Color.Red,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp)
+            )
+        }
     }
 }
 
@@ -76,7 +102,7 @@ fun TagTextInput(
 @Composable
 fun SearchMemoTextInput() {
     ComposeMemoAppTheme {
-        val state = TextInputSate("hello^")
+        val state = TextInputSate("hell")
         TagTextInput(
             state = state,
             handleClickAddTag = {}

@@ -2,8 +2,10 @@ package com.example.composememoapp.data
 
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.presentation.ui.component.TextInput
@@ -29,13 +31,14 @@ data class TextBlock(
     override fun drawEditableContent(state: InputState, modifier: androidx.compose.ui.Modifier) {
 //        val textInputState = (state as TextInputSate)
 
-        Box(modifier = modifier) {
+        Box(modifier = Modifier.fillMaxWidth()) {
             TextInput(
                 text = textInputState.text,
                 onValueChange = {
                     textInputState.text = it
                     content = textInputState.text
-                }
+                },
+                modifier = modifier.fillMaxWidth()
             )
         }
     }

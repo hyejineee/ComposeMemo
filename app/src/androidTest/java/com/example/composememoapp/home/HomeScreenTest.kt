@@ -21,14 +21,14 @@ import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.home.HomeScreen
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.kotlin.toFlowable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
+import org.mockito.kotlin.given
 
 @RunWith(AndroidJUnit4::class)
 class HomeScreenTest {
@@ -38,42 +38,10 @@ class HomeScreenTest {
 
     lateinit var context: Context
 
-    private val testMemoRepository = object : MemoAppRepository {
-        override fun getAllMemo(): Flowable<List<MemoEntity>> {
-            return listOf(memoListMock).toFlowable()
-        }
+    private val testMemoRepository = Mockito.mock(MemoAppRepository::class.java)
 
-        override fun insertMemo(memoEntity: MemoEntity): Completable {
-            return Completable.complete()
-        }
-
-        override fun deleteMemo(memoEntity: MemoEntity): Completable {
-            return Completable.complete()
-        }
-
-        override fun getAllTag(): Flowable<List<TagEntity>> {
-            return listOf(tagListMock).toFlowable()
-        }
-    }
-
-    private val saveMemoUseCaseMock = SaveMemoUseCase(testMemoRepository)
-    private val getAllMemoUseCase = GetAllMemoUseCase(testMemoRepository)
-    private val deleteMemoUseCase = DeleteMemoUseCase(testMemoRepository)
-
-    private val memoViewModel = MemoViewModel(
-        ioScheduler = Schedulers.io(),
-        saveMemoUseCase = saveMemoUseCaseMock,
-        getAllMemoUseCase = getAllMemoUseCase,
-        deleteMemoUseCase = deleteMemoUseCase,
-        androidSchedulers = Schedulers.newThread()
-    )
-
-    private val getAllTagUseCase = GetAllTagUseCase(testMemoRepository)
-    private val tagViewModel = TagViewModel(
-        ioScheduler = Schedulers.io(),
-        androidScheduler = Schedulers.newThread(),
-        getAllTagUseCase = getAllTagUseCase
-    )
+    private lateinit var memoViewModel: MemoViewModel
+    private lateinit var tagViewModel: TagViewModel
 
     private val memoListMock = List(20) {
         MemoEntity(
@@ -91,12 +59,35 @@ class HomeScreenTest {
     private val tagListMock = List(5) {
         TagEntity(tag = "tag $it")
     }
+
     @Before
     fun init() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         composeTestRule.mainClock.autoAdvance = false
         composeTestRule.mainClock.advanceTimeBy(50L)
-        memoViewModel.getAllMemo()
+
+        val scheduler = Schedulers.newThread()
+        val saveMemoUseCaseMock = SaveMemoUseCase(testMemoRepository)
+        val getAllMemoUseCase = GetAllMemoUseCase(testMemoRepository)
+        val deleteMemoUseCase = DeleteMemoUseCase(testMemoRepository)
+        val getAllTagUseCase = GetAllTagUseCase(testMemoRepository)
+
+        given(testMemoRepository.getAllMemo()).willReturn(listOf(memoListMock).toFlowable())
+        given(testMemoRepository.getAllTag()).willReturn(emptyList<List<TagEntity>>().toFlowable())
+
+        memoViewModel = MemoViewModel(
+            ioScheduler = scheduler,
+            saveMemoUseCase = saveMemoUseCaseMock,
+            getAllMemoUseCase = getAllMemoUseCase,
+            deleteMemoUseCase = deleteMemoUseCase,
+            androidSchedulers = scheduler
+        )
+
+        tagViewModel = TagViewModel(
+            ioScheduler = scheduler,
+            androidScheduler = scheduler,
+            getAllTagUseCase = getAllTagUseCase
+        )
     }
 
     private fun setContentWithHomeScreen() {
