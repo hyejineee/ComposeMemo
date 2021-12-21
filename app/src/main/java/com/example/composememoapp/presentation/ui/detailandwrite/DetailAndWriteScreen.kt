@@ -92,7 +92,7 @@ fun DetailAndWriteScreen(
         }
 
     val handleClickAddTag: (String) -> Unit = { s: String ->
-        if(s !in tagState.tags){
+        if (s !in tagState.tags) {
             tagState.tags = tagState.tags.plus(s)
         }
     }
@@ -221,8 +221,8 @@ fun DetailAndWriteScreenPreview() {
                     type = ContentType.Text,
                     seq = it.toLong(),
                     content = "this is text block content $it" +
-                            " this is text block content $it" +
-                            " this is text block content $it"
+                        " this is text block content $it" +
+                        " this is text block content $it"
                 )
             }
         )

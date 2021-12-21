@@ -1,15 +1,12 @@
 package com.example.composememoapp.presentation.ui.component
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -19,7 +16,7 @@ import com.example.composememoapp.util.model.rememberTextInputState
 
 @ExperimentalComposeUiApi
 @Composable
-fun ContentBlocks(contents: List<ContentBlock<*>>, focusRequester: FocusRequester ) {
+fun ContentBlocks(contents: List<ContentBlock<*>>, focusRequester: FocusRequester) {
 
     Column(modifier = Modifier.padding(16.dp)) {
         for (content in contents) {

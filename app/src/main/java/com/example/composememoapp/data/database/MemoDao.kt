@@ -22,7 +22,6 @@ abstract class MemoDao {
     @Insert(onConflict = IGNORE)
     abstract fun insertTagEntity(tags: List<TagEntity>): Completable
 
-
     fun insertMemo(memoEntity: MemoEntity): Completable {
         val tags: List<TagEntity> = memoEntity.tagEntities.map { TagEntity(tag = it) }
 

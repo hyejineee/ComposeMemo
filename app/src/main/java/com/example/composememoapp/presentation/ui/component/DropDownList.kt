@@ -12,10 +12,10 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun DropDownList(
-    modifier :Modifier = Modifier,
-    list : List<String> = emptyList(),
-    onClick:(String)->Unit = {}
-){
+    modifier: Modifier = Modifier,
+    list: List<String> = emptyList(),
+    onClick: (String) -> Unit = {}
+) {
     androidx.compose.material.Surface(
         elevation = 2.dp,
         shape = RoundedCornerShape(5.dp),

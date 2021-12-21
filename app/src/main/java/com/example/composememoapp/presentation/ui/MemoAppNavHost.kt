@@ -58,7 +58,6 @@ fun MemoAppNavHost(
 
         val detailScreenName = MemoAppScreen.Detail
 
-
         composable(
             route = "$detailScreenName/{${Key.MEMO_ARGS_KEY}}",
             arguments = listOf(

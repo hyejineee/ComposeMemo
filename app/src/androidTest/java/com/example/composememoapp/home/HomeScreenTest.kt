@@ -21,8 +21,6 @@ import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.home.HomeScreen
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.kotlin.toFlowable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import org.junit.Before
@@ -90,7 +88,6 @@ class HomeScreenTest {
             androidScheduler = scheduler,
             getAllTagUseCase = getAllTagUseCase
         )
-
     }
 
     private fun setContentWithHomeScreen() {
