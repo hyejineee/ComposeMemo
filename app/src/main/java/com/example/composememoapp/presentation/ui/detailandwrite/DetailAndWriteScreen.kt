@@ -38,6 +38,7 @@ import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.component.ContentBlocks
+import com.example.composememoapp.presentation.ui.component.WriteScreenTopAppBar
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
 import com.example.composememoapp.util.model.rememberContentBlocksState
@@ -135,58 +136,34 @@ fun DetailAndWriteScreenContent(
         mutableStateOf(memoEntity?.isBookMarked ?: false)
     }
 
+    val handleClickBackButton = {
+        handleSaveMemo()
+        handleBackButtonClick()
+    }
+
+    val handleClickFavoriteButton = {
+        favoriteSate.value = !favoriteSate.value
+        memoEntity?.isBookMarked = favoriteSate.value
+    }
+
+    val handleClickDeleteButton = {
+        memoEntity?.let {
+            handleDeleteMemo(it)
+        }
+        handleBackButtonClick()
+    }
+
+
     Scaffold(
         topBar = {
             TopAppBar() {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .clickable(
-                                onClick = {
-                                    handleSaveMemo()
-                                    handleBackButtonClick()
-                                }
-                            )
-                            .padding(10.dp),
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Arrow Back Icon"
-                    )
-
-                    memoEntity?.let { memo ->
-                        Row(
-                            modifier = Modifier
-                                .align(Alignment.CenterEnd)
-                                .padding(end = 16.dp)
-                        ) {
-
-                            val favoriteIcon =
-                                if (favoriteSate.value) ImageVector.vectorResource(id = R.drawable.ic_round_star_24)
-                                else ImageVector.vectorResource(id = R.drawable.ic_round_star_border_24)
-
-                            Icon(
-                                imageVector = favoriteIcon,
-                                contentDescription = "Favorite Icon",
-                                Modifier.clickable {
-                                    favoriteSate.value = !favoriteSate.value
-                                    memo.isBookMarked = favoriteSate.value
-                                }
-                            )
-
-                            Icon(
-                                imageVector = Icons.TwoTone.Delete,
-                                contentDescription = "Delete Icon",
-                                modifier = Modifier
-                                    .clickable {
-                                        handleDeleteMemo(memo)
-                                        handleBackButtonClick()
-                                    }
-                            )
-                        }
-                    }
-                }
+                WriteScreenTopAppBar(
+                    handleClickBackButton = handleClickBackButton,
+                    handleClickFavoriteButton = handleClickFavoriteButton,
+                    handleClickDeleteButton = handleClickDeleteButton,
+                    isFavorite = favoriteSate.value,
+                    showMenuIcon = memoEntity != null
+                )
             }
         },
         modifier = Modifier
@@ -221,8 +198,8 @@ fun DetailAndWriteScreenPreview() {
                     type = ContentType.Text,
                     seq = it.toLong(),
                     content = "this is text block content $it" +
-                        " this is text block content $it" +
-                        " this is text block content $it"
+                            " this is text block content $it" +
+                            " this is text block content $it"
                 )
             }
         )

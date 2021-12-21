@@ -29,7 +29,6 @@ data class TextBlock(
 
     @Composable
     override fun drawEditableContent(state: InputState, modifier: androidx.compose.ui.Modifier) {
-//        val textInputState = (state as TextInputSate)
 
         Box(modifier = Modifier.fillMaxWidth()) {
             TextInput(
