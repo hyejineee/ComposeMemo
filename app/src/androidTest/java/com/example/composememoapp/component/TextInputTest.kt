@@ -11,7 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.composememoapp.R
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
-import com.example.composememoapp.presentation.ui.component.TextInput
+import com.example.composememoapp.presentation.ui.component.TextInputIconable
 import com.example.composememoapp.util.model.IconModel
 import org.junit.Before
 import org.junit.Rule
@@ -58,7 +58,7 @@ class TextInputTest {
         composeTestRule.setContent {
             ComposeMemoAppTheme() {
                 if (showHint) {
-                    TextInput(
+                    TextInputIconable(
                         iconModel = iconModel,
                         clickableIconModel = clickableIconModel,
                         hint = hint,
@@ -66,7 +66,7 @@ class TextInputTest {
                         onValueChange = onValueChange
                     )
                 } else {
-                    TextInput(
+                    TextInputIconable(
                         iconModel = iconModel,
                         clickableIconModel = clickableIconModel,
                         text = text,

@@ -149,7 +149,7 @@ class MemoViewModel @Inject constructor(
             .asSequence()
             .map {
                 when (it) {
-                    is TextBlock -> it.content = it.textInputState.text
+                    is TextBlock -> it.content = it.textInputState.value.text
                 }
                 it.convertToContentBlockEntity()
             }
