@@ -94,6 +94,7 @@ class MemoViewModel @Inject constructor(
 
         memoList.subscribe {
             Log.d("MemoViewModel", "memoList : $it")
+            _stateSource.onNext(MemoState.FetchSuccess)
         }
 
         getAllMemo()

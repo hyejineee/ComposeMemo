@@ -1,5 +1,6 @@
 package com.example.composememoapp.presentation.ui.home
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
@@ -8,8 +9,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Snackbar
@@ -41,6 +45,7 @@ import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.data.database.entity.TagEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.component.BottomBar
+import com.example.composememoapp.presentation.ui.component.LoadingProgress
 import com.example.composememoapp.presentation.viewModel.MemoState
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
@@ -72,19 +77,24 @@ fun HomeScreen(
         memoViewModel.filterMemoByFavorite(isFavorite = isFavorite)
     }
 
+
     val snackBarMessage = when (state) {
-        MemoState.DeleteSuccess -> "메모 삭제 성공!"
         is MemoState.Error -> "작업 실패 : ${(state as MemoState.Error).message}"
-        MemoState.SaveSuccess -> "메모 저장 성공!"
         else -> {
             null
         }
+    }
+
+    val isLoading = when (state) {
+        is MemoState.Loading -> true
+        else -> false
     }
 
     HomeScreenContent(
         memoList = memoList,
         tagList = listOf(TagEntity(tag = "ALL")) + tagList,
         snackBarMessage = snackBarMessage,
+        isLoading = isLoading,
         handleClickFavoriteFilterButton = handleClickFavoriteFilterButton,
         handleChangeSelectedTag = handleChangeSelectedTag,
         handleChangeSearchInput = handleChangeSearchInput,
@@ -101,6 +111,7 @@ fun HomeScreenContent(
     memoList: List<MemoEntity>,
     tagList: List<TagEntity>,
     snackBarMessage: String?,
+    isLoading: Boolean = false,
     handleChangeSelectedTag: (TagEntity) -> Unit,
     handleClickAddMemoButton: () -> Unit,
     handleClickMemoItem: (MemoEntity) -> Unit,
@@ -133,32 +144,42 @@ fun HomeScreenContent(
                     .padding(20.dp)
             )
 
-            SearchMemoTextInput(
-                state = searchTextInputState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 30.dp, vertical = 10.dp)
-            )
+            if (isLoading.not()) {
+                SearchMemoTextInput(
+                    state = searchTextInputState,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 30.dp, vertical = 10.dp)
+                )
 
-            var selectedCategory by rememberSaveable { mutableStateOf(TagEntity(tag = "ALL")) }
-            var listState = rememberLazyListState()
+                var selectedCategory by rememberSaveable { mutableStateOf(TagEntity(tag = "ALL")) }
+                var listState = rememberLazyListState()
 
-            CategoryMenuBar(
-                categories = tagList,
-                onClick = {
-                    handleChangeSelectedTag(it)
-                    selectedCategory = it
-                },
-                selected = selectedCategory,
-                listState = listState,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 5.dp)
-            )
+                CategoryMenuBar(
+                    categories = tagList,
+                    onClick = {
+                        handleChangeSelectedTag(it)
+                        selectedCategory = it
+                    },
+                    selected = selectedCategory,
+                    listState = listState,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 5.dp)
+                )
 
-            MemosListScreen(
-                memos = memoList,
-                onItemClick = handleClickMemoItem,
-                modifier = Modifier.padding(vertical = 10.dp)
-            )
+                MemosListScreen(
+                    memos = memoList,
+                    onItemClick = handleClickMemoItem,
+                    modifier = Modifier.padding(vertical = 10.dp)
+                )
+            } else {
+               Box(modifier = Modifier.fillMaxSize()){
+                   CircularProgressIndicator(
+                       modifier = Modifier.size(100.dp)
+                           .align(Alignment.Center)
+                   )
+               }
+            }
+
         }
 
         var isFavoriteFilter by rememberSaveable { mutableStateOf(false) }
@@ -174,15 +195,16 @@ fun HomeScreenContent(
                 .align(Alignment.BottomCenter)
         )
 
-        LaunchedEffect(key1 = snackBarMessage){
-            snackBarMessage?.let{
+
+        snackBarMessage?.let {
+            LaunchedEffect(key1 = snackBarMessage) {
                 snackbarHostState.showSnackbar(
                     message = it,
                     duration = SnackbarDuration.Short
                 )
             }
         }
-        
+
         SnackbarHost(hostState = snackbarHostState, Modifier.align(Alignment.BottomCenter))
     }
 
