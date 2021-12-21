@@ -13,7 +13,7 @@ interface ContentBlock<T> {
     fun drawOnlyReadContent(modifier: Modifier)
 
     @Composable
-    fun drawEditableContent(state: InputState, modifier: Modifier)
+    fun drawEditableContent(modifier: Modifier)
 
     fun convertToContentBlockEntity(): ContentBlockEntity
 }
