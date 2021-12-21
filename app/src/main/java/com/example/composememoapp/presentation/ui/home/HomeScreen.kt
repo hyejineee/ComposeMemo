@@ -1,5 +1,7 @@
 package com.example.composememoapp.presentation.ui.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,11 +9,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -29,9 +41,12 @@ import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.data.database.entity.TagEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.component.BottomBar
+import com.example.composememoapp.presentation.viewModel.MemoState
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
 import com.example.composememoapp.util.model.rememberTextInputState
+import kotlinx.coroutines.launch
+
 
 @Composable
 fun HomeScreen(
@@ -43,6 +58,7 @@ fun HomeScreen(
 
     val memoList by memoViewModel.memoList.subscribeAsState(initial = emptyList())
     val tagList by tagViewModel.tagList.subscribeAsState(initial = emptyList())
+    val state by memoViewModel.state.subscribeAsState(initial = MemoState.Loading)
 
     val handleChangeSearchInput = { text: String ->
         memoViewModel.searchMemo(text)
@@ -56,15 +72,27 @@ fun HomeScreen(
         memoViewModel.filterMemoByFavorite(isFavorite = isFavorite)
     }
 
+    val snackBarMessage = when (state) {
+        MemoState.DeleteSuccess -> "메모 삭제 성공!"
+        is MemoState.Error -> "작업 실패 : ${(state as MemoState.Error).message}"
+        MemoState.SaveSuccess -> "메모 저장 성공!"
+        else -> {
+            null
+        }
+    }
+
     HomeScreenContent(
         memoList = memoList,
         tagList = listOf(TagEntity(tag = "ALL")) + tagList,
+        snackBarMessage = snackBarMessage,
         handleClickFavoriteFilterButton = handleClickFavoriteFilterButton,
         handleChangeSelectedTag = handleChangeSelectedTag,
         handleChangeSearchInput = handleChangeSearchInput,
         handleClickAddMemoButton = handleClickAddMemoButton,
         handleClickMemoItem = handleClickMemoItem
     )
+
+
 }
 
 @Composable
@@ -72,6 +100,7 @@ fun HomeScreenContent(
     handleChangeSearchInput: (String) -> Unit,
     memoList: List<MemoEntity>,
     tagList: List<TagEntity>,
+    snackBarMessage: String?,
     handleChangeSelectedTag: (TagEntity) -> Unit,
     handleClickAddMemoButton: () -> Unit,
     handleClickMemoItem: (MemoEntity) -> Unit,
@@ -80,6 +109,8 @@ fun HomeScreenContent(
 
     val searchTextInputState = rememberTextInputState(initialText = "")
     handleChangeSearchInput(searchTextInputState.text)
+
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Box(modifier = Modifier.fillMaxWidth()) {
         Column(
@@ -142,7 +173,19 @@ fun HomeScreenContent(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
         )
+
+        LaunchedEffect(key1 = snackBarMessage){
+            snackBarMessage?.let{
+                snackbarHostState.showSnackbar(
+                    message = it,
+                    duration = SnackbarDuration.Short
+                )
+            }
+        }
+        
+        SnackbarHost(hostState = snackbarHostState, Modifier.align(Alignment.BottomCenter))
     }
+
 }
 
 @Preview
@@ -152,6 +195,7 @@ fun HomeScreenPreview() {
     ComposeMemoAppTheme {
         HomeScreenContent(
             memoList = emptyList(),
+            snackBarMessage = "hello",
             handleChangeSearchInput = {},
             handleClickAddMemoButton = {},
             handleClickMemoItem = {},

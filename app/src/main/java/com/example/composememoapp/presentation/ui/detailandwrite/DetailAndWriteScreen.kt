@@ -20,6 +20,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -142,12 +143,6 @@ fun DetailAndWriteScreenContent(
             handleDeleteMemo(it)
         }
         handleBackButtonClick()
-    }
-
-    DisposableEffect(Unit) {
-        onDispose {
-            keyboardController?.hide()
-        }
     }
 
     Scaffold(
