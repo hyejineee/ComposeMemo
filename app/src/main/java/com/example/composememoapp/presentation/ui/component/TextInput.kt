@@ -32,7 +32,7 @@ fun TextInput(
         Box(modifier = Modifier.fillMaxWidth()) {
             BasicTextField(
                 value = value,
-                onValueChange = {onValueChange(it)},
+                onValueChange = { onValueChange(it) },
                 modifier = modifier
                     .fillMaxWidth(),
                 singleLine = singleLine,
@@ -51,7 +51,6 @@ fun TextInput(
                 }
             }
         }
-
     }
 }
 
@@ -65,5 +64,3 @@ fun TextInputPreview() {
 //        )
     }
 }
-
-

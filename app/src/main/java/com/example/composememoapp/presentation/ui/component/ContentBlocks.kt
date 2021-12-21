@@ -27,15 +27,19 @@ fun ContentBlocks(contents: List<ContentBlock<*>>, focusRequester: FocusRequeste
         for (content in contents) {
             when (content) {
                 is TextBlock -> {
-                    LaunchedEffect(key1 = content){
+                    LaunchedEffect(key1 = content) {
                         focusRequester.requestFocus()
                         keyboardController?.show()
                     }
 
-                    content.textInputState = remember{ mutableStateOf(TextFieldValue(
-                        text = content.content,
-                        selection = TextRange(content.content.length)
-                    ))}
+                    content.textInputState = remember {
+                        mutableStateOf(
+                            TextFieldValue(
+                                text = content.content,
+                                selection = TextRange(content.content.length)
+                            )
+                        )
+                    }
 
                     content.drawEditableContent(
                         modifier = Modifier
