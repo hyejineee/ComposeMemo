@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.sp
 import com.example.composememoapp.R
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.component.DropDownList
-import com.example.composememoapp.presentation.ui.component.TextInput
+import com.example.composememoapp.presentation.ui.component.TextInputIconable
 import com.example.composememoapp.util.Descriptions
 import com.example.composememoapp.util.model.IconModel
 import com.example.composememoapp.util.model.TextInputSate
@@ -48,7 +48,7 @@ fun TagTextInput(
                 .padding(5.dp)
                 .fillMaxWidth()
         ) {
-            TextInput(
+            TextInputIconable(
                 text = state.text,
                 onValueChange = {
                     state.text = it
