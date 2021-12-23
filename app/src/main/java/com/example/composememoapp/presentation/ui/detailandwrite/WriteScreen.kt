@@ -24,6 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -185,6 +187,9 @@ fun DetailAndWriteScreenContent(
             )
         },
         modifier = Modifier
+            .semantics {
+                this.testTag = "write screen"
+            }
             .fillMaxSize()
             .clickable(onClick = handleAddDefaultBlock)
     ) {

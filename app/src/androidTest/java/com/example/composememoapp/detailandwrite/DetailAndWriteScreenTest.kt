@@ -6,7 +6,9 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasAnyChild
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
@@ -119,8 +121,9 @@ class DetailAndWriteScreenTest {
         setContentWithDetailAndWriteScreen()
 
         composeTestRule
-            .onNode(hasAnyChild(hasSetTextAction()))
+            .onNodeWithTag("write screen", useUnmergedTree = true)
             .performClick()
+        composeTestRule.mainClock.advanceTimeBy(50L)
 
         composeTestRule
             .onNodeWithContentDescription("text block 1", useUnmergedTree = true)
