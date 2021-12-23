@@ -94,7 +94,7 @@ class MemoViewModelTest {
 
         memoViewModel.saveMemo(
             memoEntityMock.convertToMemoViewModel(),
-            context =context
+            context = context
         )
 
         val values = memoViewModel.state.test().awaitDone(500, TimeUnit.MILLISECONDS).values()

@@ -3,7 +3,6 @@ package com.example.composememoapp.data.repository
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import com.example.composememoapp.data.ContentBlock
 import com.example.composememoapp.data.ImageBlock
 import com.example.composememoapp.data.MemoModel
 import com.example.composememoapp.data.TextBlock
@@ -27,7 +26,7 @@ class DefaultMemoAppRepository @Inject constructor(
     override fun getAllMemo(): Flowable<List<MemoEntity>> =
         memoDao.getAllMemo()
 
-    override fun insertMemo(memoModel: MemoModel,context: Context): Completable {
+    override fun insertMemo(memoModel: MemoModel, context: Context): Completable {
 
         val converted = memoModel.contents
             .asSequence()
@@ -56,7 +55,6 @@ class DefaultMemoAppRepository @Inject constructor(
 
         val tags = memoModel.tagEntities.map { TagEntity(tag = it) }
 
-
         return memoDao.insertMemoEntity(memoEntity = memoEntity)
             .mergeWith(tagDao.insertTagEntity(tags = tags))
     }
@@ -66,13 +64,13 @@ class DefaultMemoAppRepository @Inject constructor(
 
     override fun getAllTag(): Flowable<List<TagEntity>> = tagDao.getAllTag()
 
-    private fun saveImage(bitmap:Bitmap?, context: Context):Uri{
-        val imageName = System.currentTimeMillis().toString()+".jpeg"
+    private fun saveImage(bitmap: Bitmap?, context: Context): Uri {
+        val imageName = System.currentTimeMillis().toString() + ".jpeg"
         val dirName = "images"
 
         val createdImage = context.filesDir.let {
-            val dir = File(it.path , dirName)
-            if(dir.exists().not()){
+            val dir = File(it.path, dirName)
+            if (dir.exists().not()) {
                 dir.mkdirs()
             }
 
@@ -82,10 +80,9 @@ class DefaultMemoAppRepository @Inject constructor(
                 val out = FileOutputStream(file)
                 bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, out)
                 out.close()
-
-            }catch (e:FileNotFoundException){
+            } catch (e: FileNotFoundException) {
                 e.printStackTrace()
-            }catch (e:IOException){
+            } catch (e: IOException) {
                 e.printStackTrace()
             }
 

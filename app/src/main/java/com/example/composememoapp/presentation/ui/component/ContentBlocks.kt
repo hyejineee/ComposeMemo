@@ -1,7 +1,6 @@
 package com.example.composememoapp.presentation.ui.component
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -54,10 +53,10 @@ fun ContentBlocks(contents: List<ContentBlock<*>>, focusRequester: FocusRequeste
                     )
                 }
                 is ImageBlock -> {
-                    content.imageState = remember{
+                    content.imageState = remember {
                         mutableStateOf<Bitmap?>(null)
                     }
-                    
+
                     content.drawEditableContent(modifier = Modifier)
                 }
             }

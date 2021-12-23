@@ -3,10 +3,8 @@ package com.example.composememoapp.presentation.ui.detailandwrite
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -28,7 +26,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import com.example.composememoapp.data.ContentBlock
 import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.ImageBlock
@@ -42,7 +39,6 @@ import com.example.composememoapp.presentation.ui.component.WriteScreenBottomBar
 import com.example.composememoapp.presentation.ui.component.WriteScreenTopAppBar
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
-import com.example.composememoapp.util.model.ContentBlocksState
 import com.example.composememoapp.util.model.rememberContentBlocksState
 import com.example.composememoapp.util.model.rememberTagListState
 
@@ -92,7 +88,7 @@ fun WriteScreen(
 
     val handleAddDefaultBlock: () -> Unit =
         {
-            val seq = if(contentsState.contents.isNotEmpty()) contentsState.contents.last().seq + 1 else 1
+            val seq = if (contentsState.contents.isNotEmpty()) contentsState.contents.last().seq + 1 else 1
             contentsState.contents.add(TextBlock(seq = seq, ""))
         }
 
@@ -103,7 +99,7 @@ fun WriteScreen(
     }
 
     val handleAddImageBlock = { uri: Uri? ->
-        val seq = if(contentsState.contents.isNotEmpty()) contentsState.contents.last().seq + 1 else 1
+        val seq = if (contentsState.contents.isNotEmpty()) contentsState.contents.last().seq + 1 else 1
         contentsState.contents.add(ImageBlock(seq = seq, content = uri))
         Unit
     }
@@ -145,7 +141,6 @@ fun DetailAndWriteScreenContent(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
-
 
     val scrollState = rememberScrollState()
     var favoriteSate = rememberSaveable {
@@ -228,8 +223,8 @@ fun DetailAndWriteScreenPreview() {
                     type = ContentType.Text,
                     seq = it.toLong(),
                     content = "this is text block content $it" +
-                            " this is text block content $it" +
-                            " this is text block content $it"
+                        " this is text block content $it" +
+                        " this is text block content $it"
                 )
             }
         )

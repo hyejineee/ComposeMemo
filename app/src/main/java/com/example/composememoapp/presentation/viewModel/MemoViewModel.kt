@@ -1,14 +1,9 @@
 package com.example.composememoapp.presentation.viewModel
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.composememoapp.data.ContentBlock
-import com.example.composememoapp.data.ImageBlock
 import com.example.composememoapp.data.MemoModel
-import com.example.composememoapp.data.TextBlock
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.di.AndroidMainScheduler
 import com.example.composememoapp.di.IOScheduler

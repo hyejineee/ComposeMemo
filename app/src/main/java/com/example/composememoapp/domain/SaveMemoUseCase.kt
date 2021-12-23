@@ -2,7 +2,6 @@ package com.example.composememoapp.domain
 
 import android.content.Context
 import com.example.composememoapp.data.MemoModel
-import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.data.repository.MemoAppRepository
 import javax.inject.Inject
 

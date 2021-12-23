@@ -9,7 +9,7 @@ import io.reactivex.rxjava3.core.Flowable
 
 interface MemoAppRepository {
     fun getAllMemo(): Flowable<List<MemoEntity>>
-    fun insertMemo(memoEntity: MemoModel, context:Context): Completable
+    fun insertMemo(memoEntity: MemoModel, context: Context): Completable
     fun deleteMemo(memoEntity: MemoEntity): Completable
     fun getAllTag(): Flowable<List<TagEntity>>
 }
