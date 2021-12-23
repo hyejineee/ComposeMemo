@@ -26,7 +26,7 @@ import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.util.toPx
 
 @Composable
-fun BottomBar(
+fun HomeScreenBottomBar(
     handleClickAddMemoButton: () -> Unit,
     handleClickFavoriteFilterButton: () -> Unit,
     isFavoriteFilter: Boolean = false,
@@ -84,9 +84,9 @@ fun BottomBar(
 @ExperimentalAnimationApi
 @Preview
 @Composable
-fun BottomBarPreview() {
+fun HomeScreenBottomBarPreview() {
     ComposeMemoAppTheme {
-        BottomBar(
+        HomeScreenBottomBar(
             handleClickAddMemoButton = {},
             handleClickFavoriteFilterButton = {}
         )
