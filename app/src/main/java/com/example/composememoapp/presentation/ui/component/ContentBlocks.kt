@@ -1,5 +1,7 @@
 package com.example.composememoapp.presentation.ui.component
 
+import android.graphics.Bitmap
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -17,6 +19,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.example.composememoapp.data.ContentBlock
+import com.example.composememoapp.data.ImageBlock
 import com.example.composememoapp.data.TextBlock
 
 @ExperimentalComposeUiApi
@@ -49,6 +52,13 @@ fun ContentBlocks(contents: List<ContentBlock<*>>, focusRequester: FocusRequeste
                                 this.contentDescription = "text block ${content.seq}"
                             }
                     )
+                }
+                is ImageBlock -> {
+                    content.imageState = remember{
+                        mutableStateOf<Bitmap?>(null)
+                    }
+                    
+                    content.drawEditableContent(modifier = Modifier)
                 }
             }
         }

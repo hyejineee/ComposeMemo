@@ -1,5 +1,6 @@
 package com.example.composememoapp.presentation.ui.component
 
+import android.net.Uri
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -27,7 +28,7 @@ import com.example.composememoapp.util.toPx
 
 @Composable
 fun WriteScreenBottomBar(
-    handleClickAddImageButton: () -> Unit,
+    handleClickAddImageButton: (Uri?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(

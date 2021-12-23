@@ -1,7 +1,9 @@
 package com.example.composememoapp.presentation.ui.detailandwrite
 
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -78,10 +80,8 @@ fun WriteScreen(
 
     val handleAddDefaultBlock: () -> Unit =
         {
-            contentsState.contents =
-                contentsState.contents.plus(
-                    TextBlock(contentsState.contents.last().seq + 1, "")
-                )
+            val seq = contentsState.contents.last().seq + 1
+            contentsState.contents.add(TextBlock(seq = seq, ""))
         }
 
     val handleAddTag: (String) -> Unit = { s: String ->
@@ -90,8 +90,10 @@ fun WriteScreen(
         }
     }
 
-    val handleAddImageBlock = {
-
+    val handleAddImageBlock = { uri: Uri? ->
+        val seq = contentsState.contents.last().seq + 1
+        contentsState.contents.add(ImageBlock(seq= seq, content = uri))
+        Unit
     }
 
     BackHandler() {
@@ -125,7 +127,7 @@ fun DetailAndWriteScreenContent(
     handleBackButtonClick: () -> Unit,
     handleSaveMemo: () -> Unit,
     handleAddTag: (String) -> Unit,
-    handleAddImageBlock:()->Unit,
+    handleAddImageBlock: (Uri?) -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
