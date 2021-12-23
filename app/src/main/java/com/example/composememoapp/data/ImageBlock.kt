@@ -1,11 +1,13 @@
 package com.example.composememoapp.data
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Parcelable
 import android.provider.MediaStore
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.presentation.ui.component.TextInput
+import java.lang.Exception
 
 @kotlinx.parcelize.Parcelize
 data class ImageBlock(
@@ -38,9 +41,19 @@ data class ImageBlock(
 
     @Composable
     override fun drawOnlyReadContent(modifier:Modifier) {
-//        Box(modifier = modifier) {
-//            Image(text = content, fontSize = 13.sp)
-//        }
+        val context = LocalContext.current
+        imageState = remember{ mutableStateOf<Bitmap?>(null)}
+        setImageState(context = context)
+
+        Box(modifier = modifier) {
+            imageState.value?.let { btm ->
+                Image(
+                    bitmap = btm.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        }
     }
 
     @Composable
@@ -48,15 +61,7 @@ data class ImageBlock(
 
         val context = LocalContext.current
 
-        content?.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                val source = ImageDecoder
-                    .createSource(context.contentResolver, it)
-                imageState.value = ImageDecoder.decodeBitmap(source)
-            } else {
-                imageState.value = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-            }
-        }
+        setImageState(context = context)
 
         Box(modifier = Modifier.fillMaxWidth()) {
             imageState.value?.let { btm ->
@@ -74,4 +79,21 @@ data class ImageBlock(
         seq = seq,
         content = content.toString()
     )
+
+    private fun setImageState(context:Context){
+        content?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                try {
+                    val source = ImageDecoder
+                        .createSource(context.contentResolver, it)
+                    imageState.value = ImageDecoder.decodeBitmap(source)
+                }catch (e:Exception){
+                    Log.d("ImageBlock", "exception : ${e.message}")
+                }
+
+            } else {
+                imageState.value = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+            }
+        }
+    }
 }

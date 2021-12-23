@@ -22,12 +22,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import com.example.composememoapp.data.ContentBlock
 import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.ImageBlock
+import com.example.composememoapp.data.MemoModel
 import com.example.composememoapp.data.TextBlock
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
@@ -37,6 +40,7 @@ import com.example.composememoapp.presentation.ui.component.WriteScreenBottomBar
 import com.example.composememoapp.presentation.ui.component.WriteScreenTopAppBar
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
+import com.example.composememoapp.util.model.ContentBlocksState
 import com.example.composememoapp.util.model.rememberContentBlocksState
 import com.example.composememoapp.util.model.rememberTagListState
 
@@ -49,13 +53,14 @@ fun WriteScreen(
     handleBackButtonClick: () -> Unit,
 ) {
 
+    val context = LocalContext.current
     val allTag by tagViewModel.tagList.subscribeAsState(initial = emptyList())
 
     val contentsState = rememberContentBlocksState(
         initialContents = memoEntity
             ?.contents
             ?.map { it.convertToContentBlockModel() }
-            ?: listOf(TextBlock(1, ""))
+            ?: emptyList()
     )
 
     val tagState = rememberTagListState(
@@ -63,14 +68,19 @@ fun WriteScreen(
     )
 
     val handleSaveMemo = {
-        val newMemoEntity = memoViewModel.makeMemoEntity(
-            memoEntity = memoEntity,
-            contents = contentsState.contents,
-            tags = tagState.tags
-        )
+        val newMemoModel = memoEntity?.let {
+            it.copy().convertToMemoViewModel().apply {
+                contents = contentsState.contents.toList()
+                tagEntities = tagState.tags
+            }
+        } ?: MemoModel(contents = contentsState.contents.toList(), tagEntities = tagState.tags)
 
-        if (newMemoEntity.contents.isNotEmpty()) {
-            memoViewModel.saveMemo(memoEntity = newMemoEntity)
+        val contentsCount = contentsState.contents.count {
+            it.content.toString().isNotBlank() or it.content.toString().isNotEmpty()
+        }
+
+        if (contentsCount > 0) {
+            memoViewModel.saveMemo(memoModel = newMemoModel, context = context)
         }
     }
 
@@ -80,7 +90,7 @@ fun WriteScreen(
 
     val handleAddDefaultBlock: () -> Unit =
         {
-            val seq = contentsState.contents.last().seq + 1
+            val seq = if(contentsState.contents.isNotEmpty()) contentsState.contents.last().seq + 1 else 1
             contentsState.contents.add(TextBlock(seq = seq, ""))
         }
 
@@ -91,10 +101,12 @@ fun WriteScreen(
     }
 
     val handleAddImageBlock = { uri: Uri? ->
-        val seq = contentsState.contents.last().seq + 1
-        contentsState.contents.add(ImageBlock(seq= seq, content = uri))
+        val seq = if(contentsState.contents.isNotEmpty()) contentsState.contents.last().seq + 1 else 1
+        contentsState.contents.add(ImageBlock(seq = seq, content = uri))
         Unit
     }
+
+    Log.d("Write", "content : ${contentsState.contents.toList()}")
 
     BackHandler() {
         handleSaveMemo()
@@ -173,15 +185,12 @@ fun DetailAndWriteScreenContent(
             )
         },
         modifier = Modifier
-            .clickable {
-                handleAddDefaultBlock()
-            }
             .fillMaxSize()
+            .clickable(onClick = handleAddDefaultBlock)
     ) {
         Column(
             modifier = Modifier
                 .verticalScroll(scrollState)
-                .fillMaxHeight()
         ) {
 
             TagScreen(
@@ -219,6 +228,8 @@ fun DetailAndWriteScreenPreview() {
                 )
             }
         )
+
+        val content = memo.contents.map { it.convertToContentBlockModel() }
         DetailAndWriteScreenContent(
             memoEntity = memo,
             allTag = listOf(),
@@ -229,7 +240,7 @@ fun DetailAndWriteScreenPreview() {
             handleSaveMemo = {},
             handleDeleteMemo = {},
             handleAddImageBlock = {},
-            contents = memo.contents.map { it.convertToContentBlockModel() },
+            contents = content,
         )
     }
 }
