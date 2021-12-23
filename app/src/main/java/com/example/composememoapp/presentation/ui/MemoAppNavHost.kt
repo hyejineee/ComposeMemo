@@ -10,7 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.composememoapp.data.database.entity.MemoEntity
-import com.example.composememoapp.presentation.ui.detailandwrite.DetailAndWriteScreen
+import com.example.composememoapp.presentation.ui.detailandwrite.WriteScreen
 import com.example.composememoapp.presentation.ui.home.HomeScreen
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
@@ -69,7 +69,7 @@ fun MemoAppNavHost(
             val memoId = entry.arguments?.getLong(Key.MEMO_ARGS_KEY) ?: -1L
             val memo = memoViewModel.getMemo(memoId = memoId)
 
-            DetailAndWriteScreen(
+            WriteScreen(
                 memoViewModel = memoViewModel,
                 tagViewModel = tagViewModel,
                 memoEntity = memo,
@@ -78,7 +78,7 @@ fun MemoAppNavHost(
         }
 
         composable(MemoAppScreen.Write.name) {
-            DetailAndWriteScreen(
+            WriteScreen(
                 memoViewModel = memoViewModel,
                 tagViewModel = tagViewModel,
                 handleBackButtonClick = { handleBackButtonClick() },

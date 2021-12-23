@@ -36,21 +36,14 @@ fun WriteScreenBottomBar(
             .fillMaxWidth()
     ) {
 
-        val addImageIconModel =
-            MiniFloatingButtonModel(
-                icon = ImageVector.vectorResource(id = R.drawable.ic_round_image_24),
-                description = "add image icon",
-                onClick = handleClickAddImageButton
-            )
-
-        MiniFloatingButton(
-            model = addImageIconModel,
+        AddImageButton(
             modifier = Modifier
                 .align(Alignment.CenterStart)
                 .padding(start = 20.dp, bottom = 16.dp, top = 16.dp)
                 .size(35.dp),
-            tint = MaterialTheme.colors.primary
+            handleClickAddImageButton = handleClickAddImageButton
         )
+
     }
 }
 

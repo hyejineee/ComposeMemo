@@ -21,7 +21,7 @@ import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.GetAllTagUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
-import com.example.composememoapp.presentation.ui.detailandwrite.DetailAndWriteScreen
+import com.example.composememoapp.presentation.ui.detailandwrite.WriteScreen
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
 import io.reactivex.rxjava3.kotlin.toFlowable
@@ -92,7 +92,7 @@ class DetailAndWriteScreenTest {
 
         composeTestRule.setContent {
             ComposeMemoAppTheme() {
-                DetailAndWriteScreen(
+                WriteScreen(
                     memoEntity = memoEntity,
                     memoViewModel = memoViewModel,
                     tagViewModel = tagViewModel,

@@ -1,5 +1,6 @@
 package com.example.composememoapp.presentation.ui.detailandwrite
 
+import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -24,11 +25,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composememoapp.data.ContentBlock
 import com.example.composememoapp.data.ContentType
+import com.example.composememoapp.data.ImageBlock
 import com.example.composememoapp.data.TextBlock
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.component.ContentBlocks
+import com.example.composememoapp.presentation.ui.component.WriteScreenBottomBar
 import com.example.composememoapp.presentation.ui.component.WriteScreenTopAppBar
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
@@ -37,7 +40,7 @@ import com.example.composememoapp.util.model.rememberTagListState
 
 @ExperimentalComposeUiApi
 @Composable
-fun DetailAndWriteScreen(
+fun WriteScreen(
     memoEntity: MemoEntity? = null,
     tagViewModel: TagViewModel,
     memoViewModel: MemoViewModel,
@@ -81,10 +84,14 @@ fun DetailAndWriteScreen(
                 )
         }
 
-    val handleClickAddTag: (String) -> Unit = { s: String ->
+    val handleAddTag: (String) -> Unit = { s: String ->
         if (s !in tagState.tags) {
             tagState.tags = tagState.tags.plus(s)
         }
+    }
+
+    val handleAddImageBlock = {
+
     }
 
     BackHandler() {
@@ -101,7 +108,8 @@ fun DetailAndWriteScreen(
         handleBackButtonClick = handleBackButtonClick,
         handleSaveMemo = handleSaveMemo,
         handleAddDefaultBlock = handleAddDefaultBlock,
-        handleClickAddTag = handleClickAddTag
+        handleAddTag = handleAddTag,
+        handleAddImageBlock = handleAddImageBlock
     )
 }
 
@@ -116,10 +124,12 @@ fun DetailAndWriteScreenContent(
     handleAddDefaultBlock: () -> Unit,
     handleBackButtonClick: () -> Unit,
     handleSaveMemo: () -> Unit,
-    handleClickAddTag: (String) -> Unit
+    handleAddTag: (String) -> Unit,
+    handleAddImageBlock:()->Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
+
 
     val scrollState = rememberScrollState()
     var favoriteSate = rememberSaveable {
@@ -155,6 +165,11 @@ fun DetailAndWriteScreenContent(
                 )
             }
         },
+        bottomBar = {
+            WriteScreenBottomBar(
+                handleClickAddImageButton = handleAddImageBlock
+            )
+        },
         modifier = Modifier
             .clickable {
                 handleAddDefaultBlock()
@@ -170,7 +185,7 @@ fun DetailAndWriteScreenContent(
             TagScreen(
                 tagList = tagList,
                 allTag = allTag,
-                handleClickAddTag = handleClickAddTag,
+                handleClickAddTag = handleAddTag,
                 modifier = Modifier
                     .padding(10.dp)
                     .fillMaxSize()
@@ -197,8 +212,8 @@ fun DetailAndWriteScreenPreview() {
                     type = ContentType.Text,
                     seq = it.toLong(),
                     content = "this is text block content $it" +
-                        " this is text block content $it" +
-                        " this is text block content $it"
+                            " this is text block content $it" +
+                            " this is text block content $it"
                 )
             }
         )
@@ -206,11 +221,12 @@ fun DetailAndWriteScreenPreview() {
             memoEntity = memo,
             allTag = listOf(),
             tagList = listOf(),
-            handleClickAddTag = {},
+            handleAddTag = {},
             handleBackButtonClick = {},
             handleAddDefaultBlock = { },
             handleSaveMemo = {},
             handleDeleteMemo = {},
+            handleAddImageBlock = {},
             contents = memo.contents.map { it.convertToContentBlockModel() },
         )
     }
