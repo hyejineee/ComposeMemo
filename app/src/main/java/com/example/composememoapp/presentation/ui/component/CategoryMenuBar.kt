@@ -57,9 +57,9 @@ fun CategoryMenuRow(
     modifier: Modifier = Modifier
 ) {
     Text(
-        text = category,
+        text = "#$category",
         modifier = modifier.padding(horizontal = 15.dp, vertical = 5.dp),
-        fontWeight = FontWeight.SemiBold,
+        fontWeight = if(isSelected) FontWeight.ExtraBold else FontWeight.SemiBold,
         fontStyle = FontStyle.Italic,
         fontSize = 15.sp,
         color = if (isSelected) MaterialTheme.colors.secondary else Color.LightGray
