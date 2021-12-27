@@ -14,6 +14,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import com.example.composememoapp.R
 import com.example.composememoapp.data.ContentBlock
 import com.example.composememoapp.data.ContentType
+import com.example.composememoapp.data.ImageBlock
+import com.example.composememoapp.data.TextBlock
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
@@ -35,9 +38,13 @@ fun MemoList(
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         StaggeredGridColumn(modifier = modifier.padding(horizontal = 20.dp)) {
             for (memo in memos) {
+                val hasImage = memo.contents.find { it.type == ContentType.Image }
                 MemoListItem(
                     memo = memo,
-                    modifier = Modifier.clickable { onItemClick(memo) }
+                    modifier = Modifier.clickable { onItemClick(memo) },
+                    imageBlock = hasImage?.let {
+                        it.convertToContentBlockModel() as ImageBlock
+                    }
                 )
             }
         }
@@ -47,27 +54,40 @@ fun MemoList(
 @Composable
 fun MemoListItem(
     memo: MemoEntity,
+    imageBlock: ImageBlock? = null,
     modifier: Modifier = Modifier
 ) {
     androidx.compose.material.Surface(
         elevation = 6.dp,
         shape = RoundedCornerShape(10.dp),
         modifier = modifier
-            .heightIn(50.dp, 200.dp)
-            .padding(4.dp)
-
+            .heightIn(50.dp, 250.dp)
+            .padding(4.dp),
+        contentColor = if (imageBlock != null) Color.White else Color.Black
     ) {
-        Box(modifier = Modifier.padding(5.dp)) {
+
+        imageBlock?.let {
+
+            it.drawOnlyReadContent(modifier = Modifier)
+        }
+
+        Box() {
             Column(
                 modifier = Modifier
-                    .padding(top = 10.dp, bottom = 10.dp, start = 5.dp, end = 5.dp)
+                    .padding(16.dp)
                     .align(Alignment.CenterStart)
 
             ) {
                 memo.contents
                     .map { it.convertToContentBlockModel() }
                     .forEachIndexed { i: Int, block: ContentBlock<*> ->
-                        block.drawOnlyReadContent(modifier = if (i == 0) Modifier.padding(end = 30.dp) else Modifier)
+                        when (block) {
+                            is TextBlock -> block.drawOnlyReadContent(
+                                modifier = if (i == 0) Modifier.padding(
+                                    end = 30.dp
+                                ) else Modifier
+                            )
+                        }
                     }
             }
 
@@ -80,8 +100,10 @@ fun MemoListItem(
             Icon(
                 imageVector = iconVector,
                 contentDescription = "isFavoriteMemo",
-                modifier = Modifier.align(Alignment.TopEnd),
-                tint = MaterialTheme.colors.primary
+                modifier = Modifier
+                    .padding(5.dp)
+                    .align(Alignment.TopEnd),
+                tint = if (imageBlock != null) Color.White else MaterialTheme.colors.primary
             )
         }
     }
@@ -94,7 +116,26 @@ fun MemoListItemPreview() {
         val memo = MemoEntity(
             id = 1,
             contents = listOf(
-                ContentBlockEntity(type = ContentType.Text, seq = 1L, content = "adskfeiwnocono"),
+                ContentBlockEntity(
+                    type = ContentType.Text,
+                    seq = 1L,
+                    content = "content://com.android.providers.media.documents/document/image%3A19"
+                ),
+                ContentBlockEntity(type = ContentType.Text, seq = 2L, content = "adskfeiwnocono"),
+            ),
+        )
+        MemoListItem(memo = memo)
+    }
+}
+
+@Preview
+@Composable
+fun MemoListItemImagePreview() {
+    ComposeMemoAppTheme() {
+        val memo = MemoEntity(
+            id = 1,
+            contents = listOf(
+                ContentBlockEntity(type = ContentType.Image, seq = 1L, content = "adskfeiwnocono"),
                 ContentBlockEntity(type = ContentType.Text, seq = 2L, content = "adskfeiwnocono"),
             ),
         )

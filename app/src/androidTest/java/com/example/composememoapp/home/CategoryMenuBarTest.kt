@@ -29,7 +29,7 @@ class CategoryMenuBarTest {
     val composeTestRule = createComposeRule()
 
     private val categories = listOf(TagEntity(tag = "ALL")) + List(10) {
-        TagEntity(tag = "#Category$it")
+        TagEntity(tag = "Category$it")
     }
 
     private val onClickMock = mock<(TagEntity) -> Unit>()
@@ -37,7 +37,8 @@ class CategoryMenuBarTest {
     private fun setContentWithCategoryMenuBar(
         categories: List<TagEntity>,
         onClick: (TagEntity) -> Unit,
-        selected: TagEntity? = null
+        selected: TagEntity? = null,
+        prefix: String? = null,
     ) {
         composeTestRule.setContent {
             ComposeMemoAppTheme {
@@ -48,14 +49,16 @@ class CategoryMenuBarTest {
                         categories = categories,
                         onClick = onClick,
                         selected = it,
-                        listState = listState
+                        listState = listState,
+                        prefix = prefix
                     )
                 } ?: kotlin.run {
                     CategoryMenuBar(
                         categories = categories,
                         onClick = onClick,
                         listState = listState,
-                        selected = TagEntity(tag = "ALL")
+                        selected = TagEntity(tag = "ALL"),
+                        prefix = prefix
                     )
                 }
             }
@@ -65,6 +68,7 @@ class CategoryMenuBarTest {
     @Test
     fun 카테고리를_클릭하면_onClick을_호출한다() {
         composeTestRule.mainClock.autoAdvance = false
+
         setContentWithCategoryMenuBar(
             categories = categories,
             onClick = onClickMock,
@@ -98,13 +102,14 @@ class CategoryMenuBarTest {
             }
         }
 
+        composeTestRule.onRoot(useUnmergedTree = true).printToLog("categoryBarTest")
+
         composeTestRule
             .onNodeWithText(categories[1].tag)
             .performClick()
 
         composeTestRule.mainClock.advanceTimeBy(50L)
 
-        composeTestRule.onRoot(useUnmergedTree = true).printToLog("categoryBarTest")
         composeTestRule
             .onNodeWithText(categories[1].tag)
             .assert(isSelected())

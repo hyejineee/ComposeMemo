@@ -35,7 +35,7 @@ import com.example.composememoapp.R
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.data.database.entity.TagEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
-import com.example.composememoapp.presentation.ui.component.BottomBar
+import com.example.composememoapp.presentation.ui.component.HomeScreenBottomBar
 import com.example.composememoapp.presentation.viewModel.MemoState
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
@@ -148,7 +148,8 @@ fun HomeScreenContent(
                     },
                     selected = selectedCategory,
                     listState = listState,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 5.dp)
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 5.dp),
+                    prefix = "#"
                 )
 
                 MemosListScreen(
@@ -168,7 +169,7 @@ fun HomeScreenContent(
 
         var isFavoriteFilter by rememberSaveable { mutableStateOf(false) }
 
-        BottomBar(
+        HomeScreenBottomBar(
             isFavoriteFilter = isFavoriteFilter,
             handleClickFavoriteFilterButton = {
                 isFavoriteFilter = !isFavoriteFilter

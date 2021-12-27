@@ -1,9 +1,9 @@
 package com.example.composememoapp.presentation.viewModel
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.composememoapp.data.ContentBlock
-import com.example.composememoapp.data.TextBlock
+import com.example.composememoapp.data.MemoModel
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.di.AndroidMainScheduler
 import com.example.composememoapp.di.IOScheduler
@@ -100,10 +100,10 @@ class MemoViewModel @Inject constructor(
         getAllMemo()
     }
 
-    fun saveMemo(memoEntity: MemoEntity) {
+    fun saveMemo(memoModel: MemoModel, context: Context) {
         handleLoadingState()
 
-        saveMemoUseCase(memoEntity = memoEntity)
+        saveMemoUseCase(memoModel = memoModel, context = context)
             .subscribeOn(ioScheduler)
             .observeOn(androidSchedulers)
             .subscribe(
@@ -148,33 +148,6 @@ class MemoViewModel @Inject constructor(
 
     fun filterMemoByFavorite(isFavorite: Boolean) {
         _favoriteSource.onNext(isFavorite)
-    }
-
-    fun makeMemoEntity(
-        memoEntity: MemoEntity?,
-        contents: List<ContentBlock<*>>,
-        tags: List<String>
-    ): MemoEntity {
-
-        val contentBlocks = contents
-            .asSequence()
-            .map {
-                when (it) {
-                    is TextBlock -> it.content = it.textInputState.value.text
-                }
-                it.convertToContentBlockEntity()
-            }
-            .filter { block ->
-                block.content.isNotBlank()
-            }
-            .mapIndexed { index, contentBlockEntity ->
-                contentBlockEntity.seq = index + 1L
-                contentBlockEntity
-            }.toList()
-
-        return memoEntity?.let {
-            it.copy(contents = contentBlocks, tagEntities = tags)
-        } ?: MemoEntity(contents = contentBlocks, tagEntities = tags)
     }
 
     private fun handleLoadingState() {

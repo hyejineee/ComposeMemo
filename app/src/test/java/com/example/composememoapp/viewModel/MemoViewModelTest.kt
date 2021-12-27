@@ -1,5 +1,6 @@
 package com.example.composememoapp.viewModel
 
+import android.content.Context
 import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
@@ -29,6 +30,8 @@ class MemoViewModelTest {
     // 메모를 삭제한다.
 
     private val testMemoRepository = Mockito.mock(MemoAppRepository::class.java)
+    private val context = Mockito.mock(Context::class.java)
+
     private lateinit var memoViewModel: MemoViewModel
 
     private val memoEntityMock = MemoEntity(
@@ -86,11 +89,12 @@ class MemoViewModelTest {
     @Test
     @DisplayName("메모를 저장 성공시 저장 성공 상태를 발행한다.")
     fun insertMemoSuccessTest() {
-        given(testMemoRepository.insertMemo(memoEntity = any()))
+        given(testMemoRepository.insertMemo(memoEntity = any(), context = any()))
             .willReturn(Completable.complete())
 
         memoViewModel.saveMemo(
-            memoEntityMock,
+            memoEntityMock.convertToMemoViewModel(),
+            context = context
         )
 
         val values = memoViewModel.state.test().awaitDone(500, TimeUnit.MILLISECONDS).values()
@@ -100,11 +104,12 @@ class MemoViewModelTest {
     @Test
     @DisplayName("메모를 저장 실패시 저장 실패 상태를 발행한다.")
     fun insertMemoFailTest() {
-        given(testMemoRepository.insertMemo(memoEntity = any()))
+        given(testMemoRepository.insertMemo(memoEntity = any(), any()))
             .willReturn(Completable.error(Throwable("메모 저장 에러")))
 
         memoViewModel.saveMemo(
-            memoEntityMock,
+            memoEntityMock.convertToMemoViewModel(),
+            context = context
         )
 
         val values = memoViewModel.state.test().awaitDone(500, TimeUnit.MILLISECONDS).values()
