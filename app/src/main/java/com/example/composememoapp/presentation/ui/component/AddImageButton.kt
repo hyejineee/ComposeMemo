@@ -30,8 +30,8 @@ import androidx.core.content.FileProvider
 import com.example.composememoapp.R
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.util.Permissions
-import java.io.File
 import kotlinx.coroutines.launch
+import java.io.File
 
 @Composable
 fun AddImageButton(
@@ -126,7 +126,6 @@ fun AddImageButton(
             onClick = handleClickAddImageButton
         )
 
-
     Box() {
         Column(modifier = modifier) {
             if (showImageSelectDialog) {
@@ -169,8 +168,6 @@ fun AddImageButton(
 
         SnackbarHost(hostState = snackState)
     }
-
-
 }
 
 @Preview

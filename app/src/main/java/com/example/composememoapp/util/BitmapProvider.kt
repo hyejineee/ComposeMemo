@@ -6,8 +6,6 @@ import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
-import android.provider.MediaStore
-import android.util.Log
 import androidx.annotation.RequiresApi
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
@@ -84,13 +82,12 @@ class BitmapProvider(private val context: Context) {
                 try {
                     inJustDecodeBounds = true
                     val input = context.contentResolver.openInputStream(uri)
-                    BitmapFactory.decodeStream(input,null,this)
+                    BitmapFactory.decodeStream(input, null, this)
                     inSampleSize = calculateInSampleSize(this, reqWidth, reqHeight)
 
                     inJustDecodeBounds = false
 
                     BitmapFactory.decodeStream(context.contentResolver.openInputStream(uri), null, this)
-
                 } catch (e: FileNotFoundException) {
                     throw e
                 }

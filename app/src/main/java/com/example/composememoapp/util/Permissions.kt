@@ -20,18 +20,17 @@ object Permissions {
     ) {
 
         if (ContextCompat.checkSelfPermission(
-                context,
-                permission
-            ) == PackageManager.PERMISSION_GRANTED
+            context,
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
         ) {
             grantedAction()
-
         } else {
 
-            if(ActivityCompat.shouldShowRequestPermissionRationale(context as Activity, permission)){
+            if (ActivityCompat.shouldShowRequestPermissionRationale(context as Activity, permission)) {
                 Log.d("Permissions", "should : true")
                 rationaleAction()
-            }else{
+            } else {
                 Log.d("Permissions", "should : false")
                 requestPermissionAction()
             }
