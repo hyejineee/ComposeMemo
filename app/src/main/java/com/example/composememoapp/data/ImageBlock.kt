@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -39,7 +40,9 @@ data class ImageBlock(
                 Image(
                     bitmap = btm.asImageBitmap(),
                     contentDescription = null,
-                    modifier = Modifier.align(Alignment.Center),
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .fillMaxSize(),
                     contentScale = ContentScale.FillBounds,
                     colorFilter = ColorFilter.tint(
                         Color(0x70000000),
