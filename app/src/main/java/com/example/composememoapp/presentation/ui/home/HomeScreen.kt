@@ -148,7 +148,8 @@ fun HomeScreenContent(
                     },
                     selected = selectedCategory,
                     listState = listState,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 5.dp)
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 5.dp),
+                    prefix = "#"
                 )
 
                 MemosListScreen(

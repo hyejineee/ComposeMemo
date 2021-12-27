@@ -12,3 +12,5 @@ val DeepPurpleA200Light = Color(0xffb47cff)
 val DeepPurpleA200Dark = Color(0xff3f1dcb)
 val Gray50 = Color(0xffF4F4F4)
 val Gray900 = Color(0xff212121)
+
+val Black800 = Color(0xff484848)
