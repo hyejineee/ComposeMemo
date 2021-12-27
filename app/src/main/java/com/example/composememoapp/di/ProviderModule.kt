@@ -1,7 +1,7 @@
 package com.example.composememoapp.di
 
 import android.content.Context
-import com.example.composememoapp.util.ImageProvider
+import com.example.composememoapp.util.BitmapProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,5 +13,5 @@ import dagger.hilt.components.SingletonComponent
 object ProviderModule {
 
     @Provides
-    fun provideImageProvider(@ApplicationContext context: Context) = ImageProvider(context = context)
+    fun provideImageProvider(@ApplicationContext context: Context) = BitmapProvider(context = context)
 }

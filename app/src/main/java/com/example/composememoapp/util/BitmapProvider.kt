@@ -7,47 +7,38 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.util.Log
+import androidx.annotation.RequiresApi
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.io.FileNotFoundException
 
-class ImageProvider(private val context: Context) {
+class BitmapProvider(private val context: Context) {
+
     fun getBitmapFromFile(uri: Uri?): Single<Bitmap> {
         return Single.create<Bitmap?> { observable ->
             uri?.let { uri ->
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     try {
-                        val source = ImageDecoder
-                            .createSource(context.contentResolver, uri)
-                        val bitmap = ImageDecoder.decodeBitmap(source) { decoder, info, source ->
-                            var sampleSize = 1
-                            if (info.size.height > 500 || info.size.width > 500) {
-                                val halfH = info.size.height / 2
-                                val halfW = info.size.width / 2
-
-                                while (halfH / sampleSize >= 500 && halfW / sampleSize >= 500) {
-                                    sampleSize *= 2
-                                }
-                            }
-
-                            decoder.setTargetSampleSize(sampleSize)
-                        }
-
-                        observable.onSuccess(bitmap)
-                    } catch (e: Exception) {
-                        Log.d("ImageBlock", "exception : ${e.message}")
+                        observable.onSuccess(
+                            decodeSampledBitmapFromFileInVersionP(
+                                uri = uri,
+                                context = context,
+                                reqHeight = 500,
+                                reqWidth = 500
+                            )
+                        )
+                    } catch (e: FileNotFoundException) {
                         observable.onError(e)
                     }
                 } else {
                     try {
                         observable.onSuccess(
-                            decodeSampledBitmapFromResource(
-                                uri,
-                                context,
-                                500,
-                                500
+                            decodeSampledBitmapFromFile(
+                                uri = uri,
+                                context = context,
+                                reqWidth = 500,
+                                reqHeight = 500
                             )
                         )
                     } catch (e: FileNotFoundException) {
@@ -60,7 +51,26 @@ class ImageProvider(private val context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    private fun decodeSampledBitmapFromResource(
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun decodeSampledBitmapFromFileInVersionP(context: Context, uri: Uri, reqWidth: Int, reqHeight: Int): Bitmap {
+        val source = ImageDecoder
+            .createSource(context.contentResolver, uri)
+        val bitmap = ImageDecoder.decodeBitmap(source) { decoder, info, source ->
+            var sampleSize = 1
+            if (info.size.height > reqHeight || info.size.width > reqWidth) {
+                val halfH = info.size.height / 2
+                val halfW = info.size.width / 2
+
+                while (halfH / sampleSize >= reqHeight && halfW / sampleSize >= reqWidth) {
+                    sampleSize *= 2
+                }
+            }
+
+            decoder.setTargetSampleSize(sampleSize)
+        }
+    }
+
+    private fun decodeSampledBitmapFromFile(
         uri: Uri?,
         context: Context,
         reqWidth: Int,
@@ -73,10 +83,8 @@ class ImageProvider(private val context: Context) {
                     inJustDecodeBounds = true
                     MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
 
-                    // Calculate inSampleSize
                     inSampleSize = calculateInSampleSize(this, reqWidth, reqHeight)
 
-                    // Decode bitmap with inSampleSize set
                     inJustDecodeBounds = false
 
                     MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
@@ -94,7 +102,6 @@ class ImageProvider(private val context: Context) {
         reqWidth: Int,
         reqHeight: Int
     ): Int {
-        // Raw height and width of image
         val (height: Int, width: Int) = options.run { outHeight to outWidth }
         var inSampleSize = 1
 
@@ -103,8 +110,6 @@ class ImageProvider(private val context: Context) {
             val halfHeight: Int = height / 2
             val halfWidth: Int = width / 2
 
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
             while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
                 inSampleSize *= 2
             }

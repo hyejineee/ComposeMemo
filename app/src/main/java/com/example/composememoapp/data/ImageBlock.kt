@@ -2,7 +2,6 @@ package com.example.composememoapp.data
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.media.Image
 import android.net.Uri
 import android.os.Parcelable
 import androidx.compose.foundation.Image
@@ -20,7 +19,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
-import com.example.composememoapp.util.ImageProvider
+import com.example.composememoapp.util.BitmapProvider
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
@@ -36,7 +35,7 @@ data class ImageBlock(
     @EntryPoint
     @InstallIn(SingletonComponent::class)
     interface ImageProviderEntryPoint {
-        fun imageProvider(): ImageProvider
+        fun imageProvider(): BitmapProvider
     }
 
     @IgnoredOnParcel
