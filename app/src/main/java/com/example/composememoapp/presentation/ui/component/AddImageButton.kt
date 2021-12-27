@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.MaterialTheme
@@ -48,8 +49,10 @@ fun AddImageButton(
 
     val getImageFromGalleryLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
-            imageUri = uri
-            handleAddImage(imageUri)
+            uri?.let {
+                imageUri = uri
+                handleAddImage(imageUri)
+            }
         }
 
     val getImageFromCameraLauncher =
@@ -113,7 +116,7 @@ fun AddImageButton(
     }
 
     val handleClickAddImageButton = {
-        showImageSelectDialog = true
+        showImageSelectDialog = showImageSelectDialog.not()
     }
 
     val addImageIconModel =
@@ -159,7 +162,8 @@ fun AddImageButton(
             }
             MiniFloatingButton(
                 model = addImageIconModel,
-                tint = MaterialTheme.colors.primary
+                tint = MaterialTheme.colors.primary,
+                modifier = Modifier.size(40.dp)
             )
         }
 
