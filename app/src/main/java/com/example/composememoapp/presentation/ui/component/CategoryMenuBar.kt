@@ -27,6 +27,7 @@ import kotlinx.coroutines.launch
 fun CategoryMenuBar(
     categories: List<TagEntity>,
     onClick: (TagEntity) -> Unit,
+    prefix: String? = null,
     listState: LazyListState,
     modifier: Modifier = Modifier,
     selected: TagEntity
@@ -44,7 +45,8 @@ fun CategoryMenuBar(
                 modifier = Modifier.selectable(category.tag == selected.tag) {
                     onClick(category)
                 },
-                isSelected = category.tag == selected.tag
+                isSelected = category.tag == selected.tag,
+                prefix = prefix
             )
         }
     }
@@ -53,11 +55,17 @@ fun CategoryMenuBar(
 @Composable
 fun CategoryMenuRow(
     category: String,
+    prefix:String? = null,
     isSelected: Boolean = false,
     modifier: Modifier = Modifier
 ) {
+
+    val text = prefix?.let {
+        "$it$category"
+    }?:"$category"
+
     Text(
-        text = "#$category",
+        text = text,
         modifier = modifier.padding(horizontal = 15.dp, vertical = 5.dp),
         fontWeight = if(isSelected) FontWeight.ExtraBold else FontWeight.SemiBold,
         fontStyle = FontStyle.Italic,
