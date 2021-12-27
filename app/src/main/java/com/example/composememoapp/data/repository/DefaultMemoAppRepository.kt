@@ -35,7 +35,7 @@ class DefaultMemoAppRepository @Inject constructor(
                 .map {
                     when (it) {
                         is TextBlock -> it.content = it.textInputState.value.text
-                        is ImageBlock -> it.content = if (memoModel.id == null) saveImage(
+                        is ImageBlock -> it.content = if (memoModel.id == null || it.content?.scheme != "file") saveImage(
                             bitmap = it.imageState.value,
                             context = context
                         ) else it.content
