@@ -80,7 +80,6 @@ fun ContentBlocks(
                             .focusRequester(focusRequester = focusRequester)
                             .padding(2.dp)
                     )
-
                 }
             }
         }

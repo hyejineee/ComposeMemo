@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Checkbox
-import androidx.compose.material.CheckboxColors
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -15,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -102,7 +100,7 @@ data class CheckBoxBlock(
 
         override fun create(parcel: Parcel): CheckBoxBlock = CheckBoxBlock(
             parcel.readLong(),
-            CheckBoxModel(parcel.readString()?:"", parcel.readByte() != 0.toByte())
+            CheckBoxModel(parcel.readString() ?: "", parcel.readByte() != 0.toByte())
         )
     }
 }

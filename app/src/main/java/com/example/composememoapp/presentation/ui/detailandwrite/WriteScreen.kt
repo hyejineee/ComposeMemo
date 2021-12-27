@@ -112,8 +112,6 @@ fun WriteScreen(
         }
     }
 
-
-
     Log.d("Write", "content : ${contentsState.contents.toList()}")
 
     BackHandler() {
@@ -149,7 +147,7 @@ fun DetailAndWriteScreenContent(
     handleSaveMemo: () -> Unit,
     handleAddTag: (String) -> Unit,
     handleAddImageBlock: (Uri?) -> Unit,
-    handleAddCheckBoxBlock :()-> Unit
+    handleAddCheckBoxBlock: () -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }

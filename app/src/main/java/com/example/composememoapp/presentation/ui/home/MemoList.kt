@@ -64,7 +64,7 @@ fun MemoListItem(
         modifier = modifier
             .heightIn(50.dp, 250.dp)
             .padding(4.dp),
-        color = if(imageBlock!= null) MaterialTheme.colors.primary else MaterialTheme.colors.surface
+        color = if (imageBlock != null) MaterialTheme.colors.primary else MaterialTheme.colors.surface
     ) {
 
         imageBlock?.let {

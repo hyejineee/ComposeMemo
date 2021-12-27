@@ -18,21 +18,21 @@ import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 @Composable
 fun WriteScreenBottomBar(
     handleAddImage: (Uri?) -> Unit,
-    handleAddCheckBox :()->Unit,
+    handleAddCheckBox: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .padding(start = 20.dp, end = 20.dp, bottom = 16.dp)
+            modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp, end = 20.dp, bottom = 16.dp)
     ) {
         Row(
             modifier = Modifier
                 .align(Alignment.CenterStart)
         ) {
 
-            Box(){
+            Box() {
                 AddImageButton(handleAddImage = handleAddImage)
             }
 
@@ -42,7 +42,6 @@ fun WriteScreenBottomBar(
                 handleAddCheckBox = handleAddCheckBox
             )
         }
-
     }
 }
 
