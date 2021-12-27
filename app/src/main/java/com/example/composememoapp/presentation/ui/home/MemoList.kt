@@ -63,7 +63,7 @@ fun MemoListItem(
         modifier = modifier
             .heightIn(50.dp, 250.dp)
             .padding(4.dp),
-        contentColor = if(imageBlock!=null) Color.White else Color.Black
+        contentColor = if (imageBlock != null) Color.White else Color.Black
     ) {
 
         imageBlock?.let {
@@ -103,7 +103,7 @@ fun MemoListItem(
                 modifier = Modifier
                     .padding(5.dp)
                     .align(Alignment.TopEnd),
-                tint = if(imageBlock!=null) Color.White else MaterialTheme.colors.primary
+                tint = if (imageBlock != null) Color.White else MaterialTheme.colors.primary
             )
         }
     }

@@ -13,7 +13,7 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.io.FileNotFoundException
 
-class ImageProvider (private val context: Context) {
+class ImageProvider(private val context: Context) {
     fun getBitmapFromFile(uri: Uri?): Single<Bitmap> {
         return Single.create<Bitmap?> { observable ->
             uri?.let { uri ->
@@ -53,7 +53,6 @@ class ImageProvider (private val context: Context) {
                     } catch (e: FileNotFoundException) {
                         observable.onError(e)
                     }
-
                 }
             }
         }
@@ -89,7 +88,6 @@ class ImageProvider (private val context: Context) {
 
         return null
     }
-
 
     private fun calculateInSampleSize(
         options: BitmapFactory.Options,

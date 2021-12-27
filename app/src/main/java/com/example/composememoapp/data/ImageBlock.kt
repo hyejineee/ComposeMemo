@@ -23,13 +23,9 @@ import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.util.ImageProvider
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
-import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.android.components.ViewComponent
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.parcelize.IgnoredOnParcel
-import javax.inject.Inject
 
 @kotlinx.parcelize.Parcelize
 data class ImageBlock(
@@ -45,7 +41,6 @@ data class ImageBlock(
 
     @IgnoredOnParcel
     var imageState: MutableState<Bitmap?> = mutableStateOf(null)
-
 
     @Composable
     override fun drawOnlyReadContent(modifier: Modifier) {

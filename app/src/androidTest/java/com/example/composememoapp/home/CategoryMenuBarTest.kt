@@ -1,6 +1,5 @@
 package com.example.composememoapp.home
 
-import android.net.IpPrefix
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -110,8 +109,6 @@ class CategoryMenuBarTest {
             .performClick()
 
         composeTestRule.mainClock.advanceTimeBy(50L)
-
-
 
         composeTestRule
             .onNodeWithText(categories[1].tag)

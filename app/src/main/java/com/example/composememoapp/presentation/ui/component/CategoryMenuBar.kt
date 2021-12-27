@@ -55,19 +55,19 @@ fun CategoryMenuBar(
 @Composable
 fun CategoryMenuRow(
     category: String,
-    prefix:String? = null,
+    prefix: String? = null,
     isSelected: Boolean = false,
     modifier: Modifier = Modifier
 ) {
 
     val text = prefix?.let {
         "$it$category"
-    }?:"$category"
+    } ?: "$category"
 
     Text(
         text = text,
         modifier = modifier.padding(horizontal = 15.dp, vertical = 5.dp),
-        fontWeight = if(isSelected) FontWeight.ExtraBold else FontWeight.SemiBold,
+        fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.SemiBold,
         fontStyle = FontStyle.Italic,
         fontSize = 15.sp,
         color = if (isSelected) MaterialTheme.colors.secondary else Color.LightGray
