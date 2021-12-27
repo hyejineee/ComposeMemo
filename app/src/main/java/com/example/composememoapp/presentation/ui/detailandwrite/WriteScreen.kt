@@ -94,7 +94,6 @@ fun WriteScreen(
             val seq =
                 if (contentsState.contents.isNotEmpty()) contentsState.contents.last().seq + 1 else 1
 
-
             if (it < 0) {
                 contentsState.contents.add(TextBlock(seq = seq, ""))
             } else {
@@ -236,10 +235,12 @@ fun DetailAndWriteScreenContent(
                 this.testTag = "write screen"
             }
             .fillMaxSize()
-            .clickable(onClick = {
-                handleCursorPosition(-1)
-                handleAddDefaultBlock(index)
-            })
+            .clickable(
+                onClick = {
+                    handleCursorPosition(-1)
+                    handleAddDefaultBlock(index)
+                }
+            )
     ) {
         Column(
             modifier = Modifier
@@ -277,8 +278,8 @@ fun DetailAndWriteScreenPreview() {
                     type = ContentType.Text,
                     seq = it.toLong(),
                     content = "this is text block content $it" +
-                            " this is text block content $it" +
-                            " this is text block content $it"
+                        " this is text block content $it" +
+                        " this is text block content $it"
                 )
             }
         )

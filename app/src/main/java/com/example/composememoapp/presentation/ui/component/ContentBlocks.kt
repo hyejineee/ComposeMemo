@@ -28,7 +28,7 @@ import com.example.composememoapp.data.TextBlock
 fun ContentBlocks(
     contents: List<ContentBlock<*>>,
     focusRequester: FocusRequester,
-    handleCursorPosition: (Int)->Unit,
+    handleCursorPosition: (Int) -> Unit,
     keyboardController: SoftwareKeyboardController?
 ) {
 
@@ -54,8 +54,8 @@ fun ContentBlocks(
                         modifier = Modifier
                             .focusRequester(focusRequester = focusRequester)
                             .onFocusChanged {
-                                if(it.isFocused){
-                                    handleCursorPosition(i+1)
+                                if (it.isFocused) {
+                                    handleCursorPosition(i + 1)
                                 }
                             }
                             .padding(2.dp)
@@ -86,8 +86,8 @@ fun ContentBlocks(
                         modifier = Modifier
                             .focusRequester(focusRequester = focusRequester)
                             .onFocusChanged {
-                                if(it.isFocused){
-                                    handleCursorPosition(i+1)
+                                if (it.isFocused) {
+                                    handleCursorPosition(i + 1)
                                 }
                             }
                             .padding(2.dp)
