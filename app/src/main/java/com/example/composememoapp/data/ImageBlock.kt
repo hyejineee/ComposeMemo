@@ -20,10 +20,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.util.BitmapProvider
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
 import kotlinx.parcelize.IgnoredOnParcel
 
 @kotlinx.parcelize.Parcelize
