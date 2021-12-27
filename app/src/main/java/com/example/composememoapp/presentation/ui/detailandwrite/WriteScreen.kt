@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -88,21 +89,49 @@ fun WriteScreen(
         memoViewModel.deleteMemo(memo)
     }
 
-    val handleAddDefaultBlock: () -> Unit =
+    val handleAddDefaultBlock: (Int) -> Unit =
         {
-            val seq = if (contentsState.contents.isNotEmpty()) contentsState.contents.last().seq + 1 else 1
-            contentsState.contents.add(TextBlock(seq = seq, ""))
+            val seq =
+                if (contentsState.contents.isNotEmpty()) contentsState.contents.last().seq + 1 else 1
+
+            if (it < 0) {
+                contentsState.contents.add(TextBlock(seq = seq, ""))
+            } else {
+                contentsState.contents.add(it, TextBlock(seq = seq, ""))
+            }
         }
 
-    val handleAddImageBlock = { uri: Uri? ->
-        val seq = if (contentsState.contents.isNotEmpty()) contentsState.contents.last().seq + 1 else 1
-        contentsState.contents.add(ImageBlock(seq = seq, content = uri))
-        Unit
+    val handleAddImageBlock = { i: Int ->
+        { uri: Uri? ->
+            val seq =
+                if (contentsState.contents.isNotEmpty()) contentsState.contents.last().seq + 1 else 1
+
+            if (i < 0) {
+                contentsState.contents.add(ImageBlock(seq = seq, content = uri))
+            } else {
+                contentsState.contents.add(i, ImageBlock(seq = seq, content = uri))
+            }
+            Unit
+        }
     }
 
-    val handleAddCheckBoxBlock = {
-        val seq = if (contentsState.contents.isNotEmpty()) contentsState.contents.last().seq + 1 else 1
-        contentsState.contents.add(CheckBoxBlock(seq = seq, content = CheckBoxModel(text = "", false)))
+    val handleAddCheckBoxBlock = { i: Int ->
+        val seq =
+            if (contentsState.contents.isNotEmpty()) contentsState.contents.last().seq + 1 else 1
+
+        if (i < 0) {
+            contentsState.contents.add(
+                CheckBoxBlock(
+                    seq = seq,
+                    content = CheckBoxModel(text = "", false)
+                )
+            )
+        } else {
+            contentsState.contents.add(
+                i,
+                CheckBoxBlock(seq = seq, content = CheckBoxModel(text = "", false))
+            )
+        }
         Unit
     }
 
@@ -142,17 +171,22 @@ fun DetailAndWriteScreenContent(
     allTag: List<String>,
     contents: List<ContentBlock<*>>,
     handleDeleteMemo: (MemoEntity) -> Unit,
-    handleAddDefaultBlock: () -> Unit,
     handleBackButtonClick: () -> Unit,
     handleSaveMemo: () -> Unit,
     handleAddTag: (String) -> Unit,
-    handleAddImageBlock: (Uri?) -> Unit,
-    handleAddCheckBoxBlock: () -> Unit
+
+    handleAddDefaultBlock: (Int) -> Unit,
+    handleAddImageBlock: (Int) -> (Uri?) -> Unit,
+    handleAddCheckBoxBlock: (Int) -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
+    var index by rememberSaveable { mutableStateOf(-1) }
+
+    Log.d("write", "cursor position: $index")
 
     val scrollState = rememberScrollState()
+
     var favoriteSate = rememberSaveable {
         mutableStateOf(memoEntity?.isBookMarked ?: false)
     }
@@ -174,6 +208,10 @@ fun DetailAndWriteScreenContent(
         handleBackButtonClick()
     }
 
+    val handleCursorPosition = { i: Int ->
+        index = i
+    }
+
     Scaffold(
         topBar = {
             TopAppBar() {
@@ -188,8 +226,8 @@ fun DetailAndWriteScreenContent(
         },
         bottomBar = {
             WriteScreenBottomBar(
-                handleAddImage = handleAddImageBlock,
-                handleAddCheckBox = handleAddCheckBoxBlock
+                handleAddImage = handleAddImageBlock(index),
+                handleAddCheckBox = { handleAddCheckBoxBlock(index) }
             )
         },
         modifier = Modifier
@@ -197,7 +235,12 @@ fun DetailAndWriteScreenContent(
                 this.testTag = "write screen"
             }
             .fillMaxSize()
-            .clickable(onClick = handleAddDefaultBlock)
+            .clickable(
+                onClick = {
+                    handleCursorPosition(-1)
+                    handleAddDefaultBlock(index)
+                }
+            )
     ) {
         Column(
             modifier = Modifier
@@ -216,7 +259,8 @@ fun DetailAndWriteScreenContent(
             ContentBlocks(
                 contents = contents,
                 focusRequester = focusRequester,
-                keyboardController = keyboardController
+                keyboardController = keyboardController,
+                handleCursorPosition = handleCursorPosition
             )
         }
     }
@@ -250,7 +294,7 @@ fun DetailAndWriteScreenPreview() {
             handleAddDefaultBlock = { },
             handleSaveMemo = {},
             handleDeleteMemo = {},
-            handleAddImageBlock = {},
+            handleAddImageBlock = { {} },
             contents = content,
             handleAddCheckBoxBlock = {}
         )

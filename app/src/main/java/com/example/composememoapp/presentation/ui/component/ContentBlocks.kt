@@ -11,6 +11,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -27,12 +28,13 @@ import com.example.composememoapp.data.TextBlock
 fun ContentBlocks(
     contents: List<ContentBlock<*>>,
     focusRequester: FocusRequester,
+    handleCursorPosition: (Int) -> Unit,
     keyboardController: SoftwareKeyboardController?
 ) {
 
     Column(modifier = Modifier.padding(16.dp)) {
-        for (content in contents) {
-            when (content) {
+        for (i in contents.indices) {
+            when (val content = contents[i]) {
                 is TextBlock -> {
                     LaunchedEffect(key1 = content) {
                         focusRequester.requestFocus()
@@ -51,6 +53,11 @@ fun ContentBlocks(
                     content.drawEditableContent(
                         modifier = Modifier
                             .focusRequester(focusRequester = focusRequester)
+                            .onFocusChanged {
+                                if (it.isFocused) {
+                                    handleCursorPosition(i + 1)
+                                }
+                            }
                             .padding(2.dp)
                             .semantics {
                                 this.contentDescription = "text block ${content.seq}"
@@ -78,6 +85,11 @@ fun ContentBlocks(
                     content.drawEditableContent(
                         modifier = Modifier
                             .focusRequester(focusRequester = focusRequester)
+                            .onFocusChanged {
+                                if (it.isFocused) {
+                                    handleCursorPosition(i + 1)
+                                }
+                            }
                             .padding(2.dp)
                     )
                 }
