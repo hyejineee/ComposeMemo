@@ -68,6 +68,7 @@ class BitmapProvider(private val context: Context) {
 
             decoder.setTargetSampleSize(sampleSize)
         }
+        return bitmap
     }
 
     private fun decodeSampledBitmapFromFile(
