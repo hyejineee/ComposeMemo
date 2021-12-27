@@ -20,6 +20,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composememoapp.R
+import com.example.composememoapp.data.CheckBoxBlock
 import com.example.composememoapp.data.ContentBlock
 import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.ImageBlock
@@ -63,26 +64,30 @@ fun MemoListItem(
         modifier = modifier
             .heightIn(50.dp, 250.dp)
             .padding(4.dp),
-        contentColor = if (imageBlock != null) Color.White else Color.Black
+        color = if (imageBlock != null) MaterialTheme.colors.primary else MaterialTheme.colors.surface
     ) {
 
         imageBlock?.let {
-
             it.drawOnlyReadContent(modifier = Modifier)
         }
 
         Box() {
             Column(
                 modifier = Modifier
-                    .padding(16.dp)
                     .align(Alignment.CenterStart)
-
+                    .padding(15.dp)
             ) {
                 memo.contents
                     .map { it.convertToContentBlockModel() }
+                    .take(5)
                     .forEachIndexed { i: Int, block: ContentBlock<*> ->
                         when (block) {
                             is TextBlock -> block.drawOnlyReadContent(
+                                modifier = if (i == 0) Modifier.padding(
+                                    end = 30.dp
+                                ) else Modifier
+                            )
+                            is CheckBoxBlock -> block.drawOnlyReadContent(
                                 modifier = if (i == 0) Modifier.padding(
                                     end = 30.dp
                                 ) else Modifier

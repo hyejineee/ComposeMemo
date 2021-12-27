@@ -17,13 +17,18 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.example.composememoapp.data.CheckBoxBlock
 import com.example.composememoapp.data.ContentBlock
 import com.example.composememoapp.data.ImageBlock
 import com.example.composememoapp.data.TextBlock
 
 @ExperimentalComposeUiApi
 @Composable
-fun ContentBlocks(contents: List<ContentBlock<*>>, focusRequester: FocusRequester, keyboardController: SoftwareKeyboardController?) {
+fun ContentBlocks(
+    contents: List<ContentBlock<*>>,
+    focusRequester: FocusRequester,
+    keyboardController: SoftwareKeyboardController?
+) {
 
     Column(modifier = Modifier.padding(16.dp)) {
         for (content in contents) {
@@ -46,7 +51,7 @@ fun ContentBlocks(contents: List<ContentBlock<*>>, focusRequester: FocusRequeste
                     content.drawEditableContent(
                         modifier = Modifier
                             .focusRequester(focusRequester = focusRequester)
-                            .padding(5.dp)
+                            .padding(2.dp)
                             .semantics {
                                 this.contentDescription = "text block ${content.seq}"
                             }
@@ -57,7 +62,24 @@ fun ContentBlocks(contents: List<ContentBlock<*>>, focusRequester: FocusRequeste
                         mutableStateOf<Bitmap?>(null)
                     }
 
-                    content.drawEditableContent(modifier = Modifier)
+                    content.drawEditableContent(modifier = Modifier.padding(2.dp))
+                }
+
+                is CheckBoxBlock -> {
+
+                    content.checkState = remember { mutableStateOf(content.content.isChecked) }
+                    content.textInputState = mutableStateOf(
+                        TextFieldValue(
+                            text = content.content.text,
+                            selection = TextRange(content.content.text.length)
+                        )
+                    )
+
+                    content.drawEditableContent(
+                        modifier = Modifier
+                            .focusRequester(focusRequester = focusRequester)
+                            .padding(2.dp)
+                    )
                 }
             }
         }

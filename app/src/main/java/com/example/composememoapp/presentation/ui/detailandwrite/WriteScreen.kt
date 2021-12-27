@@ -26,6 +26,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.composememoapp.data.CheckBoxBlock
+import com.example.composememoapp.data.CheckBoxModel
 import com.example.composememoapp.data.ContentBlock
 import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.ImageBlock
@@ -92,16 +94,22 @@ fun WriteScreen(
             contentsState.contents.add(TextBlock(seq = seq, ""))
         }
 
-    val handleAddTag: (String) -> Unit = { s: String ->
-        if (s !in tagState.tags) {
-            tagState.tags = tagState.tags.plus(s)
-        }
-    }
-
     val handleAddImageBlock = { uri: Uri? ->
         val seq = if (contentsState.contents.isNotEmpty()) contentsState.contents.last().seq + 1 else 1
         contentsState.contents.add(ImageBlock(seq = seq, content = uri))
         Unit
+    }
+
+    val handleAddCheckBoxBlock = {
+        val seq = if (contentsState.contents.isNotEmpty()) contentsState.contents.last().seq + 1 else 1
+        contentsState.contents.add(CheckBoxBlock(seq = seq, content = CheckBoxModel(text = "", false)))
+        Unit
+    }
+
+    val handleAddTag: (String) -> Unit = { s: String ->
+        if (s !in tagState.tags) {
+            tagState.tags = tagState.tags.plus(s)
+        }
     }
 
     Log.d("Write", "content : ${contentsState.contents.toList()}")
@@ -121,7 +129,8 @@ fun WriteScreen(
         handleSaveMemo = handleSaveMemo,
         handleAddDefaultBlock = handleAddDefaultBlock,
         handleAddTag = handleAddTag,
-        handleAddImageBlock = handleAddImageBlock
+        handleAddImageBlock = handleAddImageBlock,
+        handleAddCheckBoxBlock = handleAddCheckBoxBlock
     )
 }
 
@@ -138,6 +147,7 @@ fun DetailAndWriteScreenContent(
     handleSaveMemo: () -> Unit,
     handleAddTag: (String) -> Unit,
     handleAddImageBlock: (Uri?) -> Unit,
+    handleAddCheckBoxBlock: () -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
@@ -178,7 +188,8 @@ fun DetailAndWriteScreenContent(
         },
         bottomBar = {
             WriteScreenBottomBar(
-                handleAddImage = handleAddImageBlock
+                handleAddImage = handleAddImageBlock,
+                handleAddCheckBox = handleAddCheckBoxBlock
             )
         },
         modifier = Modifier
@@ -241,6 +252,7 @@ fun DetailAndWriteScreenPreview() {
             handleDeleteMemo = {},
             handleAddImageBlock = {},
             contents = content,
+            handleAddCheckBoxBlock = {}
         )
     }
 }
