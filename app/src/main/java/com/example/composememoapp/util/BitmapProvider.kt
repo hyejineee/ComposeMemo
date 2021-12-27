@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
-import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
@@ -24,8 +23,8 @@ class BitmapProvider(private val context: Context) {
                             decodeSampledBitmapFromFileInVersionP(
                                 uri = uri,
                                 context = context,
-                                reqHeight = 500,
-                                reqWidth = 500
+                                reqHeight = dpToPx(context, 250),
+                                reqWidth = dpToPx(context, 250)
                             )
                         )
                     } catch (e: FileNotFoundException) {
@@ -37,8 +36,8 @@ class BitmapProvider(private val context: Context) {
                             decodeSampledBitmapFromFile(
                                 uri = uri,
                                 context = context,
-                                reqWidth = 500,
-                                reqHeight = 500
+                                reqWidth = dpToPx(context, 250),
+                                reqHeight = dpToPx(context, 250)
                             )
                         )
                     } catch (e: FileNotFoundException) {
@@ -82,13 +81,13 @@ class BitmapProvider(private val context: Context) {
             return BitmapFactory.Options().run {
                 try {
                     inJustDecodeBounds = true
-                    MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
-
+                    val input = context.contentResolver.openInputStream(uri)
+                    BitmapFactory.decodeStream(input, null, this)
                     inSampleSize = calculateInSampleSize(this, reqWidth, reqHeight)
 
                     inJustDecodeBounds = false
 
-                    MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+                    BitmapFactory.decodeStream(context.contentResolver.openInputStream(uri), null, this)
                 } catch (e: FileNotFoundException) {
                     throw e
                 }

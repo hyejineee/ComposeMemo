@@ -20,8 +20,7 @@ fun DropDownList(
         elevation = 2.dp,
         shape = RoundedCornerShape(5.dp),
         modifier = modifier
-            .padding(start = 20.dp, end = 20.dp)
-            .fillMaxWidth()
+
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
             list.forEach {
