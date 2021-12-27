@@ -68,7 +68,10 @@ fun TagTextInput(
                 onClick = {
                     handleClickAddTag(it)
                     state.text = ""
-                }
+                },
+                modifier = Modifier
+                    .padding(start = 20.dp, end = 20.dp)
+                    .fillMaxWidth()
             )
         }
 
