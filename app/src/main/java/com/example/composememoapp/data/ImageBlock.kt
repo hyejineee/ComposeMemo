@@ -32,12 +32,6 @@ data class ImageBlock(
     override var content: Uri?,
 ) : ContentBlock<Uri?>, Parcelable {
 
-    @EntryPoint
-    @InstallIn(SingletonComponent::class)
-    interface ImageProviderEntryPoint {
-        fun imageProvider(): BitmapProvider
-    }
-
     @IgnoredOnParcel
     var imageState: MutableState<Bitmap?> = mutableStateOf(null)
 
@@ -81,14 +75,10 @@ data class ImageBlock(
     )
 
     private fun getBitmap(context: Context) {
-
-        val imageProvider = EntryPointAccessors
-            .fromApplication(context, ImageProviderEntryPoint::class.java)
-            .imageProvider()
-
-        if (imageState.value == null && imageProvider != null) {
+        if (imageState.value == null) {
+            val bitmapProvider = BitmapProvider(context = context)
             content?.let { uri ->
-                imageProvider.getBitmapFromFile(uri)
+                bitmapProvider.getBitmapFromFile(uri)
                     .subscribe(
                         { imageState.value = it },
                         { imageState.value = null }
