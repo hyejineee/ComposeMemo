@@ -12,6 +12,8 @@ import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.data.database.entity.TagEntity
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -28,35 +30,37 @@ class DefaultMemoAppRepository @Inject constructor(
 
     override fun insertMemo(memoModel: MemoModel, context: Context): Completable {
 
-        val converted = memoModel.contents
-            .asSequence()
-            .map {
-                when (it) {
-                    is TextBlock -> it.content = it.textInputState.value.text
-                    is ImageBlock -> it.content = saveImage(bitmap = it.imageState.value, context = context)
+        return Single.create<MemoEntity> { obervable ->
+            val converted = memoModel.contents
+                .asSequence()
+                .map {
+                    when (it) {
+                        is TextBlock -> it.content = it.textInputState.value.text
+                        is ImageBlock -> it.content = if (memoModel.id == null) saveImage(
+                            bitmap = it.imageState.value,
+                            context = context
+                        ) else it.content
+                    }
+                    it.convertToContentBlockEntity()
                 }
-                it.convertToContentBlockEntity()
-            }
-            .filter { block ->
-                block.content.isNotBlank()
-            }
-            .mapIndexed { index, contentBlockEntity ->
-                contentBlockEntity.seq = index + 1L
-                contentBlockEntity
-            }.toList()
+                .mapIndexed { index, contentBlockEntity ->
+                    contentBlockEntity.seq = index + 1L
+                    contentBlockEntity
+                }.toList()
 
-        val memoEntity = MemoEntity(
-            id = memoModel.id,
-            updatedDate = memoModel.updatedDate,
-            contents = converted,
-            isBookMarked = memoModel.isBookMarked,
-            tagEntities = memoModel.tagEntities
-        )
+            val memoEntity = MemoEntity(
+                id = memoModel.id,
+                updatedDate = memoModel.updatedDate,
+                contents = converted,
+                isBookMarked = memoModel.isBookMarked,
+                tagEntities = memoModel.tagEntities
+            )
 
-        val tags = memoModel.tagEntities.map { TagEntity(tag = it) }
-
-        return memoDao.insertMemoEntity(memoEntity = memoEntity)
-            .mergeWith(tagDao.insertTagEntity(tags = tags))
+            obervable.onSuccess(memoEntity)
+        }.concatMapCompletable {
+            memoDao.insertMemoEntity(it)
+                .mergeWith(tagDao.insertTagEntity(it.tagEntities.map { tag -> TagEntity(tag = tag) }))
+        }
     }
 
     override fun deleteMemo(memoEntity: MemoEntity): Completable =
