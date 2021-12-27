@@ -178,7 +178,7 @@ fun DetailAndWriteScreenContent(
         },
         bottomBar = {
             WriteScreenBottomBar(
-                handleClickAddImageButton = handleAddImageBlock
+                handleAddImage = handleAddImageBlock
             )
         },
         modifier = Modifier
