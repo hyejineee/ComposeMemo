@@ -1,6 +1,7 @@
 package com.example.composememoapp.presentation.ui.component
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -20,7 +21,7 @@ fun AddCheckBoxButton(
     handleAddCheckBox: () -> Unit
 ) {
 
-    Box() {
+    Box(modifier = modifier) {
         val addCheckIconModel = MiniFloatingButtonModel(
             icon = ImageVector.vectorResource(id = R.drawable.ic_round_check_circle_24),
             description = "add checkbox icon",
@@ -30,7 +31,7 @@ fun AddCheckBoxButton(
         MiniFloatingButton(
             model = addCheckIconModel,
             tint = MaterialTheme.colors.primary,
-            modifier = Modifier.size(40.dp)
+            modifier = Modifier.fillMaxSize()
         )
     }
 }

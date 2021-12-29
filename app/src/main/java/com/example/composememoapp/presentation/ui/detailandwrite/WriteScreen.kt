@@ -3,6 +3,7 @@ package com.example.composememoapp.presentation.ui.detailandwrite
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,6 +46,7 @@ import com.example.composememoapp.presentation.viewModel.TagViewModel
 import com.example.composememoapp.util.model.rememberContentBlocksState
 import com.example.composememoapp.util.model.rememberTagListState
 
+@ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @Composable
 fun WriteScreen(
@@ -163,6 +165,7 @@ fun WriteScreen(
     )
 }
 
+@ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @Composable
 fun DetailAndWriteScreenContent(
@@ -266,6 +269,7 @@ fun DetailAndWriteScreenContent(
     }
 }
 
+@ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @Preview(showBackground = true)
 @Composable
