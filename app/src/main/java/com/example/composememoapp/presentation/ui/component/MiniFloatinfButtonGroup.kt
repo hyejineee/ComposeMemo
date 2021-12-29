@@ -2,20 +2,14 @@ package com.example.composememoapp.presentation.ui.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +21,7 @@ import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 @ExperimentalAnimationApi
 @Composable
 fun MiniFloatingButtonGroup(
-    extended:Boolean = false,
+    extended: Boolean = false,
     modifier: Modifier = Modifier,
     models: List<MiniFloatingButtonModel>,
     firstModel: MiniFloatingButtonModel,
@@ -64,7 +58,7 @@ fun MiniFloatingButtonGroupExtendedPreview() {
         MiniFloatingButtonModel(icon = Icons.Default.Call, onClick = {}, description = "")
     }
     ComposeMemoAppTheme {
-        MiniFloatingButtonGroup(extended = true,firstModel = buttons.first(), models = buttons)
+        MiniFloatingButtonGroup(extended = true, firstModel = buttons.first(), models = buttons)
     }
 }
 
@@ -76,6 +70,6 @@ fun MiniFloatingButtonGroupNotExtendedPreview() {
         MiniFloatingButtonModel(icon = Icons.Default.Call, onClick = {}, description = "")
     }
     ComposeMemoAppTheme {
-        MiniFloatingButtonGroup( firstModel = buttons.first(), models = buttons)
+        MiniFloatingButtonGroup(firstModel = buttons.first(), models = buttons)
     }
 }

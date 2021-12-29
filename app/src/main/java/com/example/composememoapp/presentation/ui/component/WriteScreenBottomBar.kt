@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -26,15 +25,14 @@ fun WriteScreenBottomBar(
 ) {
     Box(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .padding(16.dp)
+            modifier
+                .fillMaxWidth()
+                .padding(16.dp)
     ) {
         Row(
             modifier = Modifier
                 .align(Alignment.CenterStart)
         ) {
-
 
             AddImageButton(
                 handleAddImage = handleAddImage,

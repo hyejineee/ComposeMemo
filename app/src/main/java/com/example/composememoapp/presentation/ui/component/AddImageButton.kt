@@ -7,15 +7,8 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHost
@@ -127,8 +120,6 @@ fun AddImageButton(
         showImageSelectDialog = showImageSelectDialog.not()
     }
 
-
-
     Box(
         modifier = modifier
     ) {
@@ -183,9 +174,9 @@ fun AddImageButton(
                     showImageSelectDialog = !showImageSelectDialog
                 }
                 .then(
-                    if(showImageSelectDialog){
+                    if (showImageSelectDialog) {
                         Modifier.height(40.dp)
-                    }else{
+                    } else {
                         Modifier.size(40.dp)
                     }
                 ),
@@ -196,7 +187,6 @@ fun AddImageButton(
 
     SnackbarHost(hostState = snackState)
 }
-
 
 @ExperimentalAnimationApi
 @Preview
