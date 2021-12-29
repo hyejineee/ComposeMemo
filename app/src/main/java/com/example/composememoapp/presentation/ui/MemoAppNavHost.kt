@@ -1,5 +1,6 @@
 package com.example.composememoapp.presentation.ui
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -15,6 +16,7 @@ import com.example.composememoapp.presentation.ui.home.HomeScreen
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
 
+@ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @Composable
 fun MemoAppNavHost(

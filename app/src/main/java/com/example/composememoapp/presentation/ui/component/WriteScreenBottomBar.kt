@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 
+@ExperimentalAnimationApi
 @Composable
 fun WriteScreenBottomBar(
     handleAddImage: (Uri?) -> Unit,
@@ -25,21 +27,22 @@ fun WriteScreenBottomBar(
         modifier =
             modifier
                 .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp, bottom = 16.dp)
+                .padding(16.dp)
     ) {
         Row(
             modifier = Modifier
                 .align(Alignment.CenterStart)
         ) {
 
-            Box() {
-                AddImageButton(handleAddImage = handleAddImage)
-            }
+            AddImageButton(
+                handleAddImage = handleAddImage,
+            )
 
-            Spacer(modifier = Modifier.width(20.dp))
+            Spacer(modifier = Modifier.width(10.dp))
 
             AddCheckBoxButton(
-                handleAddCheckBox = handleAddCheckBox
+                handleAddCheckBox = handleAddCheckBox,
+                modifier = Modifier.size(40.dp)
             )
         }
     }

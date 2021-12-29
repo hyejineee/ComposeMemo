@@ -3,12 +3,12 @@ package com.example.composememoapp.presentation.ui.component
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHost
@@ -33,6 +33,7 @@ import com.example.composememoapp.util.Permissions
 import kotlinx.coroutines.launch
 import java.io.File
 
+@ExperimentalAnimationApi
 @Composable
 fun AddImageButton(
     modifier: Modifier = Modifier,
@@ -119,61 +120,81 @@ fun AddImageButton(
         showImageSelectDialog = showImageSelectDialog.not()
     }
 
-    val addImageIconModel =
-        MiniFloatingButtonModel(
-            icon = ImageVector.vectorResource(id = R.drawable.ic_round_image_24),
-            description = "add image icon",
-            onClick = handleClickAddImageButton
-        )
+    Box(
+        modifier = modifier
+    ) {
 
-    Box() {
-        Column(modifier = modifier) {
-            if (showImageSelectDialog) {
-                DropDownList(
-                    modifier = Modifier
-                        .widthIn(200.dp, 200.dp)
-                        .padding(bottom = 10.dp)
-                        .wrapContentWidth(),
-                    list = listOf("사진 선택", "사진 찍기"),
-                    onClick = {
-                        when (it) {
-                            "사진 선택" -> {
-                                showImageSelectDialog = false
-                                getImageFromGalleryLauncher.launch("image/*")
-                            }
-                            "사진 찍기" -> {
-                                showImageSelectDialog = false
-                                Permissions.handlePermissionRequest(
-                                    permission = Permissions.CAMERA,
-                                    context = context,
-                                    grantedAction = { takePicture() },
-                                    rationaleAction = {
-                                        rationaleAction()
-                                    },
-                                    requestPermissionAction = {
-                                        requestPermissionLauncher.launch(Permissions.CAMERA)
-                                    }
-                                )
-                            }
-                        }
-                    }
-                )
-            }
-            MiniFloatingButton(
-                model = addImageIconModel,
-                tint = MaterialTheme.colors.primary,
-                modifier = Modifier.size(40.dp)
+        val addImageIconModel =
+            MiniFloatingButtonModel(
+                icon = ImageVector.vectorResource(id = R.drawable.ic_round_image_24),
+                description = "add image icon",
+                onClick = handleClickAddImageButton
+            )
+
+        val handlePickFromCameraIconButton = {
+            showImageSelectDialog = false
+            Permissions.handlePermissionRequest(
+                permission = Permissions.CAMERA,
+                context = context,
+                grantedAction = { takePicture() },
+                rationaleAction = {
+                    rationaleAction()
+                },
+                requestPermissionAction = {
+                    requestPermissionLauncher.launch(Permissions.CAMERA)
+                }
             )
         }
+        val pickFromCameraModel =
+            MiniFloatingButtonModel(
+                icon = ImageVector.vectorResource(id = R.drawable.ic_round_camera_alt_24),
+                description = "pick from camera icon",
+                onClick = handlePickFromCameraIconButton
+            )
 
-        SnackbarHost(hostState = snackState)
+        val handlePickFromGalleryIconButton = {
+            showImageSelectDialog = false
+            getImageFromGalleryLauncher.launch("image/*")
+        }
+        val pickFromGalleryModel =
+            MiniFloatingButtonModel(
+                icon = ImageVector.vectorResource(id = R.drawable.ic_round_image_search_24),
+                description = "pick from gallery icon",
+                onClick = handlePickFromGalleryIconButton
+            )
+
+        val models = listOf(pickFromCameraModel, pickFromGalleryModel)
+        val interactionSource = remember { MutableInteractionSource() }
+
+        MiniFloatingButtonGroup(
+            extended = showImageSelectDialog,
+            models = models,
+            modifier = Modifier
+                .clickable(interactionSource = interactionSource, indication = null) {
+                    showImageSelectDialog = !showImageSelectDialog
+                }
+                .then(
+                    if (showImageSelectDialog) {
+                        Modifier.height(40.dp)
+                    } else {
+                        Modifier.size(40.dp)
+                    }
+                ),
+            firstModel = addImageIconModel,
+            tint = MaterialTheme.colors.primary
+        )
     }
+
+    SnackbarHost(hostState = snackState)
 }
 
+@ExperimentalAnimationApi
 @Preview
 @Composable
 fun AddImageButtonPreview() {
     ComposeMemoAppTheme {
-        AddImageButton(handleAddImage = {})
+        AddImageButton(
+            handleAddImage = {}
+        )
     }
 }
