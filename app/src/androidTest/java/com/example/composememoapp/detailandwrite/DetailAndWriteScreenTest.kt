@@ -1,5 +1,6 @@
 package com.example.composememoapp.detailandwrite
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
@@ -32,6 +33,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.mockito.kotlin.given
 
+@ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @RunWith(AndroidJUnit4::class)
 class DetailAndWriteScreenTest {
