@@ -1,22 +1,11 @@
 package com.example.composememoapp.data.repository
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.net.Uri
-import com.example.composememoapp.data.MemoModel
 import com.example.composememoapp.data.database.MemoDao
 import com.example.composememoapp.data.database.TagDao
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.data.database.entity.TagEntity
-import com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
-import com.example.composememoapp.presentation.ui.component.blocks.TextBlock
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Single
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
 import javax.inject.Inject
 
 class DefaultMemoAppRepository @Inject constructor(
@@ -27,71 +16,13 @@ class DefaultMemoAppRepository @Inject constructor(
     override fun getAllMemo(): Flowable<List<MemoEntity>> =
         memoDao.getAllMemo()
 
-    override fun insertMemo(memoModel: MemoModel, context: Context): Completable {
-
-        return Single.create<MemoEntity> { obervable ->
-            val converted = memoModel.contents
-                .asSequence()
-                .map {
-                    when (it) {
-                        is TextBlock -> it.content = it.textInputState.value.text
-                        is ImageBlock -> it.content = if (memoModel.id == null || it.content?.scheme != "file") saveImage(
-                            bitmap = it.imageState.value,
-                            context = context
-                        ) else it.content
-                    }
-                    it.convertToContentBlockEntity()
-                }
-                .mapIndexed { index, contentBlockEntity ->
-                    contentBlockEntity.seq = index + 1L
-                    contentBlockEntity
-                }.toList()
-
-            val memoEntity = MemoEntity(
-                id = memoModel.id,
-                updatedDate = memoModel.updatedDate,
-                contents = converted,
-                isBookMarked = memoModel.isBookMarked,
-                tagEntities = memoModel.tagEntities
-            )
-
-            obervable.onSuccess(memoEntity)
-        }.concatMapCompletable {
-            memoDao.insertMemoEntity(it)
-                .mergeWith(tagDao.insertTagEntity(it.tagEntities.map { tag -> TagEntity(tag = tag) }))
-        }
+    override fun insertMemo(memoEntity: MemoEntity): Completable {
+        return memoDao.insertMemoEntity(memoEntity)
+            .mergeWith(tagDao.insertTagEntity(memoEntity.tagEntities.map { tag -> TagEntity(tag = tag) }))
     }
 
     override fun deleteMemo(memoEntity: MemoEntity): Completable =
         memoDao.deleteMemo(memoEntity = memoEntity)
 
     override fun getAllTag(): Flowable<List<TagEntity>> = tagDao.getAllTag()
-
-    private fun saveImage(bitmap: Bitmap?, context: Context): Uri {
-        val imageName = System.currentTimeMillis().toString() + ".jpeg"
-        val dirName = "images"
-
-        val createdImage = context.filesDir.let {
-            val dir = File(it.path, dirName)
-            if (dir.exists().not()) {
-                dir.mkdirs()
-            }
-
-            val file = File(dir, imageName)
-
-            try {
-                val out = FileOutputStream(file)
-                bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, out)
-                out.close()
-            } catch (e: FileNotFoundException) {
-                e.printStackTrace()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-
-            file
-        }
-
-        return Uri.fromFile(createdImage)
-    }
 }

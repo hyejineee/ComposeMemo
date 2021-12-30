@@ -12,6 +12,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
@@ -37,10 +38,10 @@ data class CheckBoxBlock(
 ) : ContentBlock<CheckBoxModel>, Parcelable {
 
     @IgnoredOnParcel
-    lateinit var checkState: MutableState<Boolean>
+    var checkState: MutableState<Boolean> = mutableStateOf(content.isChecked)
 
     @IgnoredOnParcel
-    lateinit var textInputState: MutableState<TextFieldValue>
+    var textInputState: MutableState<TextFieldValue> = mutableStateOf(TextFieldValue(content.text))
 
     @Composable
     override fun drawOnlyReadContent(modifier: androidx.compose.ui.Modifier) {

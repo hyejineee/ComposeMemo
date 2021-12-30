@@ -89,7 +89,7 @@ class MemoViewModelTest {
     @Test
     @DisplayName("메모를 저장 성공시 저장 성공 상태를 발행한다.")
     fun insertMemoSuccessTest() {
-        given(testMemoRepository.insertMemo(memoEntity = any(), context = any()))
+        given(testMemoRepository.insertMemo(memoEntity = any()))
             .willReturn(Completable.complete())
 
         memoViewModel.saveMemo(
@@ -104,7 +104,7 @@ class MemoViewModelTest {
     @Test
     @DisplayName("메모를 저장 실패시 저장 실패 상태를 발행한다.")
     fun insertMemoFailTest() {
-        given(testMemoRepository.insertMemo(memoEntity = any(), any()))
+        given(testMemoRepository.insertMemo(memoEntity = any()))
             .willReturn(Completable.error(Throwable("메모 저장 에러")))
 
         memoViewModel.saveMemo(

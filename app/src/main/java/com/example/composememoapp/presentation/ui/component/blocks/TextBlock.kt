@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.sp
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.presentation.ui.component.TextInput
+import kotlinx.parcelize.IgnoredOnParcel
 
 @kotlinx.parcelize.Parcelize
 data class TextBlock(
@@ -18,7 +20,8 @@ data class TextBlock(
     override var content: String,
 ) : ContentBlock<String>, Parcelable {
 
-    lateinit var textInputState: MutableState<TextFieldValue>
+    @IgnoredOnParcel
+    var textInputState: MutableState<TextFieldValue> = mutableStateOf(TextFieldValue(content))
 
     @Composable
     override fun drawOnlyReadContent(modifier: androidx.compose.ui.Modifier) {
