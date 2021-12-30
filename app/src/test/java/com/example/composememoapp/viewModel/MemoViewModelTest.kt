@@ -1,16 +1,15 @@
 package com.example.composememoapp.viewModel
 
 import android.content.Context
-import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.data.repository.MemoAppRepository
 import com.example.composememoapp.domain.DeleteMemoUseCase
 import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
+import com.example.composememoapp.presentation.ui.component.blocks.ContentType
 import com.example.composememoapp.presentation.viewModel.MemoState
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
-import com.example.composememoapp.util.model.ContentBlocksState
 import com.google.common.truth.Truth.assertThat
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.kotlin.toFlowable
@@ -45,12 +44,6 @@ class MemoViewModelTest {
         },
         tagEntities = listOf("hi", "hello")
     )
-
-    private val contentState =
-        ContentBlocksState(
-            memoEntityMock.contents.map { it.convertToContentBlockModel() }
-                .toMutableList()
-        )
 
     private val memoListMock = List(5) {
         MemoEntity(
@@ -89,7 +82,7 @@ class MemoViewModelTest {
     @Test
     @DisplayName("메모를 저장 성공시 저장 성공 상태를 발행한다.")
     fun insertMemoSuccessTest() {
-        given(testMemoRepository.insertMemo(memoEntity = any(), context = any()))
+        given(testMemoRepository.insertMemo(memoEntity = any()))
             .willReturn(Completable.complete())
 
         memoViewModel.saveMemo(
@@ -104,7 +97,7 @@ class MemoViewModelTest {
     @Test
     @DisplayName("메모를 저장 실패시 저장 실패 상태를 발행한다.")
     fun insertMemoFailTest() {
-        given(testMemoRepository.insertMemo(memoEntity = any(), any()))
+        given(testMemoRepository.insertMemo(memoEntity = any()))
             .willReturn(Completable.error(Throwable("메모 저장 에러")))
 
         memoViewModel.saveMemo(

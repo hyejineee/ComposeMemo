@@ -38,7 +38,7 @@ fun TextInput(
                 singleLine = singleLine,
                 textStyle = LocalTextStyle.current.copy(
                     textAlign = TextAlign.Start,
-                    fontSize = 14.sp
+                    fontSize = 15.sp
                 )
             )
             hint?.let {

@@ -26,16 +26,14 @@ data class MiniFloatingButtonModel(
 @Composable
 fun MiniFloatingButton(
     model: MiniFloatingButtonModel,
-    tint: Color = MaterialTheme.colors.onPrimary,
+    tint: Color = MaterialTheme.colors.primary,
     modifier: Modifier = Modifier,
 ) {
-
     androidx.compose.material.Surface(
         elevation = 6.dp,
         modifier = modifier,
         shape = RoundedCornerShape(50.dp),
     ) {
-
         MiniFloatingButtonContent(model = model, tint = tint)
     }
 }
@@ -44,7 +42,7 @@ fun MiniFloatingButton(
 fun MiniFloatingButtonContent(
     isFirstItem: Boolean = false,
     model: MiniFloatingButtonModel,
-    tint: Color = MaterialTheme.colors.onPrimary,
+    tint: Color = MaterialTheme.colors.primary,
     modifier: Modifier = Modifier
 ) {
 
@@ -52,9 +50,8 @@ fun MiniFloatingButtonContent(
         modifier.padding(5.dp)
     } else {
         modifier
-            .padding(2.dp)
             .clickable(onClick = model.onClick)
-            .padding(2.dp)
+            .padding(5.dp)
     }
 
     Icon(

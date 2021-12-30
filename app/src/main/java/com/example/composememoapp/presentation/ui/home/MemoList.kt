@@ -20,15 +20,15 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composememoapp.R
-import com.example.composememoapp.data.CheckBoxBlock
-import com.example.composememoapp.data.ContentBlock
-import com.example.composememoapp.data.ContentType
-import com.example.composememoapp.data.ImageBlock
-import com.example.composememoapp.data.TextBlock
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
+import com.example.composememoapp.presentation.ui.component.CheckBoxBlock
 import com.example.composememoapp.presentation.ui.component.StaggeredGridColumn
+import com.example.composememoapp.presentation.ui.component.blocks.ContentBlock
+import com.example.composememoapp.presentation.ui.component.blocks.ContentType
+import com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
+import com.example.composememoapp.presentation.ui.component.blocks.TextBlock
 
 @Composable
 fun MemoList(

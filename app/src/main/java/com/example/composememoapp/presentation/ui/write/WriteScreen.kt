@@ -1,12 +1,12 @@
-package com.example.composememoapp.presentation.ui.detailandwrite
+package com.example.composememoapp.presentation.ui.write
 
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
@@ -26,25 +26,25 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.example.composememoapp.data.CheckBoxBlock
-import com.example.composememoapp.data.CheckBoxModel
-import com.example.composememoapp.data.ContentBlock
-import com.example.composememoapp.data.ContentType
-import com.example.composememoapp.data.ImageBlock
 import com.example.composememoapp.data.MemoModel
-import com.example.composememoapp.data.TextBlock
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
+import com.example.composememoapp.presentation.ui.component.CheckBoxBlock
+import com.example.composememoapp.presentation.ui.component.CheckBoxModel
 import com.example.composememoapp.presentation.ui.component.ContentBlocks
 import com.example.composememoapp.presentation.ui.component.WriteScreenBottomBar
 import com.example.composememoapp.presentation.ui.component.WriteScreenTopAppBar
+import com.example.composememoapp.presentation.ui.component.blocks.ContentBlock
+import com.example.composememoapp.presentation.ui.component.blocks.ContentType
+import com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
+import com.example.composememoapp.presentation.ui.component.blocks.TextBlock
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
 import com.example.composememoapp.util.model.rememberContentBlocksState
 import com.example.composememoapp.util.model.rememberTagListState
 
+@ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @Composable
 fun WriteScreen(
@@ -163,6 +163,7 @@ fun WriteScreen(
     )
 }
 
+@ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @Composable
 fun DetailAndWriteScreenContent(
@@ -252,7 +253,6 @@ fun DetailAndWriteScreenContent(
                 allTag = allTag,
                 handleClickAddTag = handleAddTag,
                 modifier = Modifier
-                    .padding(10.dp)
                     .fillMaxSize()
             )
 
@@ -266,6 +266,7 @@ fun DetailAndWriteScreenContent(
     }
 }
 
+@ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @Preview(showBackground = true)
 @Composable

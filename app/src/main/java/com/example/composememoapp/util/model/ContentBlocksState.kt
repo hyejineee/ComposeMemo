@@ -1,13 +1,11 @@
 package com.example.composememoapp.util.model
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import com.example.composememoapp.data.ContentBlock
+import com.example.composememoapp.presentation.ui.component.blocks.ContentBlock
 
 class ContentBlocksState(
     initialContents: List<ContentBlock<*>>,

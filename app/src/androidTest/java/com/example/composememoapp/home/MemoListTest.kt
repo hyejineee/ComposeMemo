@@ -7,10 +7,10 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
+import com.example.composememoapp.presentation.ui.component.blocks.ContentType
 import com.example.composememoapp.presentation.ui.home.MemoList
 import org.junit.Before
 import org.junit.Rule

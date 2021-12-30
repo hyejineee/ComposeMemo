@@ -1,4 +1,4 @@
-package com.example.composememoapp.data
+package com.example.composememoapp.presentation.ui.component.blocks
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
