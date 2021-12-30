@@ -3,13 +3,13 @@ package com.example.composememoapp.data.repository
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import com.example.composememoapp.data.ImageBlock
 import com.example.composememoapp.data.MemoModel
-import com.example.composememoapp.data.TextBlock
 import com.example.composememoapp.data.database.MemoDao
 import com.example.composememoapp.data.database.TagDao
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.data.database.entity.TagEntity
+import com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
+import com.example.composememoapp.presentation.ui.component.blocks.TextBlock
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single

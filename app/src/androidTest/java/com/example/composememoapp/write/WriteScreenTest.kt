@@ -1,4 +1,4 @@
-package com.example.composememoapp.detailandwrite
+package com.example.composememoapp.write
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -12,7 +12,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.composememoapp.presentation.ui.component.blocks.ContentType
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.data.database.entity.TagEntity
@@ -22,7 +21,8 @@ import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.GetAllTagUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
-import com.example.composememoapp.presentation.ui.detailandwrite.WriteScreen
+import com.example.composememoapp.presentation.ui.component.blocks.ContentType
+import com.example.composememoapp.presentation.ui.write.WriteScreen
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
 import io.reactivex.rxjava3.kotlin.toFlowable
@@ -136,7 +136,7 @@ class WriteScreenTest {
     }
 
     @Test
-    fun 체크박스_아이콘을_누르면_메모에_체크박스를_추가할_수_있다(){
+    fun 체크박스_아이콘을_누르면_메모에_체크박스를_추가할_수_있다() {
 
         setContentWithWriteScreen()
 
@@ -150,6 +150,4 @@ class WriteScreenTest {
             .onNode(isToggleable())
             .assertExists()
     }
-
-
 }

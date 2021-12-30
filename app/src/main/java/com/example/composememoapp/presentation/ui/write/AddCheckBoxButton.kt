@@ -1,4 +1,4 @@
-package com.example.composememoapp.presentation.ui.detailandwrite
+package com.example.composememoapp.presentation.ui.write
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

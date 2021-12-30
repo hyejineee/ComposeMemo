@@ -1,4 +1,4 @@
-package com.example.composememoapp.presentation.ui.component
+package com.example.composememoapp.presentation.ui.component.blocks
 
 import android.content.Context
 import android.graphics.Bitmap

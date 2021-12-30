@@ -1,4 +1,4 @@
-package com.example.composememoapp.data
+package com.example.composememoapp.presentation.ui.component
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -18,7 +18,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
-import com.example.composememoapp.presentation.ui.component.TextInput
+import com.example.composememoapp.presentation.ui.component.blocks.ContentBlock
+import com.example.composememoapp.presentation.ui.component.blocks.ContentType
 import com.google.gson.Gson
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parceler

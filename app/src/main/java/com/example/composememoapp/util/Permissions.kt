@@ -3,7 +3,6 @@ package com.example.composememoapp.util
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
@@ -28,10 +27,8 @@ object Permissions {
         } else {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(context as Activity, permission)) {
-                Log.d("Permissions", "should : true")
                 rationaleAction()
             } else {
-                Log.d("Permissions", "should : false")
                 requestPermissionAction()
             }
         }

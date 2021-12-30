@@ -5,4 +5,6 @@
     <string name="addMemo">ADD MEMO</string>
     <string name="putSearchWordCaption">검색어를 입력하세요.</string>
     <string name="addTagCaption">태그를 입력하세요.</string>
+    <string name="blankTagCaution">빈 태그는 입력할 수 없습니다.</string>
+    <string name="specialCharacterCaution">특수문자를 입력할 수 없습니다.</string>
 </resources>

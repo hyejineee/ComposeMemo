@@ -1,12 +1,12 @@
 package com.example.composememoapp.data.database.entity
 
 import android.net.Uri
-import com.example.composememoapp.data.CheckBoxBlock
-import com.example.composememoapp.data.CheckBoxModel
-import com.example.composememoapp.data.ContentBlock
-import com.example.composememoapp.data.ContentType
-import com.example.composememoapp.data.ImageBlock
-import com.example.composememoapp.data.TextBlock
+import com.example.composememoapp.presentation.ui.component.CheckBoxBlock
+import com.example.composememoapp.presentation.ui.component.CheckBoxModel
+import com.example.composememoapp.presentation.ui.component.blocks.ContentBlock
+import com.example.composememoapp.presentation.ui.component.blocks.ContentType
+import com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
+import com.example.composememoapp.presentation.ui.component.blocks.TextBlock
 import com.google.gson.Gson
 
 data class ContentBlockEntity(
