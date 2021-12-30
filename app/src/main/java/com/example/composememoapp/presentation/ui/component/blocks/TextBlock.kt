@@ -1,4 +1,4 @@
-package com.example.composememoapp.data
+package com.example.composememoapp.presentation.ui.component
 
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.sp
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
-import com.example.composememoapp.presentation.ui.component.TextInput
 
 @kotlinx.parcelize.Parcelize
 data class TextBlock(

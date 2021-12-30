@@ -4,6 +4,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -11,7 +12,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.composememoapp.data.ContentType
+import com.example.composememoapp.presentation.ui.component.blocks.ContentType
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.data.database.entity.TagEntity
@@ -36,7 +37,7 @@ import org.mockito.kotlin.given
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @RunWith(AndroidJUnit4::class)
-class DetailAndWriteScreenTest {
+class WriteScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -87,7 +88,7 @@ class DetailAndWriteScreenTest {
         )
     }
 
-    private fun setContentWithDetailAndWriteScreen(
+    private fun setContentWithWriteScreen(
         memoEntity: MemoEntity? = null
     ) {
 
@@ -106,7 +107,7 @@ class DetailAndWriteScreenTest {
     @Test
     fun 메모_상세보기_모드일때_메모의_내용을_보여준다() {
 
-        setContentWithDetailAndWriteScreen(
+        setContentWithWriteScreen(
             memoEntity = memo,
         )
 
@@ -117,7 +118,7 @@ class DetailAndWriteScreenTest {
 
     @Test
     fun 새로운_메모를_작성하는_모드일_때_화면을_클릭하면_바로_메로를_작성할_수_있다() {
-        setContentWithDetailAndWriteScreen()
+        setContentWithWriteScreen()
 
         composeTestRule
             .onNodeWithTag("write screen", useUnmergedTree = true)
@@ -133,4 +134,22 @@ class DetailAndWriteScreenTest {
             .onNodeWithContentDescription("text block 1", useUnmergedTree = true)
             .assertTextEquals("hello")
     }
+
+    @Test
+    fun 체크박스_아이콘을_누르면_메모에_체크박스를_추가할_수_있다(){
+
+        setContentWithWriteScreen()
+
+        composeTestRule
+            .onNodeWithContentDescription("add checkbox icon", useUnmergedTree = true)
+            .performClick()
+
+        composeTestRule.mainClock.advanceTimeBy(50L)
+
+        composeTestRule
+            .onNode(isToggleable())
+            .assertExists()
+    }
+
+
 }

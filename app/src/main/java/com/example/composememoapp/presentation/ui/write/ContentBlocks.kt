@@ -18,10 +18,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.example.composememoapp.data.CheckBoxBlock
-import com.example.composememoapp.data.ContentBlock
-import com.example.composememoapp.data.ImageBlock
-import com.example.composememoapp.data.TextBlock
+import com.example.composememoapp.presentation.ui.component.blocks.ContentBlock
+import com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
+import com.example.composememoapp.presentation.ui.component.blocks.TextBlock
 
 @ExperimentalComposeUiApi
 @Composable

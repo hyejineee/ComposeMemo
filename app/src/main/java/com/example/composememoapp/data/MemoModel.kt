@@ -1,4 +1,4 @@
-package com.example.composememoapp.data
+package com.example.composememoapp.presentation.ui.component
 
 import com.example.composememoapp.data.database.entity.MemoEntity
 import java.util.Date
