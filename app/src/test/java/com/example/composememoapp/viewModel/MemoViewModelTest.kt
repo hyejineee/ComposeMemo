@@ -10,18 +10,17 @@ import com.example.composememoapp.domain.SaveMemoUseCase
 import com.example.composememoapp.presentation.ui.component.blocks.ContentType
 import com.example.composememoapp.presentation.viewModel.MemoState
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
-import com.example.composememoapp.util.model.ContentBlocksState
 import com.google.common.truth.Truth.assertThat
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.kotlin.toFlowable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.given
-import java.util.concurrent.TimeUnit
 
 class MemoViewModelTest {
 
@@ -46,11 +45,6 @@ class MemoViewModelTest {
         tagEntities = listOf("hi", "hello")
     )
 
-    private val contentState =
-        ContentBlocksState(
-            memoEntityMock.contents.map { it.convertToContentBlockModel() }
-                .toMutableList()
-        )
 
     private val memoListMock = List(5) {
         MemoEntity(
