@@ -41,7 +41,7 @@ fun TextInputIconable(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = modifier.padding(horizontal = 15.dp, vertical = 5.dp)
+        modifier = modifier.padding(horizontal = 15.dp, vertical = 3.dp)
     ) {
 
         iconModel?.let { it ->

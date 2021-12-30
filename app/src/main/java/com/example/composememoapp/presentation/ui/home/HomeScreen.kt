@@ -123,7 +123,7 @@ fun HomeScreenContent(
                 text = stringResource(id = R.string.homeTitle),
                 color = MaterialTheme.colors.primary,
                 fontWeight = FontWeight.ExtraBold,
-                fontSize = 40.sp,
+                fontSize = 55.sp,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)
@@ -155,7 +155,7 @@ fun HomeScreenContent(
                 MemosListScreen(
                     memos = memoList,
                     onItemClick = handleClickMemoItem,
-                    modifier = Modifier.padding(vertical = 10.dp)
+                    modifier = Modifier.padding(vertical = 5.dp)
                 )
             } else {
                 Box(modifier = Modifier.fillMaxSize()) {
