@@ -78,7 +78,6 @@ fun TagTextInput(
             )
         }
 
-
         if (!Pattern.matches(regex, state.text) && state.text.isNotBlank()) {
 
             Text(
@@ -89,7 +88,6 @@ fun TagTextInput(
                     .fillMaxWidth()
                     .padding(start = 20.dp)
             )
-
         }
 
         if (state.text.isBlank()) {

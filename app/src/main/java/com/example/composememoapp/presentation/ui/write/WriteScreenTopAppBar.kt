@@ -1,11 +1,9 @@
 package com.example.composememoapp.presentation.ui.component
 
-import android.widget.Space
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -84,7 +82,7 @@ fun WriteScreenTopAppBar(
 
 @Preview
 @Composable
-fun WriteScreenTopAppBarPreview(){
+fun WriteScreenTopAppBarPreview() {
     ComposeMemoAppTheme() {
         WriteScreenTopAppBar(
             handleClickBackButton = { /*TODO*/ },
