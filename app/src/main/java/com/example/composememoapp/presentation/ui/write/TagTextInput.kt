@@ -1,4 +1,4 @@
-package com.example.composememoapp.presentation.ui.detailandwrite
+package com.example.composememoapp.presentation.ui.write
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,7 +37,7 @@ fun TagTextInput(
                 state.text = ""
             }
         },
-        description = Descriptions.ClearIcon.text
+        description = Descriptions.AddTagIcon.text
     )
 
     Column {
@@ -79,7 +79,7 @@ fun TagTextInput(
         if (!Pattern.matches(regex, state.text) && state.text.isNotBlank()) {
             state.text = state.text.dropLast(1)
             Text(
-                text = "특수문자를 입력할 수 없습니다.",
+                text = stringResource(R.string.specialCharacterCaution),
                 fontSize = 10.sp,
                 color = Color.Red,
                 modifier = Modifier
@@ -90,7 +90,7 @@ fun TagTextInput(
 
         if (state.text.isBlank()) {
             Text(
-                text = "빈 태그는 입력할 수 없습니다.",
+                text = stringResource(R.string.blankTagCaution),
                 fontSize = 10.sp,
                 color = Color.Red,
                 modifier = Modifier

@@ -1,6 +1,7 @@
 package com.example.composememoapp.data
 
 import com.example.composememoapp.data.database.entity.MemoEntity
+import com.example.composememoapp.presentation.ui.component.blocks.ContentBlock
 import java.util.Date
 
 data class MemoModel(

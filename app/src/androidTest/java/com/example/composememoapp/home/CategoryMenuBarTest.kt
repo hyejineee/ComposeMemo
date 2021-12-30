@@ -9,9 +9,7 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.isSelected
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.printToLog
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.composememoapp.data.database.entity.TagEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
@@ -101,8 +99,6 @@ class CategoryMenuBarTest {
                 )
             }
         }
-
-        composeTestRule.onRoot(useUnmergedTree = true).printToLog("categoryBarTest")
 
         composeTestRule
             .onNodeWithText(categories[1].tag)

@@ -1,4 +1,4 @@
-package com.example.composememoapp.data
+package com.example.composememoapp.presentation.ui.component.blocks
 
 enum class ContentType {
     Text,

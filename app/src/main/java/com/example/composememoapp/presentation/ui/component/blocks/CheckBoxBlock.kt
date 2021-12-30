@@ -1,4 +1,4 @@
-package com.example.composememoapp.data
+package com.example.composememoapp.presentation.ui.component
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -12,13 +12,15 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
-import com.example.composememoapp.presentation.ui.component.TextInput
+import com.example.composememoapp.presentation.ui.component.blocks.ContentBlock
+import com.example.composememoapp.presentation.ui.component.blocks.ContentType
 import com.google.gson.Gson
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parceler
@@ -36,10 +38,10 @@ data class CheckBoxBlock(
 ) : ContentBlock<CheckBoxModel>, Parcelable {
 
     @IgnoredOnParcel
-    lateinit var checkState: MutableState<Boolean>
+    var checkState: MutableState<Boolean> = mutableStateOf(content.isChecked)
 
     @IgnoredOnParcel
-    lateinit var textInputState: MutableState<TextFieldValue>
+    var textInputState: MutableState<TextFieldValue> = mutableStateOf(TextFieldValue(content.text))
 
     @Composable
     override fun drawOnlyReadContent(modifier: androidx.compose.ui.Modifier) {

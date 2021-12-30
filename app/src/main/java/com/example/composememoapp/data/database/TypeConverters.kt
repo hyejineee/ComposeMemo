@@ -1,8 +1,8 @@
 package com.example.composememoapp.data.database
 
 import androidx.room.TypeConverter
-import com.example.composememoapp.data.ContentType
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
+import com.example.composememoapp.presentation.ui.component.blocks.ContentType
 import com.google.gson.Gson
 import java.util.Date
 

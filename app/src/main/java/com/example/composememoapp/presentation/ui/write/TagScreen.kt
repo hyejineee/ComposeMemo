@@ -1,4 +1,4 @@
-package com.example.composememoapp.presentation.ui.detailandwrite
+package com.example.composememoapp.presentation.ui.write
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable

@@ -11,8 +11,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.composememoapp.data.database.entity.MemoEntity
-import com.example.composememoapp.presentation.ui.detailandwrite.WriteScreen
 import com.example.composememoapp.presentation.ui.home.HomeScreen
+import com.example.composememoapp.presentation.ui.write.WriteScreen
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
 

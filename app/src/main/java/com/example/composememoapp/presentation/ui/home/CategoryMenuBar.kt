@@ -59,7 +59,6 @@ fun CategoryMenuRow(
     isSelected: Boolean = false,
     modifier: Modifier = Modifier
 ) {
-
     val text = prefix?.let {
         "$it$category"
     } ?: "$category"
