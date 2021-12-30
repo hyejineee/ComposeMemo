@@ -2,6 +2,7 @@ package com.example.composememoapp.presentation.ui.write
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -45,8 +46,8 @@ fun TagTextInput(
             elevation = 5.dp,
             shape = RoundedCornerShape(50.dp),
             modifier = modifier
-                .padding(5.dp)
                 .fillMaxWidth()
+                .padding(5.dp)
         ) {
             TextInputIconable(
                 text = state.text,
@@ -54,7 +55,7 @@ fun TagTextInput(
                     state.text = it
                 },
                 modifier = Modifier
-                    .padding(5.dp)
+                    .height(40.dp)
                     .fillMaxWidth(),
                 clickableIconModel = clickableIconModel,
                 hint = stringResource(id = R.string.addTagCaption),
@@ -80,18 +81,18 @@ fun TagTextInput(
             state.text = state.text.dropLast(1)
             Text(
                 text = stringResource(R.string.specialCharacterCaution),
-                fontSize = 10.sp,
+                fontSize = 12.sp,
                 color = Color.Red,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 20.dp)
+                    .padding(start = 20.dp, top = 10.dp)
             )
         }
 
         if (state.text.isBlank()) {
             Text(
                 text = stringResource(R.string.blankTagCaution),
-                fontSize = 10.sp,
+                fontSize = 12.sp,
                 color = Color.Red,
                 modifier = Modifier
                     .fillMaxWidth()
