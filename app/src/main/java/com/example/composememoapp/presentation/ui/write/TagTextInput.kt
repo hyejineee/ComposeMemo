@@ -30,10 +30,12 @@ fun TagTextInput(
     modifier: Modifier = Modifier
 ) {
 
+    val regex = "^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]+$"
     val clickableIconModel = IconModel(
         iconId = R.drawable.ic_round_add_circle_outline_24,
         onClick = {
-            if (state.text.isNotBlank()) {
+
+            if (state.text.isNotBlank() && Pattern.matches(regex, state.text)) {
                 handleClickAddTag(state.text)
                 state.text = ""
             }
@@ -47,7 +49,7 @@ fun TagTextInput(
             shape = RoundedCornerShape(50.dp),
             modifier = modifier
                 .fillMaxWidth()
-                .padding(5.dp)
+                .padding(horizontal = 16.dp, vertical = 10.dp)
         ) {
             TextInputIconable(
                 text = state.text,
@@ -55,7 +57,7 @@ fun TagTextInput(
                     state.text = it
                 },
                 modifier = Modifier
-                    .height(40.dp)
+                    .height(35.dp)
                     .fillMaxWidth(),
                 clickableIconModel = clickableIconModel,
                 hint = stringResource(id = R.string.addTagCaption),
@@ -76,17 +78,18 @@ fun TagTextInput(
             )
         }
 
-        val regex = "^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]+$"
+
         if (!Pattern.matches(regex, state.text) && state.text.isNotBlank()) {
-            state.text = state.text.dropLast(1)
+
             Text(
                 text = stringResource(R.string.specialCharacterCaution),
                 fontSize = 12.sp,
                 color = Color.Red,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 20.dp, top = 10.dp)
+                    .padding(start = 20.dp)
             )
+
         }
 
         if (state.text.isBlank()) {

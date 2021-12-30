@@ -18,14 +18,14 @@ fun Chip(
 ) {
     Surface(
         elevation = 6.dp,
-        modifier = Modifier.padding(3.dp),
+        modifier = Modifier.padding(5.dp),
         shape = RoundedCornerShape(50.dp)
     ) {
         Text(
             text = text,
-            modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp),
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
             fontSize = 12.sp,
-            fontWeight = FontWeight.Light
+            fontWeight = FontWeight.Medium
         )
     }
 }
