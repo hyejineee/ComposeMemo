@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -39,7 +40,7 @@ fun TextInputIconable(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)
+        modifier = modifier.padding(horizontal = 15.dp, vertical = 3.dp)
     ) {
 
         iconModel?.let { it ->
@@ -53,15 +54,19 @@ fun TextInputIconable(
             Spacer(Modifier.width(5.dp))
         }
 
-        Box(modifier = Modifier.weight(5f)) {
+        Box(
+            modifier = Modifier.weight(5f),
+        ) {
             BasicTextField(
-                modifier = modifier,
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .fillMaxWidth(),
                 value = text,
                 singleLine = singleLine,
                 onValueChange = { onValueChange(it) },
                 textStyle = LocalTextStyle.current.copy(
                     textAlign = TextAlign.Start,
-                    fontSize = 14.sp
+                    fontSize = 15.sp
                 ),
             )
 

@@ -12,11 +12,9 @@ import com.example.composememoapp.presentation.ui.component.StaggeredGridRow
 fun TagList(
     tagList: List<String>
 ) {
-
-    Row(modifier = Modifier.padding(10.dp)) {
+    Row(modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)) {
         StaggeredGridRow(
             itemsSize = tagList.size,
-            modifier = Modifier.padding(horizontal = 20.dp)
         ) {
             for (tag in tagList) {
                 Chip(text = "#$tag")
