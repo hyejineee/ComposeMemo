@@ -103,11 +103,12 @@ class MemoViewModel @Inject constructor(
                 .map {
                     when (it) {
                         is TextBlock -> it.content = it.textInputState.value.text
-                        is ImageBlock -> it.content =
-                            if (memoModel.id == null || it.content?.scheme != "file") saveImage(
-                                bitmap = it.imageState.value,
-                                context = context
-                            ) else it.content
+                        is ImageBlock ->
+                            it.content =
+                                if (memoModel.id == null || it.content?.scheme != "file") saveImage(
+                                    bitmap = it.imageState.value,
+                                    context = context
+                                ) else it.content
                     }
                     it.convertToContentBlockEntity()
                 }.mapIndexed { index, contentBlockEntity ->
@@ -132,8 +133,6 @@ class MemoViewModel @Inject constructor(
                 { handleSuccess(MemoState.SaveSuccess) },
                 { error -> handleError(error.message) }
             )
-
-
     }
 
     fun getMemo(memoId: Long) = _memoList.find { it.id == memoId }

@@ -1,7 +1,5 @@
 package com.example.composememoapp.data.repository
 
-import android.content.Context
-import com.example.composememoapp.data.MemoModel
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.data.database.entity.TagEntity
 import io.reactivex.rxjava3.core.Completable
