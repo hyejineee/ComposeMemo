@@ -16,7 +16,7 @@ import kotlinx.parcelize.IgnoredOnParcel
 
 @kotlinx.parcelize.Parcelize
 data class TextBlock(
-    override var seq: Long,
+    override var seq: Long = 0,
     override var content: String,
 ) : ContentBlock<String>, Parcelable {
 

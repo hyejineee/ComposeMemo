@@ -12,6 +12,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +27,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.composememoapp.data.MemoModel
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
@@ -39,6 +41,7 @@ import com.example.composememoapp.presentation.ui.component.blocks.ContentBlock
 import com.example.composememoapp.presentation.ui.component.blocks.ContentType
 import com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
 import com.example.composememoapp.presentation.ui.component.blocks.TextBlock
+import com.example.composememoapp.presentation.viewModel.ContentBlockViewModel
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
 import com.example.composememoapp.util.model.rememberContentBlocksState
@@ -51,18 +54,15 @@ fun WriteScreen(
     memoEntity: MemoEntity? = null,
     tagViewModel: TagViewModel,
     memoViewModel: MemoViewModel,
+    contentBlockViewModel: ContentBlockViewModel,
     handleBackButtonClick: () -> Unit,
 ) {
 
     val context = LocalContext.current
     val allTag by tagViewModel.tagList.subscribeAsState(initial = emptyList())
 
-    val contentsState = rememberContentBlocksState(
-        initialContents = memoEntity
-            ?.contents
-            ?.map { it.convertToContentBlockModel() }
-            ?: emptyList()
-    )
+    val contentsState =
+        contentBlockViewModel.contentBlocks.subscribeAsState(initial = emptyList())
 
     val tagState = rememberTagListState(
         initialContents = memoEntity?.tagEntities ?: listOf()
@@ -71,12 +71,12 @@ fun WriteScreen(
     val handleSaveMemo = {
         val newMemoModel = memoEntity?.let {
             it.copy().convertToMemoViewModel().apply {
-                contents = contentsState.contents.toList()
+                contents = contentsState.value
                 tagEntities = tagState.tags
             }
-        } ?: MemoModel(contents = contentsState.contents.toList(), tagEntities = tagState.tags)
+        } ?: MemoModel(contents = contentsState.value, tagEntities = tagState.tags)
 
-        val contentsCount = contentsState.contents.count {
+        val contentsCount = contentsState.value.count {
             it.content.toString().isNotBlank() or it.content.toString().isNotEmpty()
         }
 
@@ -85,54 +85,26 @@ fun WriteScreen(
         }
     }
 
+
     val handleDeleteMemo = { memo: MemoEntity ->
         memoViewModel.deleteMemo(memo)
     }
 
-    val handleAddDefaultBlock: (Int) -> Unit =
-        {
-            val seq =
-                if (contentsState.contents.isNotEmpty()) contentsState.contents.last().seq + 1 else 1
+    val handleAddDefaultBlock = { index: Int? ->
+        contentBlockViewModel.insertTextBlock(index = index)
+    }
 
-            if (it < 0) {
-                contentsState.contents.add(TextBlock(seq = seq, ""))
-            } else {
-                contentsState.contents.add(it, TextBlock(seq = seq, ""))
-            }
-        }
-
-    val handleAddImageBlock = { i: Int ->
+    val handleAddImageBlock = { i: Int? ->
         { uri: Uri? ->
-            val seq =
-                if (contentsState.contents.isNotEmpty()) contentsState.contents.last().seq + 1 else 1
-
-            if (i < 0) {
-                contentsState.contents.add(ImageBlock(seq = seq, content = uri))
-            } else {
-                contentsState.contents.add(i, ImageBlock(seq = seq, content = uri))
+            uri?.let {
+                contentBlockViewModel.insertImageBlock(i, it)
             }
             Unit
         }
     }
 
-    val handleAddCheckBoxBlock = { i: Int ->
-        val seq =
-            if (contentsState.contents.isNotEmpty()) contentsState.contents.last().seq + 1 else 1
-
-        if (i < 0) {
-            contentsState.contents.add(
-                CheckBoxBlock(
-                    seq = seq,
-                    content = CheckBoxModel(text = "", false)
-                )
-            )
-        } else {
-            contentsState.contents.add(
-                i,
-                CheckBoxBlock(seq = seq, content = CheckBoxModel(text = "", false))
-            )
-        }
-        Unit
+    val handleAddCheckBoxBlock = { i: Int? ->
+        contentBlockViewModel.insertCheckBoxBlock(i)
     }
 
     val handleAddTag: (String) -> Unit = { s: String ->
@@ -141,7 +113,7 @@ fun WriteScreen(
         }
     }
 
-    Log.d("Write", "content : ${contentsState.contents.toList()}")
+    Log.d("Write", "content : ${contentsState}")
 
     BackHandler() {
         handleSaveMemo()
@@ -151,7 +123,7 @@ fun WriteScreen(
     DetailAndWriteScreenContent(
         memoEntity = memoEntity,
         allTag = allTag.map { it.tag },
-        contents = contentsState.contents,
+        contents = contentsState.value,
         tagList = tagState.tags,
         handleDeleteMemo = handleDeleteMemo,
         handleBackButtonClick = handleBackButtonClick,
@@ -176,9 +148,9 @@ fun DetailAndWriteScreenContent(
     handleSaveMemo: () -> Unit,
     handleAddTag: (String) -> Unit,
 
-    handleAddDefaultBlock: (Int) -> Unit,
-    handleAddImageBlock: (Int) -> (Uri?) -> Unit,
-    handleAddCheckBoxBlock: (Int) -> Unit
+    handleAddDefaultBlock: (Int?) -> Unit,
+    handleAddImageBlock: (Int?) -> (Uri?) -> Unit,
+    handleAddCheckBoxBlock: (Int?) -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
@@ -236,12 +208,6 @@ fun DetailAndWriteScreenContent(
                 this.testTag = "write screen"
             }
             .fillMaxSize()
-            .clickable(
-                onClick = {
-                    handleCursorPosition(-1)
-                    handleAddDefaultBlock(index)
-                }
-            )
     ) {
         Column(
             modifier = Modifier
@@ -279,8 +245,8 @@ fun DetailAndWriteScreenPreview() {
                     type = ContentType.Text,
                     seq = it.toLong(),
                     content = "this is text block content $it" +
-                        " this is text block content $it" +
-                        " this is text block content $it"
+                            " this is text block content $it" +
+                            " this is text block content $it"
                 )
             }
         )

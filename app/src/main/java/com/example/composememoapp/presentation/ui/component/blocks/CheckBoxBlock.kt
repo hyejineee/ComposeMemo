@@ -33,7 +33,7 @@ data class CheckBoxModel(
 
 @kotlinx.parcelize.Parcelize
 data class CheckBoxBlock(
-    override var seq: Long,
+    override var seq: Long =0,
     override var content: @RawValue CheckBoxModel
 ) : ContentBlock<CheckBoxModel>, Parcelable {
 
