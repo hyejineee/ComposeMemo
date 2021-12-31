@@ -4,7 +4,6 @@ import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
@@ -12,7 +11,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,24 +25,17 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.composememoapp.data.MemoModel
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
-import com.example.composememoapp.presentation.ui.component.CheckBoxBlock
-import com.example.composememoapp.presentation.ui.component.CheckBoxModel
-import com.example.composememoapp.presentation.ui.component.ContentBlocks
 import com.example.composememoapp.presentation.ui.component.WriteScreenBottomBar
 import com.example.composememoapp.presentation.ui.component.WriteScreenTopAppBar
 import com.example.composememoapp.presentation.ui.component.blocks.ContentBlock
 import com.example.composememoapp.presentation.ui.component.blocks.ContentType
-import com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
-import com.example.composememoapp.presentation.ui.component.blocks.TextBlock
 import com.example.composememoapp.presentation.viewModel.ContentBlockViewModel
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
-import com.example.composememoapp.util.model.rememberContentBlocksState
 import com.example.composememoapp.util.model.rememberTagListState
 
 @ExperimentalAnimationApi
@@ -85,13 +76,14 @@ fun WriteScreen(
         }
     }
 
-
     val handleDeleteMemo = { memo: MemoEntity ->
         memoViewModel.deleteMemo(memo)
     }
 
-    val handleAddDefaultBlock = { index: Int? ->
-        contentBlockViewModel.insertTextBlock(index = index)
+    val handleAddDefaultBlock: (Int?) -> () -> Unit = { index: Int? ->
+        {
+            contentBlockViewModel.insertTextBlock(index = index)
+        }
     }
 
     val handleAddImageBlock = { i: Int? ->
@@ -148,13 +140,13 @@ fun DetailAndWriteScreenContent(
     handleSaveMemo: () -> Unit,
     handleAddTag: (String) -> Unit,
 
-    handleAddDefaultBlock: (Int?) -> Unit,
+    handleAddDefaultBlock: (Int?) -> () -> Unit,
     handleAddImageBlock: (Int?) -> (Uri?) -> Unit,
     handleAddCheckBoxBlock: (Int?) -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
-    var index by rememberSaveable { mutableStateOf(-1) }
+    var index by rememberSaveable { mutableStateOf<Int?>(null) }
 
     Log.d("write", "cursor position: $index")
 
@@ -204,16 +196,12 @@ fun DetailAndWriteScreenContent(
             )
         },
         modifier = Modifier
-            .semantics {
-                this.testTag = "write screen"
-            }
             .fillMaxSize()
     ) {
         Column(
             modifier = Modifier
                 .verticalScroll(scrollState)
         ) {
-
             TagScreen(
                 tagList = tagList,
                 allTag = allTag,
@@ -225,8 +213,10 @@ fun DetailAndWriteScreenContent(
             ContentBlocks(
                 contents = contents,
                 focusRequester = focusRequester,
+                focusedIndex = index,
                 keyboardController = keyboardController,
-                handleCursorPosition = handleCursorPosition
+                handleCursorPosition = handleCursorPosition,
+                handleAddDefaultBlock = handleAddDefaultBlock
             )
         }
     }
@@ -258,7 +248,7 @@ fun DetailAndWriteScreenPreview() {
             tagList = listOf(),
             handleAddTag = {},
             handleBackButtonClick = {},
-            handleAddDefaultBlock = { },
+            handleAddDefaultBlock = { {} },
             handleSaveMemo = {},
             handleDeleteMemo = {},
             handleAddImageBlock = { {} },

@@ -3,6 +3,7 @@ package com.example.composememoapp.presentation.viewModel
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.presentation.ui.component.CheckBoxBlock
 import com.example.composememoapp.presentation.ui.component.CheckBoxModel
 import com.example.composememoapp.presentation.ui.component.blocks.ContentBlock
@@ -11,7 +12,7 @@ import com.example.composememoapp.presentation.ui.component.blocks.TextBlock
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
 class ContentBlockViewModel(
-    initialContentBlock: List<ContentBlock<*>>
+    initialContentBlock: List<ContentBlockEntity>
 ) : ViewModel() {
 
     private val _contentBlocksSource = BehaviorSubject.create<List<ContentBlock<*>>>()
@@ -20,7 +21,7 @@ class ContentBlockViewModel(
     val contentBlocks = _contentBlocksSource.compose { it }
 
     init {
-        _contentBlocksSource.onNext(initialContentBlock)
+        _contentBlocksSource.onNext(initialContentBlock.map { it.convertToContentBlockModel() })
         contentBlocks.subscribe {
             contentBlockList = it.toMutableList()
         }

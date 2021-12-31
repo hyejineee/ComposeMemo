@@ -15,6 +15,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,7 +34,7 @@ data class CheckBoxModel(
 
 @kotlinx.parcelize.Parcelize
 data class CheckBoxBlock(
-    override var seq: Long =0,
+    override var seq: Long = 0,
     override var content: @RawValue CheckBoxModel
 ) : ContentBlock<CheckBoxModel>, Parcelable {
 
@@ -41,7 +42,12 @@ data class CheckBoxBlock(
     var checkState: MutableState<Boolean> = mutableStateOf(content.isChecked)
 
     @IgnoredOnParcel
-    var textInputState: MutableState<TextFieldValue> = mutableStateOf(TextFieldValue(content.text))
+    var textInputState: MutableState<TextFieldValue> = mutableStateOf(
+        TextFieldValue(
+            text = content.text,
+            selection = TextRange(content.text.length)
+        )
+    )
 
     @Composable
     override fun drawOnlyReadContent(modifier: androidx.compose.ui.Modifier) {
@@ -82,7 +88,8 @@ data class CheckBoxBlock(
                     content.text = it.text
                 },
                 modifier = modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                singleLine = true
             )
         }
     }

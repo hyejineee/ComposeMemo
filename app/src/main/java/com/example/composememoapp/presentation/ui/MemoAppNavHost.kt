@@ -82,9 +82,7 @@ fun MemoAppNavHost(
             val contentBlockViewModel = remember {
                 mutableStateOf(
                     ContentBlockViewModel(
-                        memo?.let {
-                            it.contents.map { content -> content.convertToContentBlockModel() }
-                        } ?: emptyList()
+                        initialContentBlock = memo?.let { it.contents } ?: emptyList()
                     )
                 )
             }
@@ -101,7 +99,11 @@ fun MemoAppNavHost(
         composable(MemoAppScreen.Write.name) {
 
             val contentBlockViewModel =
-                remember { mutableStateOf(ContentBlockViewModel(listOf(TextBlock(content="")))) }
+                remember {
+                    mutableStateOf(ContentBlockViewModel(emptyList()).apply {
+                        this.insertTextBlock()
+                    })
+                }
 
             WriteScreen(
                 memoViewModel = memoViewModel,
