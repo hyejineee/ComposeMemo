@@ -102,7 +102,6 @@ class MemoViewModel @Inject constructor(
                 .asSequence()
                 .map {
                     when (it) {
-                        is TextBlock -> it.content = it.textInputState.value.text
                         is ImageBlock ->
                             it.content =
                                 if (memoModel.id == null || it.content?.scheme != "file") saveImage(
@@ -111,9 +110,11 @@ class MemoViewModel @Inject constructor(
                                 ) else it.content
                     }
                     it.convertToContentBlockEntity()
+
                 }.mapIndexed { index, contentBlockEntity ->
                     contentBlockEntity.seq = index + 1L
                     contentBlockEntity
+
                 }.toList()
 
             val memoEntity = MemoEntity(
