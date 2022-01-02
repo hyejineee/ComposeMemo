@@ -52,8 +52,8 @@ data class TextBlock(
                 modifier = modifier
                     .fillMaxWidth(),
                 singleLine = true,
-                keyBoardActions = KeyboardActions( onAny = { handleAddBlock?.invoke() }),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Default)
+                keyBoardActions = KeyboardActions( onNext = { handleAddBlock?.invoke() }),
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
             )
         }
     }
