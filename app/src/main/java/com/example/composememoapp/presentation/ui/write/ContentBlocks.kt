@@ -44,7 +44,7 @@ fun ContentBlocks(
     contents: List<ContentBlock<*>>,
     focusedIndex: Int? = null,
     handleCursorPosition: (Int) -> Unit,
-    handleAddDefaultBlock: (Int?) -> () -> Unit,
+    handleAddDefaultBlock: (Int?)-> Unit,
     focusRequester: FocusRequester,
     keyboardController: SoftwareKeyboardController?
 ) {
@@ -75,7 +75,6 @@ fun ContentBlocks(
             when (val content = contents[i]) {
                 is TextBlock -> {
 
-
                     content.drawEditableContent(
                         modifier = focusRequesterModifier
                             .padding(2.dp)
@@ -84,7 +83,7 @@ fun ContentBlocks(
                             },
                         handleAddDefaultBlock = {
                             handleCursorPosition(index + 1)
-                            handleAddDefaultBlock(index)()
+                            handleAddDefaultBlock(index)
                         }
 
                     )

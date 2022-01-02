@@ -80,7 +80,7 @@ fun WriteScreen(
         memoViewModel.deleteMemo(memo)
     }
 
-    val handleAddDefaultBlock: (Int?) -> () -> Unit = { index: Int? ->
+    val handleAddDefaultBlock: (Int?) -> Unit = { index: Int? ->
         {
             contentBlockViewModel.insertTextBlock(index = index)
         }
@@ -140,7 +140,7 @@ fun DetailAndWriteScreenContent(
     handleSaveMemo: () -> Unit,
     handleAddTag: (String) -> Unit,
 
-    handleAddDefaultBlock: (Int?) -> () -> Unit,
+    handleAddDefaultBlock: (Int?) -> Unit,
     handleAddImageBlock: (Int?) -> (Uri?) -> Unit,
     handleAddCheckBoxBlock: (Int?) -> Unit
 ) {
@@ -248,7 +248,7 @@ fun DetailAndWriteScreenPreview() {
             tagList = listOf(),
             handleAddTag = {},
             handleBackButtonClick = {},
-            handleAddDefaultBlock = { {} },
+            handleAddDefaultBlock = {  },
             handleSaveMemo = {},
             handleDeleteMemo = {},
             handleAddImageBlock = { {} },
