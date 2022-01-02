@@ -3,11 +3,14 @@ package com.example.composememoapp.presentation.ui.write
 import android.graphics.Bitmap
 import android.util.Log
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -22,6 +25,7 @@ import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.semantics.contentDescription
@@ -44,34 +48,36 @@ fun ContentBlocks(
     focusRequester: FocusRequester,
     keyboardController: SoftwareKeyboardController?
 ) {
-
     Column(
         modifier = Modifier
             .padding(16.dp)
     ) {
+
         for (i in contents.indices) {
+
             val index = i + 1
+
+            val focusRequesterModifier = if (focusedIndex ?: 0 + 1 == index) {
+                Modifier.focusRequester(focusRequester = focusRequester)
+            } else {
+                Modifier
+            }.then(Modifier.onFocusEvent {
+                if (it.isFocused) {
+                    handleCursorPosition(index)
+                }
+            })
+
+            SideEffect {
+                focusRequester.requestFocus()
+                keyboardController?.show()
+            }
+
             when (val content = contents[i]) {
                 is TextBlock -> {
 
-                    LaunchedEffect(key1 = contents, block = {
-                        focusRequester.requestFocus()
-                        keyboardController?.show()
-                    })
-
-                    val focusRequesterModifier = if (focusedIndex ?: 0 + 1 == index) {
-                        Modifier.focusRequester(focusRequester = focusRequester)
-                    } else {
-                        Modifier
-                    }
 
                     content.drawEditableContent(
                         modifier = focusRequesterModifier
-                            .onFocusEvent {
-                                if (it.isFocused) {
-                                    handleCursorPosition(index)
-                                }
-                            }
                             .padding(2.dp)
                             .semantics {
                                 this.contentDescription = "text block ${content.seq}"
@@ -84,18 +90,20 @@ fun ContentBlocks(
                     )
                 }
                 is ImageBlock -> {
-                    content.drawEditableContent(modifier = Modifier.padding(2.dp))
+
+                    content.drawEditableContent(modifier = focusRequesterModifier
+                        .padding(2.dp)
+                        .focusable(true)
+                        .clickable {
+                            handleCursorPosition(index)
+                        }
+                    )
                 }
 
                 is CheckBoxBlock -> {
+
                     content.drawEditableContent(
-                        modifier = Modifier
-                            .focusRequester(focusRequester = focusRequester)
-                            .onFocusChanged {
-                                if (it.isFocused) {
-                                    handleCursorPosition(i + 1)
-                                }
-                            }
+                        modifier = focusRequesterModifier
                             .padding(2.dp)
                     )
                 }

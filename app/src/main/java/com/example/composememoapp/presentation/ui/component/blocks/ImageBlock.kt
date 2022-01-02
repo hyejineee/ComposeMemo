@@ -56,7 +56,7 @@ data class ImageBlock(
     @Composable
     override fun drawEditableContent(modifier: Modifier) {
         getBitmap(LocalContext.current)
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = modifier.fillMaxWidth()) {
             imageState.value?.let { btm ->
                 Image(
                     bitmap = btm.asImageBitmap(),
