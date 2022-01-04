@@ -4,11 +4,18 @@ import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,9 +27,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import com.example.composememoapp.data.MemoModel
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
@@ -84,22 +93,7 @@ fun WriteScreen(
         handleBackButtonClick()
     }
 
-    val handleAddDefaultBlock: (Int?) -> Unit = { index: Int? ->
-        contentBlockViewModel.insertTextBlock(index = index)
-    }
 
-    val handleAddImageBlock = { i: Int? ->
-        { uri: Uri? ->
-            uri?.let {
-                contentBlockViewModel.insertImageBlock(i, it)
-            }
-            Unit
-        }
-    }
-
-    val handleAddCheckBoxBlock = { i: Int? ->
-        contentBlockViewModel.insertCheckBoxBlock(i)
-    }
 
     val handleAddTag: (String) -> Unit = { s: String ->
         if (s !in tagState.tags) {
@@ -116,21 +110,22 @@ fun WriteScreen(
     }
 
 
-    WriteScreenContent(
-        memoEntity = memoEntity?.convertToMemoModel(),
-        allTag = allTag.map { it.tag },
-        contents = contentsState.value,
-        tagList = tagState.tags,
-        isFavorite = favoriteSate.value,
-        handleDeleteMemo = handleDeleteMemo,
-        handleBackButtonClick = handleBackButtonClick,
-        handleSaveMemo = handleSaveMemo,
-        handleClickFavoriteButton = handleClickFavoriteButton,
-        handleAddDefaultBlock = handleAddDefaultBlock,
-        handleAddTag = handleAddTag,
-        handleAddImageBlock = handleAddImageBlock,
-        handleAddCheckBoxBlock = handleAddCheckBoxBlock
-    )
+    Box(modifier = Modifier.fillMaxSize()) {
+        WriteScreenContent(
+            memoEntity = memoEntity?.convertToMemoModel(),
+            allTag = allTag.map { it.tag },
+            contents = contentsState.value,
+            tagList = tagState.tags,
+            isFavorite = favoriteSate.value,
+            contentBlockViewModel = contentBlockViewModel,
+            handleDeleteMemo = handleDeleteMemo,
+            handleBackButtonClick = handleBackButtonClick,
+            handleSaveMemo = handleSaveMemo,
+            handleClickFavoriteButton = handleClickFavoriteButton,
+            handleAddTag = handleAddTag,
+        )
+    }
+
 }
 
 @ExperimentalAnimationApi
@@ -141,22 +136,14 @@ fun WriteScreenContent(
     tagList: List<String>,
     allTag: List<String>,
     contents: List<ContentBlock<*>>,
-    isFavorite : Boolean,
+    contentBlockViewModel: ContentBlockViewModel,
+    isFavorite: Boolean,
     handleDeleteMemo: () -> Unit,
     handleBackButtonClick: () -> Unit,
     handleSaveMemo: () -> Unit,
-    handleClickFavoriteButton : ()->Unit,
+    handleClickFavoriteButton: () -> Unit,
     handleAddTag: (String) -> Unit,
-
-    handleAddDefaultBlock: (Int?) -> Unit,
-    handleAddImageBlock: (Int?) -> (Uri?) -> Unit,
-    handleAddCheckBoxBlock: (Int?) -> Unit
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val focusRequester = remember { FocusRequester() }
-    var index by rememberSaveable { mutableStateOf<Int?>(null) }
-
-    val scrollState = rememberScrollState()
 
     val handleClickBackButton = {
         handleSaveMemo()
@@ -165,10 +152,6 @@ fun WriteScreenContent(
 
     BackHandler() {
         handleClickBackButton()
-    }
-
-    val handleCursorPosition = { i: Int ->
-        index = i
     }
 
     Scaffold(
@@ -183,37 +166,27 @@ fun WriteScreenContent(
                 )
             }
         },
-        bottomBar = {
-            WriteScreenBottomBar(
-                handleAddImage = handleAddImageBlock(index),
-                handleAddCheckBox = { handleAddCheckBoxBlock(index) }
-            )
-        },
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.DarkGray)
     ) {
         Column(
             modifier = Modifier
-                .verticalScroll(scrollState)
+                .fillMaxSize()
         ) {
             TagScreen(
                 tagList = tagList,
                 allTag = allTag,
                 handleClickAddTag = handleAddTag,
-                modifier = Modifier
-                    .fillMaxSize()
             )
 
-            ContentBlocks(
+            ContentBlockScreen(
+                contentBlockViewModel = contentBlockViewModel,
                 contents = contents,
-                focusRequester = focusRequester,
-                focusedIndex = index,
-                keyboardController = keyboardController,
-                handleCursorPosition = handleCursorPosition,
-                handleAddDefaultBlock = handleAddDefaultBlock
             )
         }
     }
+
 }
 
 @ExperimentalAnimationApi
@@ -243,13 +216,11 @@ fun DetailAndWriteScreenPreview() {
             isFavorite = false,
             handleAddTag = {},
             handleBackButtonClick = {},
-            handleAddDefaultBlock = { },
             handleSaveMemo = {},
             handleDeleteMemo = {},
-            handleAddImageBlock = { {} },
             contents = content,
-            handleAddCheckBoxBlock = {},
-            handleClickFavoriteButton = {}
+            handleClickFavoriteButton = {},
+            contentBlockViewModel = ContentBlockViewModel(emptyList())
         )
     }
 }
