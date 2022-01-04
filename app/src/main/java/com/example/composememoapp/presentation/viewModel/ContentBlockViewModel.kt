@@ -22,7 +22,7 @@ class ContentBlockViewModel(
     init {
         _contentBlocksSource.onNext(initialContentBlock.map { it.convertToContentBlockModel() })
 
-        if(initialContentBlock.isEmpty()){
+        if (initialContentBlock.isEmpty()) {
             insertTextBlock()
         }
 
@@ -57,8 +57,8 @@ class ContentBlockViewModel(
         _contentBlocksSource.onNext(contentBlockList.toList())
     }
 
-    fun deleteBlock(block:ContentBlock<*>){
-        if(contentBlockList.size <= 1){
+    fun deleteBlock(block: ContentBlock<*>) {
+        if (contentBlockList.size <= 1) {
             return
         }
 

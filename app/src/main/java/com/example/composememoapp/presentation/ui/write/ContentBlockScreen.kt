@@ -178,7 +178,7 @@ fun ContentBlocks(
                             .focusable(true)
                             .onKeyEvent {
                                 if (it.key.keyCode == Key.Backspace.keyCode) {
-                                    if(focusedIndex == index){
+                                    if (focusedIndex == index) {
                                         handleCursorPosition(index - 1)
                                         handleDeleteBlock(content)
                                     }

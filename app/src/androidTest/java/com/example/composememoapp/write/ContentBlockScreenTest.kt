@@ -111,7 +111,5 @@ class ContentBlockScreenTest {
         composeTestRule
             .onAllNodes(hasImeAction(ImeAction.Next))
             .assertCountEquals(1)
-
     }
-
 }

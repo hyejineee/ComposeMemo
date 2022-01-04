@@ -134,7 +134,7 @@ class ContentBlockViewModelTest {
 
     @Test
     @DisplayName("컨텐트 블록을 삭제한다.")
-    fun deleteContentBlockTest(){
+    fun deleteContentBlockTest() {
         val contentBlockViewModel = ContentBlockViewModel(emptyList())
         contentBlockViewModel.insertCheckBoxBlock()
 
