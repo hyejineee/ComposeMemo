@@ -142,10 +142,7 @@ fun ContentBlocks(
                 is TextBlock -> {
                     content.drawEditableContent(
                         modifier = focusRequesterModifier
-                            .padding(2.dp)
-                            .semantics {
-                                this.contentDescription = "text block ${content.seq}"
-                            },
+                            .padding(2.dp),
                         handleAddDefaultBlock = {
                             handleCursorPosition(index + 1)
                             handleAddDefaultBlock(index)
