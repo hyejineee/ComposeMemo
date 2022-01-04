@@ -22,8 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.composememoapp.data.MemoModel
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
@@ -50,6 +48,7 @@ fun WriteScreen(
 ) {
 
     val context = LocalContext.current
+
     val allTag by tagViewModel.tagList.subscribeAsState(initial = emptyList())
 
     val contentsState =
@@ -59,9 +58,11 @@ fun WriteScreen(
         initialContents = memoEntity?.tagEntities ?: listOf()
     )
 
+    var favoriteSate = rememberSaveable { mutableStateOf(memoEntity?.isBookMarked ?: false) }
+
     val handleSaveMemo = {
         val newMemoModel = memoEntity?.let {
-            it.copy().convertToMemoViewModel().apply {
+            it.copy().convertToMemoModel().apply {
                 contents = contentsState.value
                 tagEntities = tagState.tags
             }
@@ -76,14 +77,15 @@ fun WriteScreen(
         }
     }
 
-    val handleDeleteMemo = { memo: MemoEntity ->
-        memoViewModel.deleteMemo(memo)
+    val handleDeleteMemo = {
+        memoEntity?.let {
+            memoViewModel.deleteMemo(it)
+        }
+        handleBackButtonClick()
     }
 
     val handleAddDefaultBlock: (Int?) -> Unit = { index: Int? ->
-        {
-            contentBlockViewModel.insertTextBlock(index = index)
-        }
+        contentBlockViewModel.insertTextBlock(index = index)
     }
 
     val handleAddImageBlock = { i: Int? ->
@@ -107,19 +109,23 @@ fun WriteScreen(
 
     Log.d("Write", "content : ${contentsState}")
 
-    BackHandler() {
-        handleSaveMemo()
-        handleBackButtonClick()
+
+    val handleClickFavoriteButton = {
+        favoriteSate.value = !favoriteSate.value
+        memoEntity?.isBookMarked = favoriteSate.value
     }
 
-    DetailAndWriteScreenContent(
-        memoEntity = memoEntity,
+
+    WriteScreenContent(
+        memoEntity = memoEntity?.convertToMemoModel(),
         allTag = allTag.map { it.tag },
         contents = contentsState.value,
         tagList = tagState.tags,
+        isFavorite = favoriteSate.value,
         handleDeleteMemo = handleDeleteMemo,
         handleBackButtonClick = handleBackButtonClick,
         handleSaveMemo = handleSaveMemo,
+        handleClickFavoriteButton = handleClickFavoriteButton,
         handleAddDefaultBlock = handleAddDefaultBlock,
         handleAddTag = handleAddTag,
         handleAddImageBlock = handleAddImageBlock,
@@ -130,14 +136,16 @@ fun WriteScreen(
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @Composable
-fun DetailAndWriteScreenContent(
-    memoEntity: MemoEntity?,
+fun WriteScreenContent(
+    memoEntity: MemoModel?,
     tagList: List<String>,
     allTag: List<String>,
     contents: List<ContentBlock<*>>,
-    handleDeleteMemo: (MemoEntity) -> Unit,
+    isFavorite : Boolean,
+    handleDeleteMemo: () -> Unit,
     handleBackButtonClick: () -> Unit,
     handleSaveMemo: () -> Unit,
+    handleClickFavoriteButton : ()->Unit,
     handleAddTag: (String) -> Unit,
 
     handleAddDefaultBlock: (Int?) -> Unit,
@@ -148,29 +156,15 @@ fun DetailAndWriteScreenContent(
     val focusRequester = remember { FocusRequester() }
     var index by rememberSaveable { mutableStateOf<Int?>(null) }
 
-    Log.d("write", "cursor position: $index")
-
     val scrollState = rememberScrollState()
-
-    var favoriteSate = rememberSaveable {
-        mutableStateOf(memoEntity?.isBookMarked ?: false)
-    }
 
     val handleClickBackButton = {
         handleSaveMemo()
         handleBackButtonClick()
     }
 
-    val handleClickFavoriteButton = {
-        favoriteSate.value = !favoriteSate.value
-        memoEntity?.isBookMarked = favoriteSate.value
-    }
-
-    val handleClickDeleteButton = {
-        memoEntity?.let {
-            handleDeleteMemo(it)
-        }
-        handleBackButtonClick()
+    BackHandler() {
+        handleClickBackButton()
     }
 
     val handleCursorPosition = { i: Int ->
@@ -183,8 +177,8 @@ fun DetailAndWriteScreenContent(
                 WriteScreenTopAppBar(
                     handleClickBackButton = handleClickBackButton,
                     handleClickFavoriteButton = handleClickFavoriteButton,
-                    handleClickDeleteButton = handleClickDeleteButton,
-                    isFavorite = favoriteSate.value,
+                    handleClickDeleteButton = handleDeleteMemo,
+                    isFavorite = isFavorite,
                     showMenuIcon = memoEntity != null
                 )
             }
@@ -242,18 +236,20 @@ fun DetailAndWriteScreenPreview() {
         )
 
         val content = memo.contents.map { it.convertToContentBlockModel() }
-        DetailAndWriteScreenContent(
-            memoEntity = memo,
+        WriteScreenContent(
+            memoEntity = memo.convertToMemoModel(),
             allTag = listOf(),
             tagList = listOf(),
+            isFavorite = false,
             handleAddTag = {},
             handleBackButtonClick = {},
-            handleAddDefaultBlock = {  },
+            handleAddDefaultBlock = { },
             handleSaveMemo = {},
             handleDeleteMemo = {},
             handleAddImageBlock = { {} },
             contents = content,
-            handleAddCheckBoxBlock = {}
+            handleAddCheckBoxBlock = {},
+            handleClickFavoriteButton = {}
         )
     }
 }
