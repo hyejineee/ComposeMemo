@@ -13,7 +13,7 @@ data class MemoEntity(
     var isBookMarked: Boolean = false,
     var tagEntities: List<String> = listOf()
 ) {
-    fun convertToMemoViewModel() = MemoModel(
+    fun convertToMemoModel() = MemoModel(
         id = id,
         updatedDate = updatedDate,
         contents = contents.map { it.convertToContentBlockModel() },

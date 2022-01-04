@@ -13,7 +13,6 @@ import com.example.composememoapp.domain.DeleteMemoUseCase
 import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
 import com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
-import com.example.composememoapp.presentation.ui.component.blocks.TextBlock
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
@@ -102,7 +101,6 @@ class MemoViewModel @Inject constructor(
                 .asSequence()
                 .map {
                     when (it) {
-                        is TextBlock -> it.content = it.textInputState.value.text
                         is ImageBlock ->
                             it.content =
                                 if (memoModel.id == null || it.content?.scheme != "file") saveImage(

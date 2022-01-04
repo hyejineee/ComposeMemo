@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +25,8 @@ fun TextInput(
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
     singleLine: Boolean = false,
+    keyBoardActions: KeyboardActions? = null,
+    keyboardOptions: KeyboardOptions? = null,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -39,8 +43,11 @@ fun TextInput(
                 textStyle = LocalTextStyle.current.copy(
                     textAlign = TextAlign.Start,
                     fontSize = 15.sp
-                )
+                ),
+                keyboardOptions = keyboardOptions?.let { it } ?: KeyboardOptions.Default,
+                keyboardActions = keyBoardActions?.let { it } ?: KeyboardActions.Default,
             )
+
             hint?.let {
                 if ((value.text.isNotEmpty()).not()) {
                     Text(

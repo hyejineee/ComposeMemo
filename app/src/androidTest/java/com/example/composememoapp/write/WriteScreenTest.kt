@@ -4,13 +4,11 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
-import androidx.compose.ui.test.isToggleable
+import androidx.compose.ui.test.hasImeAction
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.text.input.ImeAction
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
@@ -23,6 +21,7 @@ import com.example.composememoapp.domain.SaveMemoUseCase
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.component.blocks.ContentType
 import com.example.composememoapp.presentation.ui.write.WriteScreen
+import com.example.composememoapp.presentation.viewModel.ContentBlockViewModel
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
 import io.reactivex.rxjava3.kotlin.toFlowable
@@ -89,7 +88,8 @@ class WriteScreenTest {
     }
 
     private fun setContentWithWriteScreen(
-        memoEntity: MemoEntity? = null
+        memoEntity: MemoEntity? = null,
+        contentBlockViewModel: ContentBlockViewModel = ContentBlockViewModel(emptyList())
     ) {
 
         composeTestRule.setContent {
@@ -99,6 +99,7 @@ class WriteScreenTest {
                     memoViewModel = memoViewModel,
                     tagViewModel = tagViewModel,
                     handleBackButtonClick = {},
+                    contentBlockViewModel = contentBlockViewModel
                 )
             }
         }
@@ -109,8 +110,11 @@ class WriteScreenTest {
 
         setContentWithWriteScreen(
             memoEntity = memo,
+            contentBlockViewModel = ContentBlockViewModel(memo.contents)
         )
 
+        composeTestRule.mainClock.autoAdvance = false
+        composeTestRule.mainClock.advanceTimeBy(50)
         composeTestRule
             .onNodeWithText(memo.contents.first().content)
             .assertIsDisplayed()
@@ -118,36 +122,21 @@ class WriteScreenTest {
 
     @Test
     fun 새로운_메모를_작성하는_모드일_때_화면을_클릭하면_바로_메로를_작성할_수_있다() {
-        setContentWithWriteScreen()
+
+        setContentWithWriteScreen(
+            contentBlockViewModel = ContentBlockViewModel(emptyList())
+        )
+
+        composeTestRule.mainClock.autoAdvance = false
+        composeTestRule.mainClock.advanceTimeBy(100)
 
         composeTestRule
-            .onNodeWithTag("write screen", useUnmergedTree = true)
-            .performClick()
-        composeTestRule.mainClock.advanceTimeBy(50L)
-
-        composeTestRule
-            .onNodeWithContentDescription("text block 1", useUnmergedTree = true)
+            .onNode(hasImeAction(ImeAction.Next))
             .performTextInput("hello")
         composeTestRule.mainClock.advanceTimeBy(50L)
 
         composeTestRule
-            .onNodeWithContentDescription("text block 1", useUnmergedTree = true)
+            .onNode(hasImeAction(ImeAction.Next))
             .assertTextEquals("hello")
-    }
-
-    @Test
-    fun 체크박스_아이콘을_누르면_메모에_체크박스를_추가할_수_있다() {
-
-        setContentWithWriteScreen()
-
-        composeTestRule
-            .onNodeWithContentDescription("add checkbox icon", useUnmergedTree = true)
-            .performClick()
-
-        composeTestRule.mainClock.advanceTimeBy(50L)
-
-        composeTestRule
-            .onNode(isToggleable())
-            .assertExists()
     }
 }

@@ -2,9 +2,10 @@ package com.example.composememoapp.presentation.ui
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -13,6 +14,7 @@ import androidx.navigation.navArgument
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.ui.home.HomeScreen
 import com.example.composememoapp.presentation.ui.write.WriteScreen
+import com.example.composememoapp.presentation.viewModel.ContentBlockViewModel
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
 
@@ -25,7 +27,6 @@ fun MemoAppNavHost(
     memoViewModel: MemoViewModel,
     tagViewModel: TagViewModel
 ) {
-    val context = LocalContext.current
 
     NavHost(
         navController = navController,
@@ -71,18 +72,34 @@ fun MemoAppNavHost(
             val memoId = entry.arguments?.getLong(Key.MEMO_ARGS_KEY) ?: -1L
             val memo = memoViewModel.getMemo(memoId = memoId)
 
+            val contentBlockViewModel = remember {
+                mutableStateOf(
+                    ContentBlockViewModel(
+                        initialContentBlock = memo?.let { it.contents } ?: emptyList()
+                    )
+                )
+            }
+
             WriteScreen(
                 memoViewModel = memoViewModel,
                 tagViewModel = tagViewModel,
+                contentBlockViewModel = contentBlockViewModel.value,
                 memoEntity = memo,
                 handleBackButtonClick = { handleBackButtonClick() },
             )
         }
 
         composable(MemoAppScreen.Write.name) {
+
+            val contentBlockViewModel =
+                remember {
+                    mutableStateOf(ContentBlockViewModel(emptyList()))
+                }
+
             WriteScreen(
                 memoViewModel = memoViewModel,
                 tagViewModel = tagViewModel,
+                contentBlockViewModel = contentBlockViewModel.value,
                 handleBackButtonClick = { handleBackButtonClick() },
             )
         }

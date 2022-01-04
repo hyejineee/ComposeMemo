@@ -1,4 +1,4 @@
-package com.example.composememoapp.presentation.ui.component
+package com.example.composememoapp.presentation.ui.write
 
 import android.net.Uri
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
-import com.example.composememoapp.presentation.ui.write.AddCheckBoxButton
 
 @ExperimentalAnimationApi
 @Composable

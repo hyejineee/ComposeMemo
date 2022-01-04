@@ -1,4 +1,4 @@
-package com.example.composememoapp.presentation.ui.component
+package com.example.composememoapp.presentation.ui.write
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import com.example.composememoapp.R
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
+import com.example.composememoapp.presentation.ui.component.MiniFloatingButtonGroup
+import com.example.composememoapp.presentation.ui.component.MiniFloatingButtonModel
 import com.example.composememoapp.util.Permissions
 import kotlinx.coroutines.launch
 import java.io.File
