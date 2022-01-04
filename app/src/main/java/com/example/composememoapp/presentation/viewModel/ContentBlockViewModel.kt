@@ -16,12 +16,18 @@ class ContentBlockViewModel(
 ) : ViewModel() {
 
     private val _contentBlocksSource = BehaviorSubject.create<List<ContentBlock<*>>>()
-    private var contentBlockList:MutableList<ContentBlock<*>> = mutableListOf()
+    private var contentBlockList: MutableList<ContentBlock<*>> = mutableListOf()
 
     val contentBlocks = _contentBlocksSource.compose { it }
 
     init {
+
         _contentBlocksSource.onNext(initialContentBlock.map { it.convertToContentBlockModel() })
+
+        if(initialContentBlock.isEmpty()){
+            insertTextBlock()
+        }
+
         contentBlocks.subscribe {
             contentBlockList = it.toMutableList()
         }

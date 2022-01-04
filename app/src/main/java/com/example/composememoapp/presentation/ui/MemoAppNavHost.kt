@@ -100,9 +100,7 @@ fun MemoAppNavHost(
 
             val contentBlockViewModel =
                 remember {
-                    mutableStateOf(ContentBlockViewModel(emptyList()).apply {
-                        this.insertTextBlock()
-                    })
+                    mutableStateOf(ContentBlockViewModel(emptyList()))
                 }
 
             WriteScreen(

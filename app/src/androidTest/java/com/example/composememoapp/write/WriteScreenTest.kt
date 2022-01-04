@@ -131,7 +131,7 @@ class WriteScreenTest {
     fun 새로운_메모를_작성하는_모드일_때_화면을_클릭하면_바로_메로를_작성할_수_있다() {
 
         setContentWithWriteScreen(
-            contentBlockViewModel = ContentBlockViewModel(emptyList()).apply { insertTextBlock() }
+            contentBlockViewModel = ContentBlockViewModel(emptyList())
         )
 
         composeTestRule.mainClock.autoAdvance = false
