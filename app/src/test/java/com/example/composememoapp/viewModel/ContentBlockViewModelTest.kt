@@ -114,7 +114,7 @@ class ContentBlockViewModelTest {
     }
 
     @Test
-    @DisplayName("이미 블록을 리스트의 중간에 추가한다.")
+    @DisplayName("이미지 블록을 리스트의 중간에 추가한다.")
     fun insertImageBlockBetweenTest() {
         val uri = Mockito.mock(Uri::class.java)
 
@@ -127,6 +127,23 @@ class ContentBlockViewModelTest {
             listOf(
                 TextBlock(content = ""),
                 ImageBlock(content = uri),
+                TextBlock(content = ""),
+            )
+        )
+    }
+
+    @Test
+    @DisplayName("컨텐트 블록을 삭제한다.")
+    fun deleteContentBlockTest(){
+        val contentBlockViewModel = ContentBlockViewModel(emptyList())
+        contentBlockViewModel.insertCheckBoxBlock()
+
+        val deletedBlock = contentBlockViewModel.contentBlocks.test().values().last().last()
+
+        contentBlockViewModel.deleteBlock(deletedBlock)
+
+        contentBlockViewModel.contentBlocks.test().awaitCount(4).assertValue(
+            listOf(
                 TextBlock(content = ""),
             )
         )

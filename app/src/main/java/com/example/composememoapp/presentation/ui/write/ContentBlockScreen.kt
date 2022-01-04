@@ -29,6 +29,7 @@ import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
@@ -155,7 +156,7 @@ fun ContentBlocks(
                     content.drawEditableContent(
                         modifier = focusRequesterModifier
                             .padding(2.dp)
-                            .onKeyEvent {
+                            .onPreviewKeyEvent {
                                 if (it.key.keyCode == Key.Backspace.keyCode) {
                                     if (content.content.isBlank()) {
                                         handleCursorPosition(index - 1)
