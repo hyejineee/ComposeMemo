@@ -86,7 +86,7 @@ class MemoViewModelTest {
             .willReturn(Completable.complete())
 
         memoViewModel.saveMemo(
-            memoEntityMock.convertToMemoViewModel(),
+            memoEntityMock.convertToMemoModel(),
             context = context
         )
 
@@ -101,7 +101,7 @@ class MemoViewModelTest {
             .willReturn(Completable.error(Throwable("메모 저장 에러")))
 
         memoViewModel.saveMemo(
-            memoEntityMock.convertToMemoViewModel(),
+            memoEntityMock.convertToMemoModel(),
             context = context
         )
 

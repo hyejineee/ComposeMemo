@@ -25,7 +25,7 @@ import kotlinx.parcelize.IgnoredOnParcel
 
 @kotlinx.parcelize.Parcelize
 data class ImageBlock(
-    override var seq: Long,
+    override var seq: Long = 0,
     override var content: Uri?,
 ) : ContentBlock<Uri?>, Parcelable {
 
@@ -56,7 +56,7 @@ data class ImageBlock(
     @Composable
     override fun drawEditableContent(modifier: Modifier) {
         getBitmap(LocalContext.current)
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = modifier.fillMaxWidth()) {
             imageState.value?.let { btm ->
                 Image(
                     bitmap = btm.asImageBitmap(),
