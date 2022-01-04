@@ -143,19 +143,5 @@ class WriteScreenTest {
             .assertTextEquals("hello")
     }
 
-    @Test
-    fun 체크박스_아이콘을_누르면_메모에_체크박스를_추가할_수_있다() {
 
-        setContentWithWriteScreen()
-
-        composeTestRule
-            .onNodeWithContentDescription("add checkbox icon", useUnmergedTree = true)
-            .performClick()
-
-        composeTestRule.mainClock.advanceTimeBy(50L)
-
-        composeTestRule
-            .onNode(isToggleable())
-            .assertExists()
-    }
 }
