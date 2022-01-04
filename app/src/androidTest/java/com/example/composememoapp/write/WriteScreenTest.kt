@@ -5,11 +5,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasImeAction
-import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.text.input.ImeAction
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -141,21 +138,5 @@ class WriteScreenTest {
         composeTestRule
             .onNode(hasImeAction(ImeAction.Next))
             .assertTextEquals("hello")
-    }
-
-    @Test
-    fun 체크박스_아이콘을_누르면_메모에_체크박스를_추가할_수_있다() {
-
-        setContentWithWriteScreen()
-
-        composeTestRule
-            .onNodeWithContentDescription("add checkbox icon", useUnmergedTree = true)
-            .performClick()
-
-        composeTestRule.mainClock.advanceTimeBy(50L)
-
-        composeTestRule
-            .onNode(isToggleable())
-            .assertExists()
     }
 }

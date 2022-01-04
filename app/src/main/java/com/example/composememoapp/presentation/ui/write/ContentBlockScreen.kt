@@ -1,6 +1,7 @@
 package com.example.composememoapp.presentation.ui.write
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
@@ -25,13 +26,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.component.CheckBoxBlock
-import com.example.composememoapp.presentation.ui.component.WriteScreenBottomBar
 import com.example.composememoapp.presentation.ui.component.blocks.ContentBlock
 import com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
 import com.example.composememoapp.presentation.ui.component.blocks.TextBlock
@@ -49,7 +53,11 @@ fun ContentBlockScreen(
     var index by rememberSaveable { mutableStateOf<Int?>(null) }
 
     val handleCursorPosition = { i: Int ->
-        index = i
+        index = if (i == 0) {
+            1
+        } else {
+            i
+        }
     }
 
     val handleAddDefaultBlock: (Int?) -> Unit = { index: Int? ->
@@ -69,12 +77,17 @@ fun ContentBlockScreen(
         contentBlockViewModel.insertCheckBoxBlock(i)
     }
 
+    val handleDeleteBlock = { block: ContentBlock<*> ->
+        contentBlockViewModel.deleteBlock(block)
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
 
         ContentBlocks(
             contents = contents,
             handleCursorPosition = handleCursorPosition,
             handleAddDefaultBlock = handleAddDefaultBlock,
+            handleDeleteBlock = handleDeleteBlock,
             focusRequester = focusRequester,
             keyboardController = keyboardController,
             focusedIndex = index
@@ -101,11 +114,14 @@ fun ContentBlocks(
     focusedIndex: Int? = null,
     handleCursorPosition: (Int) -> Unit,
     handleAddDefaultBlock: (Int?) -> Unit,
+    handleDeleteBlock: (ContentBlock<*>) -> Unit,
     focusRequester: FocusRequester,
     keyboardController: SoftwareKeyboardController?
 ) {
 
     val scrollState = rememberScrollState()
+
+    Log.d("ContentBlocks", "focusedIndex = $focusedIndex")
 
     Column(
         modifier = Modifier
@@ -139,20 +155,36 @@ fun ContentBlocks(
                 is TextBlock -> {
                     content.drawEditableContent(
                         modifier = focusRequesterModifier
-                            .padding(2.dp),
+                            .padding(2.dp)
+                            .onPreviewKeyEvent {
+                                if (it.key.keyCode == Key.Backspace.keyCode) {
+                                    if (content.content.isBlank()) {
+                                        handleCursorPosition(index - 1)
+                                        handleDeleteBlock(content)
+                                    }
+                                }
+                                false
+                            },
                         handleAddDefaultBlock = {
                             handleCursorPosition(index + 1)
                             handleAddDefaultBlock(index)
                         }
-
                     )
                 }
                 is ImageBlock -> {
-
                     content.drawEditableContent(
                         modifier = focusRequesterModifier
                             .padding(2.dp)
                             .focusable(true)
+                            .onKeyEvent {
+                                if (it.key.keyCode == Key.Backspace.keyCode) {
+                                    if (focusedIndex == index) {
+                                        handleCursorPosition(index - 1)
+                                        handleDeleteBlock(content)
+                                    }
+                                }
+                                false
+                            }
                             .clickable {
                                 handleCursorPosition(index)
                             }
@@ -162,6 +194,15 @@ fun ContentBlocks(
                 is CheckBoxBlock -> {
                     content.drawEditableContent(
                         modifier = focusRequesterModifier
+                            .onKeyEvent {
+                                if (it.key.keyCode == Key.Backspace.keyCode) {
+                                    if (content.content.text.isBlank()) {
+                                        handleCursorPosition(index - 1)
+                                        handleDeleteBlock(content)
+                                    }
+                                }
+                                false
+                            }
                             .padding(2.dp)
                     )
                 }
@@ -180,6 +221,7 @@ fun ContentBlocksPreviwe() {
             contents = emptyList(),
             handleCursorPosition = {},
             handleAddDefaultBlock = {},
+            handleDeleteBlock = {},
             focusRequester = FocusRequester(),
             keyboardController = LocalSoftwareKeyboardController.current
         )
