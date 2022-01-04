@@ -20,10 +20,9 @@ class ContentBlockViewModel(
     val contentBlocks = _contentBlocksSource.compose { it }
 
     init {
-
         _contentBlocksSource.onNext(initialContentBlock.map { it.convertToContentBlockModel() })
 
-        if (initialContentBlock.isEmpty()) {
+        if(initialContentBlock.isEmpty()){
             insertTextBlock()
         }
 
@@ -55,6 +54,15 @@ class ContentBlockViewModel(
             )
         } ?: contentBlockList.add(CheckBoxBlock(content = CheckBoxModel(text = "", false)))
 
+        _contentBlocksSource.onNext(contentBlockList.toList())
+    }
+
+    fun deleteBlock(block:ContentBlock<*>){
+        if(contentBlockList.size <= 1){
+            return
+        }
+
+        contentBlockList.remove(block)
         _contentBlocksSource.onNext(contentBlockList.toList())
     }
 }
