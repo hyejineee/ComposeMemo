@@ -13,7 +13,6 @@ import com.example.composememoapp.domain.DeleteMemoUseCase
 import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
 import com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
-import com.example.composememoapp.presentation.ui.component.blocks.TextBlock
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
@@ -110,11 +109,9 @@ class MemoViewModel @Inject constructor(
                                 ) else it.content
                     }
                     it.convertToContentBlockEntity()
-
                 }.mapIndexed { index, contentBlockEntity ->
                     contentBlockEntity.seq = index + 1L
                     contentBlockEntity
-
                 }.toList()
 
             val memoEntity = MemoEntity(

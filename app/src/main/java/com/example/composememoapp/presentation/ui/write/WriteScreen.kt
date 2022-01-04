@@ -1,42 +1,30 @@
 package com.example.composememoapp.presentation.ui.write
 
-import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import com.example.composememoapp.data.MemoModel
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
-import com.example.composememoapp.presentation.ui.component.WriteScreenBottomBar
 import com.example.composememoapp.presentation.ui.component.WriteScreenTopAppBar
 import com.example.composememoapp.presentation.ui.component.blocks.ContentBlock
 import com.example.composememoapp.presentation.ui.component.blocks.ContentType
@@ -93,22 +81,18 @@ fun WriteScreen(
         handleBackButtonClick()
     }
 
-
-
     val handleAddTag: (String) -> Unit = { s: String ->
         if (s !in tagState.tags) {
             tagState.tags = tagState.tags.plus(s)
         }
     }
 
-    Log.d("Write", "content : ${contentsState}")
-
+    Log.d("Write", "content : $contentsState")
 
     val handleClickFavoriteButton = {
         favoriteSate.value = !favoriteSate.value
         memoEntity?.isBookMarked = favoriteSate.value
     }
-
 
     Box(modifier = Modifier.fillMaxSize()) {
         WriteScreenContent(
@@ -125,7 +109,6 @@ fun WriteScreen(
             handleAddTag = handleAddTag,
         )
     }
-
 }
 
 @ExperimentalAnimationApi
@@ -186,7 +169,6 @@ fun WriteScreenContent(
             )
         }
     }
-
 }
 
 @ExperimentalAnimationApi
@@ -202,8 +184,8 @@ fun DetailAndWriteScreenPreview() {
                     type = ContentType.Text,
                     seq = it.toLong(),
                     content = "this is text block content $it" +
-                            " this is text block content $it" +
-                            " this is text block content $it"
+                        " this is text block content $it" +
+                        " this is text block content $it"
                 )
             }
         )

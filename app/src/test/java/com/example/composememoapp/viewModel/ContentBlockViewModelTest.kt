@@ -1,33 +1,16 @@
 package com.example.composememoapp.viewModel
 
-import android.content.Context
 import android.net.Uri
-import androidx.compose.foundation.Image
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
-import com.example.composememoapp.data.database.entity.MemoEntity
-import com.example.composememoapp.data.repository.MemoAppRepository
-import com.example.composememoapp.domain.DeleteMemoUseCase
-import com.example.composememoapp.domain.GetAllMemoUseCase
-import com.example.composememoapp.domain.SaveMemoUseCase
 import com.example.composememoapp.presentation.ui.component.CheckBoxBlock
 import com.example.composememoapp.presentation.ui.component.CheckBoxModel
 import com.example.composememoapp.presentation.ui.component.blocks.ContentType
 import com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
 import com.example.composememoapp.presentation.ui.component.blocks.TextBlock
 import com.example.composememoapp.presentation.viewModel.ContentBlockViewModel
-import com.example.composememoapp.presentation.viewModel.MemoState
-import com.example.composememoapp.presentation.viewModel.MemoViewModel
-import com.google.common.truth.Truth.assertThat
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.kotlin.toFlowable
-import io.reactivex.rxjava3.schedulers.Schedulers
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
-import org.mockito.kotlin.any
-import org.mockito.kotlin.given
-import java.util.concurrent.TimeUnit
 import org.mockito.kotlin.mock
 
 class ContentBlockViewModelTest {
@@ -113,10 +96,9 @@ class ContentBlockViewModelTest {
         )
     }
 
-
     @Test
     @DisplayName("체크박스 블록을 리스트의 중간에 추가한다.")
-    fun insertCheckBoxBlockBetweenTest(){
+    fun insertCheckBoxBlockBetweenTest() {
         val contentBlockViewModel = ContentBlockViewModel(emptyList())
         contentBlockViewModel.insertTextBlock()
 
@@ -133,7 +115,7 @@ class ContentBlockViewModelTest {
 
     @Test
     @DisplayName("이미 블록을 리스트의 중간에 추가한다.")
-    fun insertImageBlockBetweenTest(){
+    fun insertImageBlockBetweenTest() {
         val uri = Mockito.mock(Uri::class.java)
 
         val contentBlockViewModel = ContentBlockViewModel(emptyList())
@@ -149,5 +131,4 @@ class ContentBlockViewModelTest {
             )
         )
     }
-
 }

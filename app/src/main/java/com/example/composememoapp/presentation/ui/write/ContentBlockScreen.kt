@@ -27,8 +27,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
@@ -38,7 +36,6 @@ import com.example.composememoapp.presentation.ui.component.blocks.ContentBlock
 import com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
 import com.example.composememoapp.presentation.ui.component.blocks.TextBlock
 import com.example.composememoapp.presentation.viewModel.ContentBlockViewModel
-
 
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
@@ -94,8 +91,6 @@ fun ContentBlockScreen(
             )
         }
     }
-
-
 }
 
 @ExperimentalAnimationApi
@@ -127,11 +122,13 @@ fun ContentBlocks(
                 Modifier.focusRequester(focusRequester = focusRequester)
             } else {
                 Modifier
-            }.then(Modifier.onFocusEvent {
-                if (it.isFocused) {
-                    handleCursorPosition(index)
+            }.then(
+                Modifier.onFocusEvent {
+                    if (it.isFocused) {
+                        handleCursorPosition(index)
+                    }
                 }
-            })
+            )
 
             SideEffect {
                 focusRequester.requestFocus()
@@ -152,12 +149,13 @@ fun ContentBlocks(
                 }
                 is ImageBlock -> {
 
-                    content.drawEditableContent(modifier = focusRequesterModifier
-                        .padding(2.dp)
-                        .focusable(true)
-                        .clickable {
-                            handleCursorPosition(index)
-                        }
+                    content.drawEditableContent(
+                        modifier = focusRequesterModifier
+                            .padding(2.dp)
+                            .focusable(true)
+                            .clickable {
+                                handleCursorPosition(index)
+                            }
                     )
                 }
 
@@ -185,6 +183,5 @@ fun ContentBlocksPreviwe() {
             focusRequester = FocusRequester(),
             keyboardController = LocalSoftwareKeyboardController.current
         )
-
     }
 }

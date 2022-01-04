@@ -5,16 +5,12 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasImeAction
-import androidx.compose.ui.test.hasScrollAction
 import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import androidx.compose.ui.test.printToLog
 import androidx.compose.ui.text.input.ImeAction
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
@@ -106,7 +102,7 @@ class WriteScreenTest {
                     memoViewModel = memoViewModel,
                     tagViewModel = tagViewModel,
                     handleBackButtonClick = {},
-                    contentBlockViewModel =  contentBlockViewModel
+                    contentBlockViewModel = contentBlockViewModel
                 )
             }
         }

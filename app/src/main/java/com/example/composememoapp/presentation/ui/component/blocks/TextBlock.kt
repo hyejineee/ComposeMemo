@@ -1,7 +1,6 @@
 package com.example.composememoapp.presentation.ui.component.blocks
 
 import android.os.Parcelable
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
@@ -52,7 +51,7 @@ data class TextBlock(
                 modifier = modifier
                     .fillMaxWidth(),
                 singleLine = true,
-                keyBoardActions = KeyboardActions( onNext = { handleAddBlock?.invoke() }),
+                keyBoardActions = KeyboardActions(onNext = { handleAddBlock?.invoke() }),
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
             )
         }

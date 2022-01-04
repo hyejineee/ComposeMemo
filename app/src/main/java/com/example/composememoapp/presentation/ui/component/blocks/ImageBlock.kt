@@ -25,7 +25,7 @@ import kotlinx.parcelize.IgnoredOnParcel
 
 @kotlinx.parcelize.Parcelize
 data class ImageBlock(
-    override var seq: Long =0,
+    override var seq: Long = 0,
     override var content: Uri?,
 ) : ContentBlock<Uri?>, Parcelable {
 
