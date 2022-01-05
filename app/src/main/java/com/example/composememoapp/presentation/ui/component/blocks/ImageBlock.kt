@@ -5,7 +5,9 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Parcelable
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
@@ -35,19 +37,15 @@ data class ImageBlock(
     @Composable
     override fun drawOnlyReadContent(modifier: Modifier) {
         getBitmap(LocalContext.current)
-        Box(modifier = modifier) {
+        Box(modifier = modifier.fillMaxSize()) {
             imageState.value?.let { btm ->
                 Image(
                     bitmap = btm.asImageBitmap(),
                     contentDescription = null,
                     modifier = Modifier
-                        .align(Alignment.Center)
-                        .fillMaxSize(),
-                    contentScale = ContentScale.FillBounds,
-                    colorFilter = ColorFilter.tint(
-                        Color(0x70000000),
-                        BlendMode.SrcOver
-                    )
+                        .align(Alignment.TopCenter)
+                        .aspectRatio(1f),
+                    contentScale = ContentScale.Crop,
                 )
             }
         }

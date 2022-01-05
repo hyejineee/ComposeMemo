@@ -1,6 +1,7 @@
 package com.example.composememoapp.presentation.ui.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -64,36 +66,40 @@ fun MemoListItem(
         modifier = modifier
             .heightIn(50.dp, 250.dp)
             .padding(4.dp),
-        color = if (imageBlock != null) MaterialTheme.colors.primary else MaterialTheme.colors.surface
+        contentColor = MaterialTheme.colors.onSurface
     ) {
 
-        imageBlock?.let {
-            it.drawOnlyReadContent(modifier = Modifier)
-        }
-
         Box() {
-            Column(
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(15.dp)
-            ) {
-                memo.contents
-                    .map { it.convertToContentBlockModel() }
-                    .take(5)
-                    .forEachIndexed { i: Int, block: ContentBlock<*> ->
-                        when (block) {
-                            is TextBlock -> block.drawOnlyReadContent(
-                                modifier = if (i == 0) Modifier.padding(
-                                    end = 30.dp
-                                ) else Modifier
-                            )
-                            is CheckBoxBlock -> block.drawOnlyReadContent(
-                                modifier = if (i == 0) Modifier.padding(
-                                    end = 30.dp
-                                ) else Modifier
-                            )
-                        }
+            Column(modifier = Modifier.align(Alignment.CenterStart)) {
+                Box() {
+                    imageBlock?.let {
+                        it.drawOnlyReadContent(modifier = Modifier)
                     }
+                }
+
+                Column(
+                    modifier = Modifier
+                        .padding(15.dp)
+                ) {
+                    memo.contents
+                        .map { it.convertToContentBlockModel() }
+                        .take(5)
+                        .forEachIndexed { i: Int, block: ContentBlock<*> ->
+                            when (block) {
+                                is TextBlock -> block.drawOnlyReadContent(
+                                    modifier = if (i == 0) Modifier.padding(
+                                        end = 30.dp
+                                    ) else Modifier
+                                )
+                                is CheckBoxBlock -> block.drawOnlyReadContent(
+                                    modifier = if (i == 0) Modifier.padding(
+                                        end = 30.dp
+                                    ) else Modifier
+                                )
+                            }
+                        }
+                }
+
             }
 
             val iconVector = if (memo.isBookMarked) {
@@ -108,7 +114,6 @@ fun MemoListItem(
                 modifier = Modifier
                     .padding(5.dp)
                     .align(Alignment.TopEnd),
-                tint = if (imageBlock != null) Color.White else MaterialTheme.colors.primary
             )
         }
     }
