@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.util.BitmapProvider
 import kotlinx.parcelize.IgnoredOnParcel
@@ -37,7 +39,7 @@ data class ImageBlock(
     @Composable
     override fun drawOnlyReadContent(modifier: Modifier) {
         getBitmap(LocalContext.current)
-        Box(modifier = modifier.fillMaxSize()) {
+        Box(modifier = modifier) {
             imageState.value?.let { btm ->
                 Image(
                     bitmap = btm.asImageBitmap(),

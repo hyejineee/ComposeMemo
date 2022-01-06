@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -64,17 +65,18 @@ fun MemoListItem(
         elevation = 6.dp,
         shape = RoundedCornerShape(10.dp),
         modifier = modifier
-            .heightIn(50.dp, 250.dp)
+            .heightIn(50.dp, 500.dp)
             .padding(4.dp),
         contentColor = MaterialTheme.colors.onSurface
     ) {
 
         Box() {
             Column(modifier = Modifier.align(Alignment.CenterStart)) {
-                Box() {
-                    imageBlock?.let {
-                        it.drawOnlyReadContent(modifier = Modifier)
-                    }
+
+                imageBlock?.let {
+                    it.drawOnlyReadContent(
+                        modifier = Modifier
+                    )
                 }
 
                 Column(
@@ -114,6 +116,7 @@ fun MemoListItem(
                 modifier = Modifier
                     .padding(5.dp)
                     .align(Alignment.TopEnd),
+                tint = if(imageBlock != null) Color.White else Color.Black
             )
         }
     }
