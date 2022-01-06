@@ -18,6 +18,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -30,6 +31,8 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,6 +43,7 @@ import com.example.composememoapp.presentation.ui.component.blocks.ContentBlock
 import com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
 import com.example.composememoapp.presentation.ui.component.blocks.TextBlock
 import com.example.composememoapp.presentation.viewModel.ContentBlockViewModel
+import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
@@ -120,6 +124,8 @@ fun ContentBlocks(
 ) {
 
     val scrollState = rememberScrollState()
+    var scrollToPosition by remember { mutableStateOf(0f) }
+    val scrollScope = rememberCoroutineScope()
 
     Log.d("ContentBlocks", "focusedIndex = $focusedIndex")
 
@@ -139,11 +145,18 @@ fun ContentBlocks(
             } else {
                 Modifier
             }.then(
-                Modifier.onFocusEvent {
-                    if (it.isFocused) {
-                        handleCursorPosition(index)
+                Modifier
+                    .onGloballyPositioned {
+                        scrollToPosition = scrollState.value + it.positionInRoot().y
                     }
-                }
+                    .onFocusEvent {
+                        if (it.isFocused) {
+                            handleCursorPosition(index)
+                            scrollScope.launch {
+                                scrollState.scrollTo(scrollToPosition.toInt())
+                            }
+                        }
+                    }
             )
 
             SideEffect {

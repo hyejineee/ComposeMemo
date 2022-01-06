@@ -160,10 +160,12 @@ fun WriteScreenContent(
                 handleClickAddTag = handleAddTag,
             )
 
-            ContentBlockScreen(
-                contentBlockViewModel = contentBlockViewModel,
-                contents = contents,
-            )
+            Box(modifier = Modifier.weight(1f)) {
+                ContentBlockScreen(
+                    contentBlockViewModel = contentBlockViewModel,
+                    contents = contents,
+                )
+            }
         }
     }
 }

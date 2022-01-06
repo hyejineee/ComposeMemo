@@ -62,38 +62,42 @@ fun MemoListItem(
         elevation = 6.dp,
         shape = RoundedCornerShape(10.dp),
         modifier = modifier
-            .heightIn(50.dp, 250.dp)
+            .heightIn(50.dp, 500.dp)
             .padding(4.dp),
-        color = if (imageBlock != null) MaterialTheme.colors.primary else MaterialTheme.colors.surface
+        contentColor = MaterialTheme.colors.onSurface
     ) {
 
-        imageBlock?.let {
-            it.drawOnlyReadContent(modifier = Modifier)
-        }
-
         Box() {
-            Column(
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(15.dp)
-            ) {
-                memo.contents
-                    .map { it.convertToContentBlockModel() }
-                    .take(5)
-                    .forEachIndexed { i: Int, block: ContentBlock<*> ->
-                        when (block) {
-                            is TextBlock -> block.drawOnlyReadContent(
-                                modifier = if (i == 0) Modifier.padding(
-                                    end = 30.dp
-                                ) else Modifier
-                            )
-                            is CheckBoxBlock -> block.drawOnlyReadContent(
-                                modifier = if (i == 0) Modifier.padding(
-                                    end = 30.dp
-                                ) else Modifier
-                            )
+            Column(modifier = Modifier.align(Alignment.CenterStart)) {
+
+                imageBlock?.let {
+                    it.drawOnlyReadContent(
+                        modifier = Modifier
+                    )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .padding(15.dp)
+                ) {
+                    memo.contents
+                        .map { it.convertToContentBlockModel() }
+                        .take(5)
+                        .forEachIndexed { i: Int, block: ContentBlock<*> ->
+                            when (block) {
+                                is TextBlock -> block.drawOnlyReadContent(
+                                    modifier = if (i == 0) Modifier.padding(
+                                        end = 30.dp
+                                    ) else Modifier
+                                )
+                                is CheckBoxBlock -> block.drawOnlyReadContent(
+                                    modifier = if (i == 0) Modifier.padding(
+                                        end = 30.dp
+                                    ) else Modifier
+                                )
+                            }
                         }
-                    }
+                }
             }
 
             val iconVector = if (memo.isBookMarked) {
@@ -108,7 +112,7 @@ fun MemoListItem(
                 modifier = Modifier
                     .padding(5.dp)
                     .align(Alignment.TopEnd),
-                tint = if (imageBlock != null) Color.White else MaterialTheme.colors.primary
+                tint = if (imageBlock != null) Color.White else Color.Black
             )
         }
     }
