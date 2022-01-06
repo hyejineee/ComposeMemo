@@ -160,10 +160,13 @@ fun WriteScreenContent(
                 handleClickAddTag = handleAddTag,
             )
 
-            ContentBlockScreen(
-                contentBlockViewModel = contentBlockViewModel,
-                contents = contents,
-            )
+            Box(modifier = Modifier.weight(1f)) {
+                ContentBlockScreen(
+                    contentBlockViewModel = contentBlockViewModel,
+                    contents = contents,
+                )
+            }
+
         }
     }
 }
@@ -181,8 +184,8 @@ fun DetailAndWriteScreenPreview() {
                     type = ContentType.Text,
                     seq = it.toLong(),
                     content = "this is text block content $it" +
-                        " this is text block content $it" +
-                        " this is text block content $it"
+                            " this is text block content $it" +
+                            " this is text block content $it"
                 )
             }
         )

@@ -48,6 +48,10 @@ data class ImageBlock(
                         .align(Alignment.TopCenter)
                         .aspectRatio(1f),
                     contentScale = ContentScale.Crop,
+                    colorFilter = ColorFilter.tint(
+                        Color(0x50000000),
+                        BlendMode.SrcOver
+                    )
                 )
             }
         }
