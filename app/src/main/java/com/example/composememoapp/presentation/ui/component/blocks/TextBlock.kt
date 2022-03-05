@@ -29,7 +29,7 @@ data class TextBlock(
         mutableStateOf(TextFieldValue(text = content, selection = TextRange(content.length)))
 
     @IgnoredOnParcel
-    var handleAddBlock: (() -> Unit)? = null
+    private var handleAddBlock: (() -> Unit)? = null
 
     @Composable
     override fun drawOnlyReadContent(modifier: androidx.compose.ui.Modifier) {
@@ -41,20 +41,20 @@ data class TextBlock(
     @Composable
     override fun drawEditableContent(modifier: androidx.compose.ui.Modifier) {
 
-        Box(modifier = Modifier.fillMaxWidth()) {
-            TextInput(
-                value = textInputState.value,
-                onValueChange = {
-                    textInputState.value = it
-                    content = it.text
-                },
-                modifier = modifier
-                    .fillMaxWidth(),
-                singleLine = true,
-                keyBoardActions = KeyboardActions(onNext = { handleAddBlock?.invoke() }),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
-            )
-        }
+
+        TextInput(
+            value = textInputState.value,
+            onValueChange = {
+                textInputState.value = it
+                content = it.text
+            },
+            modifier = modifier
+                .fillMaxWidth(),
+            singleLine = true,
+            keyBoardActions = KeyboardActions(onNext = { handleAddBlock?.invoke() }),
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
+        )
+
     }
 
     @Composable

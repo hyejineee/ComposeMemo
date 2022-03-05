@@ -2,10 +2,13 @@ package com.example.composememoapp.presentation.ui.component
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.MaterialTheme
@@ -16,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,6 +52,9 @@ data class CheckBoxBlock(
             selection = TextRange(content.text.length)
         )
     )
+
+    @IgnoredOnParcel
+    private var handleAddBlock: (() -> Unit)? = null
 
     @Composable
     override fun drawOnlyReadContent(modifier: androidx.compose.ui.Modifier) {
@@ -89,9 +96,17 @@ data class CheckBoxBlock(
                 },
                 modifier = modifier
                     .fillMaxWidth(),
-                singleLine = true
+                singleLine = true,
+                keyBoardActions = KeyboardActions(onNext = { handleAddBlock?.invoke() }),
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
             )
         }
+    }
+
+    @Composable
+    fun drawEditableContent(modifier: Modifier, handleAddDefaultBlock: () -> Unit) {
+        handleAddBlock = handleAddDefaultBlock
+        drawEditableContent(modifier = modifier)
     }
 
     override fun convertToContentBlockEntity() = ContentBlockEntity(

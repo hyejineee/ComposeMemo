@@ -11,7 +11,6 @@ import com.example.composememoapp.presentation.viewModel.ContentBlockViewModel
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
-import org.mockito.kotlin.mock
 
 class ContentBlockViewModelTest {
 
@@ -53,7 +52,7 @@ class ContentBlockViewModelTest {
     fun insertCheckBoxBlockTest() {
         val contentBlockViewModel = ContentBlockViewModel(emptyList())
 
-        contentBlockViewModel.insertCheckBoxBlock()
+        contentBlockViewModel.changeToCheckBoxBlock()
 
         contentBlockViewModel.contentBlocks.test().awaitCount(3).assertValue(
             listOf(
@@ -69,7 +68,7 @@ class ContentBlockViewModelTest {
         val uri = Mockito.mock(Uri::class.java)
 
         val contentBlockViewModel = ContentBlockViewModel(emptyList())
-        contentBlockViewModel.insertImageBlock(uri = uri)
+        contentBlockViewModel.changeToImageBlock(uri = uri)
 
         contentBlockViewModel.contentBlocks.test().awaitCount(3).assertValue(
             listOf(
@@ -102,7 +101,7 @@ class ContentBlockViewModelTest {
         val contentBlockViewModel = ContentBlockViewModel(emptyList())
         contentBlockViewModel.insertTextBlock()
 
-        contentBlockViewModel.insertCheckBoxBlock(1)
+        contentBlockViewModel.changeToCheckBoxBlock(1)
 
         contentBlockViewModel.contentBlocks.test().awaitCount(4).assertValue(
             listOf(
@@ -121,7 +120,7 @@ class ContentBlockViewModelTest {
         val contentBlockViewModel = ContentBlockViewModel(emptyList())
         contentBlockViewModel.insertTextBlock()
 
-        contentBlockViewModel.insertImageBlock(1, uri)
+        contentBlockViewModel.changeToImageBlock(1, uri)
 
         contentBlockViewModel.contentBlocks.test().awaitCount(4).assertValue(
             listOf(
@@ -136,7 +135,7 @@ class ContentBlockViewModelTest {
     @DisplayName("컨텐트 블록을 삭제한다.")
     fun deleteContentBlockTest() {
         val contentBlockViewModel = ContentBlockViewModel(emptyList())
-        contentBlockViewModel.insertCheckBoxBlock()
+        contentBlockViewModel.changeToCheckBoxBlock()
 
         val deletedBlock = contentBlockViewModel.contentBlocks.test().values().last().last()
 
