@@ -41,7 +41,6 @@ data class TextBlock(
     @Composable
     override fun drawEditableContent(modifier: androidx.compose.ui.Modifier) {
 
-
         TextInput(
             value = textInputState.value,
             onValueChange = {
@@ -54,7 +53,6 @@ data class TextBlock(
             keyBoardActions = KeyboardActions(onNext = { handleAddBlock?.invoke() }),
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
         )
-
     }
 
     @Composable

@@ -15,6 +15,6 @@ fun Dp.toPx() = with(LocalDensity.current) { toPx() }
 // https://stackoverflow.com/questions/67522145/text-composable-dimensionresource-not-working-as-fontsize-parameter
 @Composable
 @ReadOnlyComposable
-fun fontDimensionResource(@DimenRes id:Int) = dimensionResource(id = id).value.sp
+fun fontDimensionResource(@DimenRes id: Int) = dimensionResource(id = id).value.sp
 
 fun dpToPx(context: Context, dp: Int) = (dp * context.resources.displayMetrics.density).toInt()

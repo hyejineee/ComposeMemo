@@ -2,7 +2,6 @@ package com.example.composememoapp.presentation.ui.component
 
 import android.os.Parcel
 import android.os.Parcelable
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth

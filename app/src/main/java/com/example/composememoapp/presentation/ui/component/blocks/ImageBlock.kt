@@ -80,5 +80,4 @@ data class ImageBlock(
         seq = seq,
         content = content.toString()
     )
-
 }
