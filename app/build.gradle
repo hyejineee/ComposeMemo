@@ -161,6 +161,9 @@ dependencies {
     //compose-viewmodel
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0-beta01'
+
+    //landscapist
+    implementation "com.github.skydoves:landscapist-glide:1.4.7"
 }
 
 
