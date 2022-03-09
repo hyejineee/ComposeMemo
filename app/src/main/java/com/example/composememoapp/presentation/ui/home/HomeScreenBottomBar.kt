@@ -34,27 +34,20 @@ fun HomeScreenBottomBar(
 ) {
     Box(
         modifier =
-            modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .background(
-                    Brush.verticalGradient(
-                        listOf(Color(0x00000000), Color.White),
-                        startY = 0.dp.toPx(),
-                        endY = 100.dp.toPx()
-                    )
-                )
+        modifier
+            .fillMaxWidth()
+
     ) {
 
         val favoriteIconModel = if (isFavoriteFilter) {
             MiniFloatingButtonModel(
-                icon = ImageVector.vectorResource(id = R.drawable.ic_round_star_24),
+                icon = ImageVector.vectorResource(id = R.drawable.ic_fill_star),
                 description = "Favorite filter icon",
                 onClick = handleClickFavoriteFilterButton
             )
         } else {
             MiniFloatingButtonModel(
-                icon = ImageVector.vectorResource(id = R.drawable.ic_round_star_border_24),
+                icon = ImageVector.vectorResource(id = R.drawable.ic_line_star),
                 description = "all filter icon",
                 onClick = handleClickFavoriteFilterButton
             )
@@ -66,11 +59,9 @@ fun HomeScreenBottomBar(
                 .align(Alignment.BottomStart)
                 .padding(start = 20.dp, bottom = 16.dp)
                 .size(35.dp),
-            tint = MaterialTheme.colors.primary
         )
 
         FloatingActionButton(
-            backgroundColor = MaterialTheme.colors.primaryVariant,
             onClick = handleClickAddMemoButton,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
