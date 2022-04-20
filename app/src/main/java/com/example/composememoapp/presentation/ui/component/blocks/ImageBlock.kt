@@ -5,7 +5,9 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -62,6 +64,8 @@ data class ImageBlock(
                 imageModel = content,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
+                    .fillMaxWidth()
+                    .heightIn(50.dp, 500.dp)
                     .clip(RoundedCornerShape(16.dp)),
                 contentScale = ContentScale.Crop,
                 shimmerParams = ShimmerParams(

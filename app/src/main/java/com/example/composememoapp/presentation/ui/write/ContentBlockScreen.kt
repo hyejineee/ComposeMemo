@@ -1,6 +1,7 @@
 package com.example.composememoapp.presentation.ui.write
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
@@ -124,7 +125,6 @@ fun ContentBlocks(
                         modifier = focusedModifier
                             .padding(2.dp)
                             .onPreviewKeyEvent {
-
                                 if (it.key.nativeKeyCode == Key.Backspace.nativeKeyCode) {
                                     if (content.content.isBlank()) {
                                         handleDeleteBlock(content)

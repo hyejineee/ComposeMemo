@@ -99,17 +99,8 @@ class MemoViewModel @Inject constructor(
         Single.create<MemoEntity> { obervable ->
             val converted = memoModel.contents
                 .asSequence()
-                .map {
-                    when (it) {
-                        is ImageBlock ->
-                            it.content =
-                                if (memoModel.id == null || it.content?.scheme != "file") saveImage(
-                                    bitmap = it.imageState.value,
-                                    context = context
-                                ) else it.content
-                    }
-                    it.convertToContentBlockEntity()
-                }.mapIndexed { index, contentBlockEntity ->
+                .map { it.convertToContentBlockEntity() }
+                .mapIndexed { index, contentBlockEntity ->
                     contentBlockEntity.seq = index + 1L
                     contentBlockEntity
                 }.toList()
@@ -185,31 +176,4 @@ class MemoViewModel @Inject constructor(
         _stateSource.onNext(MemoState.Error(errorMsg ?: "에러가 발생했습니다."))
     }
 
-    private fun saveImage(bitmap: Bitmap?, context: Context): Uri {
-        val imageName = System.currentTimeMillis().toString() + ".jpeg"
-        val dirName = "images"
-
-        val createdImage = context.filesDir.let {
-            val dir = File(it.path, dirName)
-            if (dir.exists().not()) {
-                dir.mkdirs()
-            }
-
-            val file = File(dir, imageName)
-
-            try {
-                val out = FileOutputStream(file)
-                bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, out)
-                out.close()
-            } catch (e: FileNotFoundException) {
-                e.printStackTrace()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-
-            file
-        }
-
-        return Uri.fromFile(createdImage)
-    }
 }

@@ -107,7 +107,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$rootProject.composeVersion"
 
 
-    def coroutine_version = "1.5.2"
+    def coroutine_version = "1.6.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
