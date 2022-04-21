@@ -9,7 +9,6 @@ import androidx.compose.ui.input.key.NativeKeyEvent
 import androidx.compose.ui.input.key.nativeKeyCode
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.hasImeAction
-import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onLast
@@ -98,7 +97,6 @@ class ContentBlockScreenTest {
             .onAllNodes(hasImeAction(ImeAction.Next))
             .onLast()
             .performTextInput("h")
-
 
         composeTestRule
             .onNodeWithText("h")

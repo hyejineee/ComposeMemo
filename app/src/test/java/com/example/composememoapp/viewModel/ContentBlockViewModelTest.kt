@@ -1,7 +1,6 @@
 package com.example.composememoapp.viewModel
 
 import android.net.Uri
-import android.util.Log
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.presentation.ui.component.CheckBoxBlock
 import com.example.composememoapp.presentation.ui.component.CheckBoxModel
@@ -48,7 +47,6 @@ class ContentBlockViewModelTest {
             .assertValue(listOf(TextBlock(content = ""), TextBlock(content = "")))
     }
 
-
     @Test
     @DisplayName("이미지 블록을 추가한다.")
     fun insertImageBlockTest() {
@@ -66,7 +64,6 @@ class ContentBlockViewModelTest {
         )
     }
 
-
     @Test
     @DisplayName("텍스트 블록을 체크박스 블록으로 변환한다.")
     fun insertCheckBoxBlockBetweenTest() {
@@ -79,10 +76,9 @@ class ContentBlockViewModelTest {
 
                 CheckBoxBlock(content = CheckBoxModel(text = "", isChecked = false)),
 
-                )
+            )
         )
     }
-
 
     @Test
     @DisplayName("컨텐트 블록을 삭제한다.")

@@ -1,7 +1,6 @@
 package com.example.composememoapp.presentation.viewModel
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.presentation.ui.component.CheckBoxBlock
@@ -34,7 +33,7 @@ class ContentBlockViewModel(
     }
 
     fun insertTextBlock(s: String? = null) {
-        contentBlockList.add(TextBlock( content = s ?: ""))
+        contentBlockList.add(TextBlock(content = s ?: ""))
         focusedIndex = contentBlockList.size - 1
         _contentBlocksSource.onNext(contentBlockList.toList())
     }

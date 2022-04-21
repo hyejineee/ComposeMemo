@@ -52,11 +52,12 @@ data class TextBlock(
             modifier = modifier
                 .fillMaxWidth(),
             singleLine = true,
-            keyBoardActions = KeyboardActions(onNext = {
-                handleAddBlock?.invoke()
-                focusManager.moveFocus(FocusDirection.Down)
-
-            }),
+            keyBoardActions = KeyboardActions(
+                onNext = {
+                    handleAddBlock?.invoke()
+                    focusManager.moveFocus(FocusDirection.Down)
+                }
+            ),
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
         )
     }

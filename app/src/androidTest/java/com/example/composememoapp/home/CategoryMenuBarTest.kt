@@ -51,7 +51,6 @@ class CategoryMenuBarTest {
                     selected = TagEntity(tag = "ALL"),
                     prefix = prefix
                 )
-
             }
         }
     }
@@ -67,7 +66,6 @@ class CategoryMenuBarTest {
         )
 
         composeTestRule.onRoot(useUnmergedTree = true).printToLog("click")
-
 
         composeTestRule
             .onNodeWithText(categories.first().tag)

@@ -1,7 +1,6 @@
 package com.example.composememoapp.presentation.ui.write
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
