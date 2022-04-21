@@ -19,7 +19,7 @@ class ContentBlockViewModel(
 
     private val _contentBlocksSource = BehaviorSubject.create<List<ContentBlock<*>>>()
     private var contentBlockList: MutableList<ContentBlock<*>> = mutableListOf()
-    var focusedIndex: Int = 0
+    private var focusedIndex: Int = 0
 
     val contentBlocks: Observable<List<ContentBlock<*>>> = _contentBlocksSource
 
@@ -34,8 +34,7 @@ class ContentBlockViewModel(
     }
 
     fun insertTextBlock(s: String? = null) {
-        Log.d("ContentBlockViewModel", "insertTextBlock is called")
-        contentBlockList.add(TextBlock(seq = contentBlockList.size.toLong(), content = s ?: ""))
+        contentBlockList.add(TextBlock( content = s ?: ""))
         focusedIndex = contentBlockList.size - 1
         _contentBlocksSource.onNext(contentBlockList.toList())
     }
@@ -49,20 +48,16 @@ class ContentBlockViewModel(
 
         val target = contentBlockList.get(index = focusedIndex).convertToContentBlockEntity()
 
-        if (target.type == ContentType.CheckBox) return
+        if (target.type != ContentType.Text) return
 
-        if (target.type == ContentType.Text) {
-            contentBlockList[focusedIndex] =
-                CheckBoxBlock(content = CheckBoxModel(text = target.content, false))
-        }
+        contentBlockList[focusedIndex] =
+            CheckBoxBlock(content = CheckBoxModel(text = target.content, false))
 
         _contentBlocksSource.onNext(contentBlockList.toList())
     }
 
     fun deleteBlock(block: ContentBlock<*>) {
-        if (contentBlockList.size <= 1) {
-            return
-        }
+        if (contentBlockList.size <= 1) return
 
         contentBlockList.remove(block)
         _contentBlocksSource.onNext(contentBlockList.toList())

@@ -1,6 +1,7 @@
 package com.example.composememoapp.viewModel
 
 import android.net.Uri
+import android.util.Log
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.presentation.ui.component.CheckBoxBlock
 import com.example.composememoapp.presentation.ui.component.CheckBoxModel
@@ -47,20 +48,6 @@ class ContentBlockViewModelTest {
             .assertValue(listOf(TextBlock(content = ""), TextBlock(content = "")))
     }
 
-    @Test
-    @DisplayName("체크박스 블록을 추가한다.")
-    fun insertCheckBoxBlockTest() {
-        val contentBlockViewModel = ContentBlockViewModel(emptyList())
-
-        contentBlockViewModel.changeToCheckBoxBlock()
-
-        contentBlockViewModel.contentBlocks.test().awaitCount(3).assertValue(
-            listOf(
-                TextBlock(content = ""),
-                CheckBoxBlock(content = CheckBoxModel(text = "", isChecked = false))
-            )
-        )
-    }
 
     @Test
     @DisplayName("이미지 블록을 추가한다.")
@@ -73,68 +60,35 @@ class ContentBlockViewModelTest {
         contentBlockViewModel.contentBlocks.test().awaitCount(3).assertValue(
             listOf(
                 TextBlock(content = ""),
-                ImageBlock(content = uri)
-            )
-        )
-    }
-
-    @Test
-    @DisplayName("텍스트 블록을 리스트의 중간에 추가한다.")
-    fun insertTextBlockBetweenTest() {
-        val contentBlockViewModel = ContentBlockViewModel(emptyList())
-        contentBlockViewModel.insertTextBlock()
-
-        contentBlockViewModel.insertTextBlock(1)
-
-        contentBlockViewModel.contentBlocks.test().awaitCount(4).assertValue(
-            listOf(
-                TextBlock(content = ""),
-                TextBlock(content = ""),
-                TextBlock(content = ""),
-            )
-        )
-    }
-
-    @Test
-    @DisplayName("체크박스 블록을 리스트의 중간에 추가한다.")
-    fun insertCheckBoxBlockBetweenTest() {
-        val contentBlockViewModel = ContentBlockViewModel(emptyList())
-        contentBlockViewModel.insertTextBlock()
-
-        contentBlockViewModel.changeToCheckBoxBlock(1)
-
-        contentBlockViewModel.contentBlocks.test().awaitCount(4).assertValue(
-            listOf(
-                TextBlock(content = ""),
-                CheckBoxBlock(content = CheckBoxModel(text = "", isChecked = false)),
-                TextBlock(content = ""),
-            )
-        )
-    }
-
-    @Test
-    @DisplayName("이미지 블록을 리스트의 중간에 추가한다.")
-    fun insertImageBlockBetweenTest() {
-        val uri = Mockito.mock(Uri::class.java)
-
-        val contentBlockViewModel = ContentBlockViewModel(emptyList())
-        contentBlockViewModel.insertTextBlock()
-
-        contentBlockViewModel.changeToImageBlock(1, uri)
-
-        contentBlockViewModel.contentBlocks.test().awaitCount(4).assertValue(
-            listOf(
-                TextBlock(content = ""),
                 ImageBlock(content = uri),
                 TextBlock(content = ""),
             )
         )
     }
 
+
+    @Test
+    @DisplayName("텍스트 블록을 체크박스 블록으로 변환한다.")
+    fun insertCheckBoxBlockBetweenTest() {
+        val contentBlockViewModel = ContentBlockViewModel(emptyList())
+
+        contentBlockViewModel.changeToCheckBoxBlock()
+
+        contentBlockViewModel.contentBlocks.test().awaitCount(4).assertValue(
+            listOf(
+
+                CheckBoxBlock(content = CheckBoxModel(text = "", isChecked = false)),
+
+                )
+        )
+    }
+
+
     @Test
     @DisplayName("컨텐트 블록을 삭제한다.")
     fun deleteContentBlockTest() {
         val contentBlockViewModel = ContentBlockViewModel(emptyList())
+        contentBlockViewModel.insertTextBlock()
         contentBlockViewModel.changeToCheckBoxBlock()
 
         val deletedBlock = contentBlockViewModel.contentBlocks.test().values().last().last()
