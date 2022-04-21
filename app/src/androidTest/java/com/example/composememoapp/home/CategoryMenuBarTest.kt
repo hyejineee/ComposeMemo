@@ -9,7 +9,9 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.isSelected
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.printToLog
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.composememoapp.data.database.entity.TagEntity
 import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
@@ -42,29 +44,20 @@ class CategoryMenuBarTest {
             ComposeMemoAppTheme {
                 val listState = rememberLazyListState()
 
-                selected?.let {
-                    CategoryMenuBar(
-                        categories = categories,
-                        onClick = onClick,
-                        selected = it,
-                        listState = listState,
-                        prefix = prefix
-                    )
-                } ?: kotlin.run {
-                    CategoryMenuBar(
-                        categories = categories,
-                        onClick = onClick,
-                        listState = listState,
-                        selected = TagEntity(tag = "ALL"),
-                        prefix = prefix
-                    )
-                }
+                CategoryMenuBar(
+                    categories = categories,
+                    onClick = onClick,
+                    listState = listState,
+                    selected = TagEntity(tag = "ALL"),
+                    prefix = prefix
+                )
             }
         }
     }
 
     @Test
     fun 카테고리를_클릭하면_onClick을_호출한다() {
+
         composeTestRule.mainClock.autoAdvance = false
 
         setContentWithCategoryMenuBar(
@@ -72,11 +65,13 @@ class CategoryMenuBarTest {
             onClick = onClickMock,
         )
 
-        composeTestRule.mainClock.advanceTimeBy(50L)
+        composeTestRule.onRoot(useUnmergedTree = true).printToLog("click")
 
         composeTestRule
             .onNodeWithText(categories.first().tag)
             .performClick()
+
+        composeTestRule.mainClock.advanceTimeBy(100L)
 
         verify(onClickMock).invoke(categories.first())
     }

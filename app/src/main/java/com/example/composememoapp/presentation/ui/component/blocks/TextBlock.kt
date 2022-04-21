@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -29,7 +31,7 @@ data class TextBlock(
         mutableStateOf(TextFieldValue(text = content, selection = TextRange(content.length)))
 
     @IgnoredOnParcel
-    var handleAddBlock: (() -> Unit)? = null
+    private var handleAddBlock: (() -> Unit)? = null
 
     @Composable
     override fun drawOnlyReadContent(modifier: androidx.compose.ui.Modifier) {
@@ -40,21 +42,24 @@ data class TextBlock(
 
     @Composable
     override fun drawEditableContent(modifier: androidx.compose.ui.Modifier) {
-
-        Box(modifier = Modifier.fillMaxWidth()) {
-            TextInput(
-                value = textInputState.value,
-                onValueChange = {
-                    textInputState.value = it
-                    content = it.text
-                },
-                modifier = modifier
-                    .fillMaxWidth(),
-                singleLine = true,
-                keyBoardActions = KeyboardActions(onNext = { handleAddBlock?.invoke() }),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
-            )
-        }
+        val focusManager = LocalFocusManager.current
+        TextInput(
+            value = textInputState.value,
+            onValueChange = {
+                textInputState.value = it
+                content = it.text
+            },
+            modifier = modifier
+                .fillMaxWidth(),
+            singleLine = true,
+            keyBoardActions = KeyboardActions(
+                onNext = {
+                    handleAddBlock?.invoke()
+                    focusManager.moveFocus(FocusDirection.Down)
+                }
+            ),
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
+        )
     }
 
     @Composable

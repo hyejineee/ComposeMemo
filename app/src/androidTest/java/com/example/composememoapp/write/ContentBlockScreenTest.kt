@@ -82,19 +82,32 @@ class ContentBlockScreenTest {
     }
 
     @Test
-    fun Content의_내용이_없을_때_백스페이스를_누르면_블록이_삭제된다() {
-        val contentBlockViewModel = ContentBlockViewModel(emptyList())
-        setContentWithContentBlockScreen(
-            contentBlockViewModel = contentBlockViewModel
-        )
+    fun 블록의_Content의_내용이_없을_때_백스페이스를_누르면_블록이_삭제된다() {
+        setContentWithContentBlockScreen()
 
         composeTestRule
             .onNode(hasImeAction(ImeAction.Next))
-            .performTextInput("1")
+            .performTextInput("hello")
 
         composeTestRule
-            .onNode(hasImeAction(ImeAction.Next))
+            .onNodeWithText("hello")
             .performImeAction()
+
+        composeTestRule
+            .onAllNodes(hasImeAction(ImeAction.Next))
+            .onLast()
+            .performTextInput("h")
+
+        composeTestRule
+            .onNodeWithText("h")
+            .performKeyPress(
+                KeyEvent(
+                    NativeKeyEvent(
+                        android.view.KeyEvent.ACTION_DOWN,
+                        Key.Backspace.nativeKeyCode
+                    )
+                )
+            )
 
         composeTestRule
             .onAllNodes(hasImeAction(ImeAction.Next))

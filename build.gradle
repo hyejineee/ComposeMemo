@@ -7,8 +7,8 @@ buildscript {
         navVersion ='2.3.5'
         hiltVersion = '2.40.3'
         viewModelKtxVersion ='2.4.0'
-        composeVersion = '1.0.5'
-        kotlinVersion = '1.5.31'
+        composeVersion = '1.1.1'
+        kotlinVersion = '1.6.10'
         ktlintVersion = '0.37.2'
         mockitoVersion = '4.1.0'
         mockitoKtVersion= '4.0.0'
@@ -23,7 +23,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:7.0.3"
+        classpath 'com.android.tools.build:gradle:7.1.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
         classpath "org.jacoco:org.jacoco.core:$jacocoVersion"

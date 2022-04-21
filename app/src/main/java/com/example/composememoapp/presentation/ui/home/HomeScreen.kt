@@ -1,12 +1,10 @@
 package com.example.composememoapp.presentation.ui.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
@@ -24,13 +22,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.composememoapp.R
 import com.example.composememoapp.data.database.entity.MemoEntity
 import com.example.composememoapp.data.database.entity.TagEntity
@@ -39,6 +35,7 @@ import com.example.composememoapp.presentation.ui.component.HomeScreenBottomBar
 import com.example.composememoapp.presentation.viewModel.MemoState
 import com.example.composememoapp.presentation.viewModel.MemoViewModel
 import com.example.composememoapp.presentation.viewModel.TagViewModel
+import com.example.composememoapp.util.fontDimensionResource
 import com.example.composememoapp.util.model.rememberTextInputState
 
 @Composable
@@ -112,21 +109,16 @@ fun HomeScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        listOf(Color.White, Color(0x000000000)),
-                    )
-                )
-                .padding(bottom = 50.dp)
+                .padding(dimensionResource(id = R.dimen.padding_default))
         ) {
             Text(
                 text = stringResource(id = R.string.homeTitle),
                 color = MaterialTheme.colors.primary,
                 fontWeight = FontWeight.ExtraBold,
-                fontSize = 55.sp,
+                fontSize = fontDimensionResource(id = R.dimen.textsize_extra_main_title),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(20.dp)
+                    .padding(dimensionResource(id = R.dimen.padding_default))
             )
 
             if (isLoading.not()) {
@@ -134,7 +126,7 @@ fun HomeScreenContent(
                     state = searchTextInputState,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 30.dp, vertical = 10.dp)
+
                 )
 
                 var selectedCategory by rememberSaveable { mutableStateOf(TagEntity(tag = "ALL")) }
@@ -160,7 +152,7 @@ fun HomeScreenContent(
             } else {
                 Box(modifier = Modifier.fillMaxSize()) {
                     CircularProgressIndicator(
-                        modifier = Modifier.size(100.dp)
+                        modifier = Modifier
                             .align(Alignment.Center)
                     )
                 }

@@ -1,9 +1,7 @@
 package com.example.composememoapp.presentation.ui.write
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,36 +12,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.nativeKeyCode
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.SoftwareKeyboardController
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import com.example.composememoapp.presentation.theme.ComposeMemoAppTheme
 import com.example.composememoapp.presentation.ui.component.CheckBoxBlock
 import com.example.composememoapp.presentation.ui.component.blocks.ContentBlock
 import com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
 import com.example.composememoapp.presentation.ui.component.blocks.TextBlock
 import com.example.composememoapp.presentation.viewModel.ContentBlockViewModel
-import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
@@ -52,49 +39,37 @@ fun ContentBlockScreen(
     contentBlockViewModel: ContentBlockViewModel,
     contents: List<ContentBlock<*>>,
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val focusRequester = remember { FocusRequester() }
-    var index by rememberSaveable { mutableStateOf<Int?>(null) }
 
-    val handleCursorPosition = { i: Int ->
-        index = if (i == 0) {
-            1
-        } else {
-            i
+    val handleAddImageBlock = { uri: Uri? ->
+        uri?.let {
+            contentBlockViewModel.changeToImageBlock(it)
         }
+        Unit
     }
 
-    val handleAddDefaultBlock: (Int?) -> Unit = { index: Int? ->
-        contentBlockViewModel.insertTextBlock(index = index)
+    val handleAddCheckBoxBlock = {
+        contentBlockViewModel.changeToCheckBoxBlock()
     }
 
-    val handleAddImageBlock = { i: Int? ->
-        { uri: Uri? ->
-            uri?.let {
-                contentBlockViewModel.insertImageBlock(i, it)
-            }
-            Unit
-        }
-    }
-
-    val handleAddCheckBoxBlock = { i: Int? ->
-        contentBlockViewModel.insertCheckBoxBlock(i)
+    val handleAddTextBlock = {
+        contentBlockViewModel.insertTextBlock()
     }
 
     val handleDeleteBlock = { block: ContentBlock<*> ->
         contentBlockViewModel.deleteBlock(block)
     }
 
+    val handleFocusedIndex = { index: Int ->
+        contentBlockViewModel.focusedBlock(index = index)
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
 
         ContentBlocks(
             contents = contents,
-            handleCursorPosition = handleCursorPosition,
-            handleAddDefaultBlock = handleAddDefaultBlock,
             handleDeleteBlock = handleDeleteBlock,
-            focusRequester = focusRequester,
-            keyboardController = keyboardController,
-            focusedIndex = index
+            handleFocusedIndex = handleFocusedIndex,
+            handleAddTextBlock = handleAddTextBlock
         )
 
         Row(
@@ -103,8 +78,8 @@ fun ContentBlockScreen(
                 .align(Alignment.BottomCenter)
         ) {
             WriteScreenBottomBar(
-                handleAddImage = handleAddImageBlock(index),
-                handleAddCheckBox = { handleAddCheckBoxBlock(index) }
+                handleAddImage = handleAddImageBlock,
+                handleAddCheckBox = handleAddCheckBoxBlock
             )
         }
     }
@@ -115,19 +90,12 @@ fun ContentBlockScreen(
 @Composable
 fun ContentBlocks(
     contents: List<ContentBlock<*>>,
-    focusedIndex: Int? = null,
-    handleCursorPosition: (Int) -> Unit,
-    handleAddDefaultBlock: (Int?) -> Unit,
     handleDeleteBlock: (ContentBlock<*>) -> Unit,
-    focusRequester: FocusRequester,
-    keyboardController: SoftwareKeyboardController?
+    handleFocusedIndex: (Int) -> Unit,
+    handleAddTextBlock: () -> Unit,
 ) {
 
     val scrollState = rememberScrollState()
-    var scrollToPosition by remember { mutableStateOf(0f) }
-    val scrollScope = rememberCoroutineScope()
-
-    Log.d("ContentBlocks", "focusedIndex = $focusedIndex")
 
     Column(
         modifier = Modifier
@@ -136,107 +104,70 @@ fun ContentBlocks(
             .verticalScroll(scrollState)
     ) {
 
+        val focusManager = LocalFocusManager.current
+        val addTextBlock: () -> Unit = {
+            handleAddTextBlock()
+            focusManager.moveFocus(FocusDirection.Down)
+        }
+
         for (i in contents.indices) {
 
-            val index = i + 1
-
-            val focusRequesterModifier = if (focusedIndex ?: 0 + 1 == index) {
-                Modifier.focusRequester(focusRequester = focusRequester)
-            } else {
-                Modifier
-            }.then(
-                Modifier
-                    .onGloballyPositioned {
-                        scrollToPosition = scrollState.value + it.positionInRoot().y
-                    }
-                    .onFocusEvent {
-                        if (it.isFocused) {
-                            handleCursorPosition(index)
-                            scrollScope.launch {
-                                scrollState.scrollTo(scrollToPosition.toInt())
-                            }
-                        }
-                    }
-            )
-
-            SideEffect {
-                focusRequester.requestFocus()
-                keyboardController?.show()
+            val focusedModifier = Modifier.onFocusChanged {
+                if (it.isFocused) {
+                    handleFocusedIndex(i)
+                }
             }
 
             when (val content = contents[i]) {
                 is TextBlock -> {
                     content.drawEditableContent(
-                        modifier = focusRequesterModifier
+                        modifier = focusedModifier
                             .padding(2.dp)
                             .onPreviewKeyEvent {
-                                if (it.key.keyCode == Key.Backspace.keyCode) {
+                                if (it.key.nativeKeyCode == Key.Backspace.nativeKeyCode) {
                                     if (content.content.isBlank()) {
-                                        handleCursorPosition(index - 1)
                                         handleDeleteBlock(content)
+                                        focusManager.moveFocus(FocusDirection.Up)
                                     }
                                 }
                                 false
                             },
-                        handleAddDefaultBlock = {
-                            handleCursorPosition(index + 1)
-                            handleAddDefaultBlock(index)
-                        }
+                        addTextBlock
                     )
                 }
                 is ImageBlock -> {
                     content.drawEditableContent(
-                        modifier = focusRequesterModifier
+                        modifier = focusedModifier
                             .padding(2.dp)
                             .focusable(true)
                             .onKeyEvent {
-                                if (it.key.keyCode == Key.Backspace.keyCode) {
-                                    if (focusedIndex == index) {
-                                        handleCursorPosition(index - 1)
-                                        handleDeleteBlock(content)
-                                    }
+                                if (it.key.nativeKeyCode == Key.Backspace.nativeKeyCode) {
+                                    handleDeleteBlock(content)
+                                    focusManager.moveFocus(FocusDirection.Up)
                                 }
                                 false
                             }
-                            .clickable {
-                                handleCursorPosition(index)
-                            }
+
                     )
                 }
 
                 is CheckBoxBlock -> {
                     content.drawEditableContent(
-                        modifier = focusRequesterModifier
-                            .onKeyEvent {
-                                if (it.key.keyCode == Key.Backspace.keyCode) {
-                                    if (content.content.text.isBlank()) {
-                                        handleCursorPosition(index - 1)
+                        modifier = focusedModifier
+                            .padding(2.dp)
+                            .onPreviewKeyEvent {
+                                if (it.key.nativeKeyCode == Key.Backspace.nativeKeyCode) {
+                                    if (content.textInputState.value.text.isBlank()) {
                                         handleDeleteBlock(content)
+                                        focusManager.moveFocus(FocusDirection.Up)
                                     }
                                 }
                                 false
-                            }
-                            .padding(2.dp)
+                            },
+                        addTextBlock
                     )
                 }
             }
         }
-    }
-}
-
-@ExperimentalAnimationApi
-@ExperimentalComposeUiApi
-@Preview
-@Composable
-fun ContentBlocksPreviwe() {
-    ComposeMemoAppTheme() {
-        ContentBlocks(
-            contents = emptyList(),
-            handleCursorPosition = {},
-            handleAddDefaultBlock = {},
-            handleDeleteBlock = {},
-            focusRequester = FocusRequester(),
-            keyboardController = LocalSoftwareKeyboardController.current
-        )
     }
 }

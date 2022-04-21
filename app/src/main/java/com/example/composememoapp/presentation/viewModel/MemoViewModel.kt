@@ -1,8 +1,6 @@
 package com.example.composememoapp.presentation.viewModel
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.composememoapp.data.MemoModel
@@ -12,7 +10,6 @@ import com.example.composememoapp.di.IOScheduler
 import com.example.composememoapp.domain.DeleteMemoUseCase
 import com.example.composememoapp.domain.GetAllMemoUseCase
 import com.example.composememoapp.domain.SaveMemoUseCase
-import com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
@@ -20,10 +17,6 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.functions.Function4
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -99,17 +92,8 @@ class MemoViewModel @Inject constructor(
         Single.create<MemoEntity> { obervable ->
             val converted = memoModel.contents
                 .asSequence()
-                .map {
-                    when (it) {
-                        is ImageBlock ->
-                            it.content =
-                                if (memoModel.id == null || it.content?.scheme != "file") saveImage(
-                                    bitmap = it.imageState.value,
-                                    context = context
-                                ) else it.content
-                    }
-                    it.convertToContentBlockEntity()
-                }.mapIndexed { index, contentBlockEntity ->
+                .map { it.convertToContentBlockEntity() }
+                .mapIndexed { index, contentBlockEntity ->
                     contentBlockEntity.seq = index + 1L
                     contentBlockEntity
                 }.toList()
@@ -183,33 +167,5 @@ class MemoViewModel @Inject constructor(
     private fun handleError(errorMsg: String?) {
         Log.d("MemoViewModel", "handleError : $errorMsg ")
         _stateSource.onNext(MemoState.Error(errorMsg ?: "에러가 발생했습니다."))
-    }
-
-    private fun saveImage(bitmap: Bitmap?, context: Context): Uri {
-        val imageName = System.currentTimeMillis().toString() + ".jpeg"
-        val dirName = "images"
-
-        val createdImage = context.filesDir.let {
-            val dir = File(it.path, dirName)
-            if (dir.exists().not()) {
-                dir.mkdirs()
-            }
-
-            val file = File(dir, imageName)
-
-            try {
-                val out = FileOutputStream(file)
-                bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, out)
-                out.close()
-            } catch (e: FileNotFoundException) {
-                e.printStackTrace()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-
-            file
-        }
-
-        return Uri.fromFile(createdImage)
     }
 }

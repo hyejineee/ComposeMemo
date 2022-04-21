@@ -49,7 +49,7 @@ fun ComposeMemoAppTheme(
 
     MaterialTheme(
         colors = colors,
-        typography = Typography,
+        typography = appFont,
         shapes = Shapes,
         content = content
     )

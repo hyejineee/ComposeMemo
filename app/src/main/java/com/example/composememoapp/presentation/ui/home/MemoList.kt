@@ -60,10 +60,10 @@ fun MemoListItem(
 ) {
     androidx.compose.material.Surface(
         elevation = 6.dp,
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(16.dp),
         modifier = modifier
             .heightIn(50.dp, 500.dp)
-            .padding(4.dp),
+            .padding(6.dp),
         contentColor = MaterialTheme.colors.onSurface
     ) {
 
@@ -72,7 +72,7 @@ fun MemoListItem(
 
                 imageBlock?.let {
                     it.drawOnlyReadContent(
-                        modifier = Modifier
+                        modifier = Modifier.padding(top = 10.dp)
                     )
                 }
 
@@ -112,7 +112,7 @@ fun MemoListItem(
                 modifier = Modifier
                     .padding(5.dp)
                     .align(Alignment.TopEnd),
-                tint = if (imageBlock != null) Color.White else Color.Black
+                tint = Color.Black
             )
         }
     }
