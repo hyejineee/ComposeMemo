@@ -1,6 +1,7 @@
 package com.example.composememoapp.presentation.viewModel
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.presentation.ui.component.CheckBoxBlock
@@ -38,13 +39,18 @@ class ContentBlockViewModel(
         _contentBlocksSource.onNext(contentBlockList.toList())
     }
 
+    fun insertBlock(block: ContentBlock<*>) {
+
+        contentBlockList.add(block)
+        _contentBlocksSource.onNext(contentBlockList.toList())
+    }
+
     fun changeToImageBlock(uri: Uri) {
         contentBlockList.add(focusedIndex + 1, ImageBlock(content = uri))
         insertTextBlock()
     }
 
     fun changeToCheckBoxBlock() {
-
         val target = contentBlockList.get(index = focusedIndex).convertToContentBlockEntity()
 
         if (target.type != ContentType.Text) return

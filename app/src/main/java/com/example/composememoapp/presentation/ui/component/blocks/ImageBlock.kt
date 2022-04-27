@@ -20,15 +20,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
+import com.example.composememoapp.presentation.viewModel.ContentBlockViewModel
 import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.parcelize.IgnoredOnParcel
 
 @kotlinx.parcelize.Parcelize
-data class ImageBlock(
-    override var seq: Long = 0,
-    override var content: Uri?,
-) : ContentBlock<Uri?>, Parcelable {
+class ImageBlock(
+    override val seq: Long = 0,
+    override val content: Uri?
+) : ContentBlock<Uri?>(), Parcelable {
 
     @IgnoredOnParcel
     var imageState: MutableState<Bitmap?> = mutableStateOf(null)
@@ -56,7 +57,7 @@ data class ImageBlock(
     }
 
     @Composable
-    override fun drawEditableContent(modifier: Modifier) {
+    override fun drawEditableContent(modifier: Modifier,viewModel: ContentBlockViewModel) {
 
         Box(modifier = modifier.fillMaxWidth()) {
             GlideImage(
@@ -83,4 +84,10 @@ data class ImageBlock(
         seq = seq,
         content = content.toString()
     )
+
+    override fun isEmpty(): Boolean = content == null || content.toString().isBlank()
+
+    override fun addNextBlock(viewModel: ContentBlockViewModel) {
+        viewModel.insertBlock(TextBlock(content = ""))
+    }
 }

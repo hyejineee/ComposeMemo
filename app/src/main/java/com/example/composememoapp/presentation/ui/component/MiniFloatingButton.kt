@@ -2,7 +2,10 @@ package com.example.composememoapp.presentation.ui.component
 
 import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -10,6 +13,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -50,7 +54,9 @@ fun MiniFloatingButtonContent(
         modifier.padding(5.dp)
     } else {
         modifier
-            .clickable(onClick = model.onClick)
+            .clickable(
+                onClick = model.onClick,
+            )
             .padding(5.dp)
     }
 

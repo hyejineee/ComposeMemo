@@ -1,6 +1,7 @@
 package com.example.composememoapp.presentation.ui.component.blocks
 
 import android.os.Parcelable
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
@@ -18,20 +19,18 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.sp
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.presentation.ui.component.TextInput
+import com.example.composememoapp.presentation.viewModel.ContentBlockViewModel
 import kotlinx.parcelize.IgnoredOnParcel
 
 @kotlinx.parcelize.Parcelize
 data class TextBlock(
     override var seq: Long = 0,
     override var content: String,
-) : ContentBlock<String>, Parcelable {
+) : ContentBlock<String>(), Parcelable {
 
     @IgnoredOnParcel
     var textInputState: MutableState<TextFieldValue> =
         mutableStateOf(TextFieldValue(text = content, selection = TextRange(content.length)))
-
-    @IgnoredOnParcel
-    private var handleAddBlock: (() -> Unit)? = null
 
     @Composable
     override fun drawOnlyReadContent(modifier: androidx.compose.ui.Modifier) {
@@ -41,7 +40,10 @@ data class TextBlock(
     }
 
     @Composable
-    override fun drawEditableContent(modifier: androidx.compose.ui.Modifier) {
+    override fun drawEditableContent(
+        modifier: androidx.compose.ui.Modifier,
+        viewModel: ContentBlockViewModel
+    ) {
         val focusManager = LocalFocusManager.current
         TextInput(
             value = textInputState.value,
@@ -54,7 +56,7 @@ data class TextBlock(
             singleLine = true,
             keyBoardActions = KeyboardActions(
                 onNext = {
-                    handleAddBlock?.invoke()
+                    addNextBlock(viewModel = viewModel)
                     focusManager.moveFocus(FocusDirection.Down)
                 }
             ),
@@ -62,15 +64,18 @@ data class TextBlock(
         )
     }
 
-    @Composable
-    fun drawEditableContent(modifier: Modifier, handleAddDefaultBlock: () -> Unit) {
-        handleAddBlock = handleAddDefaultBlock
-        drawEditableContent(modifier = modifier)
-    }
 
     override fun convertToContentBlockEntity() = ContentBlockEntity(
         type = ContentType.Text,
         seq = seq,
         content = textInputState.value.text
     )
+
+    override fun isEmpty(): Boolean {
+        Log.d("TextBlock", textInputState.value.text)
+        return textInputState.value.text.isBlank()
+    }
+    override fun addNextBlock(viewModel: ContentBlockViewModel) {
+        viewModel.insertBlock(TextBlock(content = ""))
+    }
 }

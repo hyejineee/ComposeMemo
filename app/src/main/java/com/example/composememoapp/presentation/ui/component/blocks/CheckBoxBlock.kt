@@ -2,6 +2,7 @@ package com.example.composememoapp.presentation.ui.component
 
 import android.os.Parcel
 import android.os.Parcelable
+import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,10 +26,12 @@ import androidx.compose.ui.unit.sp
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.presentation.ui.component.blocks.ContentBlock
 import com.example.composememoapp.presentation.ui.component.blocks.ContentType
+import com.example.composememoapp.presentation.viewModel.ContentBlockViewModel
 import com.google.gson.Gson
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parceler
 import kotlinx.parcelize.RawValue
+import javax.inject.Inject
 
 data class CheckBoxModel(
     var text: String,
@@ -36,10 +39,11 @@ data class CheckBoxModel(
 )
 
 @kotlinx.parcelize.Parcelize
-data class CheckBoxBlock(
-    override var seq: Long = 0,
-    override var content: @RawValue CheckBoxModel
-) : ContentBlock<CheckBoxModel>, Parcelable {
+class CheckBoxBlock(
+    override val seq: Long = 0,
+    override val content: @RawValue CheckBoxModel,
+) : ContentBlock<CheckBoxModel>(), Parcelable {
+
 
     @IgnoredOnParcel
     var checkState: MutableState<Boolean> = mutableStateOf(content.isChecked)
@@ -52,11 +56,10 @@ data class CheckBoxBlock(
         )
     )
 
-    @IgnoredOnParcel
-    private var handleAddBlock: (() -> Unit)? = null
-
     @Composable
-    override fun drawOnlyReadContent(modifier: androidx.compose.ui.Modifier) {
+    override fun drawOnlyReadContent(
+        modifier: androidx.compose.ui.Modifier,
+    ) {
         Row(modifier = modifier) {
             Checkbox(
                 checked = content.isChecked,
@@ -73,7 +76,10 @@ data class CheckBoxBlock(
     }
 
     @Composable
-    override fun drawEditableContent(modifier: androidx.compose.ui.Modifier) {
+    override fun drawEditableContent(
+        modifier: androidx.compose.ui.Modifier,
+        viewModel: ContentBlockViewModel
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier.fillMaxWidth()
@@ -96,16 +102,10 @@ data class CheckBoxBlock(
                 modifier = modifier
                     .fillMaxWidth(),
                 singleLine = true,
-                keyBoardActions = KeyboardActions(onNext = { handleAddBlock?.invoke() }),
+                keyBoardActions = KeyboardActions(onNext = { addNextBlock(viewModel) }),
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
             )
         }
-    }
-
-    @Composable
-    fun drawEditableContent(modifier: Modifier, handleAddDefaultBlock: () -> Unit) {
-        handleAddBlock = handleAddDefaultBlock
-        drawEditableContent(modifier = modifier)
     }
 
     override fun convertToContentBlockEntity() = ContentBlockEntity(
@@ -125,5 +125,12 @@ data class CheckBoxBlock(
             parcel.readLong(),
             CheckBoxModel(parcel.readString() ?: "", parcel.readByte() != 0.toByte())
         )
+    }
+
+    override fun isEmpty(): Boolean = textInputState.value.text.isBlank()
+
+    override fun addNextBlock(viewModel: ContentBlockViewModel) {
+
+        viewModel.insertBlock(CheckBoxBlock(content = CheckBoxModel("", false)))
     }
 }

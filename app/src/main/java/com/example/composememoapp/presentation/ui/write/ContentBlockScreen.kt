@@ -1,6 +1,8 @@
 package com.example.composememoapp.presentation.ui.write
 
 import android.net.Uri
+import android.util.Log
+import android.view.KeyEvent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
@@ -24,6 +26,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.nativeKeyCode
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.example.composememoapp.presentation.ui.component.CheckBoxBlock
@@ -69,7 +72,7 @@ fun ContentBlockScreen(
             contents = contents,
             handleDeleteBlock = handleDeleteBlock,
             handleFocusedIndex = handleFocusedIndex,
-            handleAddTextBlock = handleAddTextBlock
+            contentBlockViewModel = contentBlockViewModel,
         )
 
         Row(
@@ -92,7 +95,7 @@ fun ContentBlocks(
     contents: List<ContentBlock<*>>,
     handleDeleteBlock: (ContentBlock<*>) -> Unit,
     handleFocusedIndex: (Int) -> Unit,
-    handleAddTextBlock: () -> Unit,
+    contentBlockViewModel: ContentBlockViewModel
 ) {
 
     val scrollState = rememberScrollState()
@@ -105,69 +108,29 @@ fun ContentBlocks(
     ) {
 
         val focusManager = LocalFocusManager.current
-        val addTextBlock: () -> Unit = {
-            handleAddTextBlock()
-            focusManager.moveFocus(FocusDirection.Down)
-        }
 
         for (i in contents.indices) {
 
-            val focusedModifier = Modifier.onFocusChanged {
-                if (it.isFocused) {
-                    handleFocusedIndex(i)
+            val content = contents[i]
+            val modifier = Modifier
+                .onFocusChanged {
+                    if (it.isFocused) {
+                        handleFocusedIndex(i)
+                    }
                 }
-            }
+                .onPreviewKeyEvent {
+                    if (it.key.nativeKeyCode == Key.Backspace.nativeKeyCode) {
+                        Log.d("ContentBlock", "click backspace")
 
-            when (val content = contents[i]) {
-                is TextBlock -> {
-                    content.drawEditableContent(
-                        modifier = focusedModifier
-                            .padding(2.dp)
-                            .onPreviewKeyEvent {
-                                if (it.key.nativeKeyCode == Key.Backspace.nativeKeyCode) {
-                                    if (content.content.isBlank()) {
-                                        handleDeleteBlock(content)
-                                        focusManager.moveFocus(FocusDirection.Up)
-                                    }
-                                }
-                                false
-                            },
-                        addTextBlock
-                    )
-                }
-                is ImageBlock -> {
-                    content.drawEditableContent(
-                        modifier = focusedModifier
-                            .padding(2.dp)
-                            .focusable(true)
-                            .onKeyEvent {
-                                if (it.key.nativeKeyCode == Key.Backspace.nativeKeyCode) {
-                                    handleDeleteBlock(content)
-                                    focusManager.moveFocus(FocusDirection.Up)
-                                }
-                                false
-                            }
-
-                    )
+                        if (content.isEmpty()) {
+                            handleDeleteBlock(content)
+                            focusManager.moveFocus(FocusDirection.Up)
+                        }
+                    }
+                    true
                 }
 
-                is CheckBoxBlock -> {
-                    content.drawEditableContent(
-                        modifier = focusedModifier
-                            .padding(2.dp)
-                            .onPreviewKeyEvent {
-                                if (it.key.nativeKeyCode == Key.Backspace.nativeKeyCode) {
-                                    if (content.textInputState.value.text.isBlank()) {
-                                        handleDeleteBlock(content)
-                                        focusManager.moveFocus(FocusDirection.Up)
-                                    }
-                                }
-                                false
-                            },
-                        addTextBlock
-                    )
-                }
-            }
+            content.drawEditableContent(modifier = modifier, viewModel = contentBlockViewModel)
         }
     }
 }
