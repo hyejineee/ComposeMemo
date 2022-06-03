@@ -1,0 +1,1203 @@
+@startuml
+class com.example.composememoapp.di.SchedulerModule {
++ {static} com.example.composememoapp.di.SchedulerModule INSTANCE
++ io.reactivex.rxjava3.core.Scheduler provideIOScheduler()
++ io.reactivex.rxjava3.core.Scheduler provideAndroidMainScheduler()
+}
+class com.example.composememoapp.presentation.ui.home.SearchMemoTextInputKt {
++ {static} void SearchMemoTextInput(com.example.composememoapp.util.model.TextInputSate,androidx.compose.ui.Modifier)
++ {static} void SearchMemoTextInput()
+}
+class com.example.composememoapp.presentation.ui.component.DropDownListKt {
++ {static} void DropDownList(androidx.compose.ui.Modifier,java.util.List<java.lang.String>,kotlin.jvm.functions.Function1<? super java.lang.String,kotlin.Unit>)
+}
+class com.example.composememoapp.MemoAppApplication {
+}
+class error.NonExistentClass {
+}
+class com.example.composememoapp.presentation.theme.ShapeKt {
+- {static} androidx.compose.material.Shapes Shapes
++ {static} androidx.compose.material.Shapes getShapes()
+}
+class com.example.composememoapp.presentation.ui.write.WriteScreenKt {
++ {static} void WriteScreen(com.example.composememoapp.data.database.entity.MemoEntity,com.example.composememoapp.presentation.viewModel.TagViewModel,com.example.composememoapp.presentation.viewModel.MemoViewModel,com.example.composememoapp.presentation.viewModel.ContentBlockViewModel,kotlin.jvm.functions.Function0<kotlin.Unit>)
++ {static} void WriteScreenContent(com.example.composememoapp.data.MemoModel,java.util.List<java.lang.String>,java.util.List<java.lang.String>,java.util.List<? extends com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>>,com.example.composememoapp.presentation.viewModel.ContentBlockViewModel,boolean,kotlin.jvm.functions.Function0<kotlin.Unit>,kotlin.jvm.functions.Function0<kotlin.Unit>,kotlin.jvm.functions.Function0<kotlin.Unit>,kotlin.jvm.functions.Function0<kotlin.Unit>,kotlin.jvm.functions.Function1<? super java.lang.String,kotlin.Unit>)
++ {static} void DetailAndWriteScreenPreview()
+}
+class com.example.composememoapp.presentation.ui.component.StaggeredGridColumnKt {
++ {static} void StaggeredGridColumn(androidx.compose.ui.Modifier,int,kotlin.jvm.functions.Function0<kotlin.Unit>)
+}
+class com.example.composememoapp.util.model.CheckBoxState {
+- androidx.compose.runtime.MutableState text$delegate
+- androidx.compose.runtime.MutableState isChecked$delegate
++ {static} com.example.composememoapp.util.model.CheckBoxState.Companion Companion
+- {static} java.lang.String textKey
+- {static} java.lang.String checkedKey
+- {static} androidx.compose.runtime.saveable.Saver<com.example.composememoapp.util.model.CheckBoxState,?> Saver
++ java.lang.String getText()
++ void setText(java.lang.String)
++ boolean isChecked()
++ void setChecked(boolean)
+}
+class com.example.composememoapp.util.model.CheckBoxState.Companion {
++ androidx.compose.runtime.saveable.Saver<com.example.composememoapp.util.model.CheckBoxState,?> getSaver()
+}
+class com.example.composememoapp.presentation.theme.TypeKt {
+- {static} androidx.compose.ui.text.font.Font regular
+- {static} androidx.compose.ui.text.font.Font medium
+- {static} androidx.compose.ui.text.font.Font extraBold
+- {static} androidx.compose.ui.text.font.FontFamily appFontFamily
+- {static} androidx.compose.material.Typography appFont
++ {static} androidx.compose.material.Typography getAppFont()
+}
+class com.example.composememoapp.di.UseCaseModule {
++ {static} com.example.composememoapp.di.UseCaseModule INSTANCE
++ com.example.composememoapp.domain.GetAllMemoUseCase provideGetAllMemoUseCase(com.example.composememoapp.data.repository.MemoAppRepository)
++ com.example.composememoapp.domain.SaveMemoUseCase provideSaveMemoUseCase(com.example.composememoapp.data.repository.MemoAppRepository)
++ com.example.composememoapp.domain.DeleteMemoUseCase provideDeleteMemoUseCase(com.example.composememoapp.data.repository.MemoAppRepository)
++ com.example.composememoapp.domain.GetAllTagUseCase provideGetAllTagUseCase(com.example.composememoapp.data.repository.MemoAppRepository)
+}
+enum com.example.composememoapp.presentation.ui.component.blocks.ContentType {
++  Text
++  Image
++  CheckBox
++  Unknown
+}
+class com.example.composememoapp.presentation.ui.component.blocks.ImageBlock {
+- long seq
+- android.net.Uri content
+- androidx.compose.runtime.MutableState<android.graphics.Bitmap> imageState
++ {static} android.os.Parcelable.Creator<com.example.composememoapp.presentation.ui.component.blocks.ImageBlock> CREATOR
++ long getSeq()
++ android.net.Uri getContent()
++ androidx.compose.runtime.MutableState<android.graphics.Bitmap> getImageState()
++ {static} void getImageState$annotations()
++ void setImageState(androidx.compose.runtime.MutableState<android.graphics.Bitmap>)
++ void drawOnlyReadContent(androidx.compose.ui.Modifier)
++ void drawEditableContent(androidx.compose.ui.Modifier,com.example.composememoapp.presentation.viewModel.ContentBlockViewModel)
++ com.example.composememoapp.data.database.entity.ContentBlockEntity convertToContentBlockEntity()
++ boolean isEmpty()
++ void addNextBlock(com.example.composememoapp.presentation.viewModel.ContentBlockViewModel)
++ int describeContents()
++ void writeToParcel(android.os.Parcel,int)
+}
+class com.example.composememoapp.presentation.ui.component.blocks.ImageBlock.Creator {
++ com.example.composememoapp.presentation.ui.component.blocks.ImageBlock createFromParcel(android.os.Parcel)
++ com.example.composememoapp.presentation.ui.component.blocks.ImageBlock[] newArray(int)
+}
+class com.example.composememoapp.domain.SaveMemoUseCase {
+- com.example.composememoapp.data.repository.MemoAppRepository memoAppRepository
++ io.reactivex.rxjava3.core.Completable invoke(com.example.composememoapp.data.database.entity.MemoEntity)
+}
+class com.example.composememoapp.util.model.TextInputSate {
+- androidx.compose.runtime.MutableState text$delegate
++ {static} com.example.composememoapp.util.model.TextInputSate.Companion Companion
+- {static} androidx.compose.runtime.saveable.Saver<com.example.composememoapp.util.model.TextInputSate,?> Saver
++ java.lang.String getText()
++ void setText(java.lang.String)
+}
+class com.example.composememoapp.util.model.TextInputSate.Companion {
++ androidx.compose.runtime.saveable.Saver<com.example.composememoapp.util.model.TextInputSate,?> getSaver()
+}
+class dagger.hilt.internal.aggregatedroot.codegen._com_example_composememoapp_MemoAppApplication {
+}
+class com.example.composememoapp.presentation.ui.write.AddCheckBoxButtonKt {
++ {static} void AddCheckBoxButton(androidx.compose.ui.Modifier,kotlin.jvm.functions.Function0<kotlin.Unit>)
++ {static} void AddCheckBoxButtonPreview()
+}
+class com.example.composememoapp.presentation.ui.home.CategoryMenuBarKt {
++ {static} void CategoryMenuBar(java.util.List<com.example.composememoapp.data.database.entity.TagEntity>,kotlin.jvm.functions.Function1<? super com.example.composememoapp.data.database.entity.TagEntity,kotlin.Unit>,java.lang.String,androidx.compose.foundation.lazy.LazyListState,androidx.compose.ui.Modifier,com.example.composememoapp.data.database.entity.TagEntity)
++ {static} void CategoryMenuRow(java.lang.String,java.lang.String,boolean,androidx.compose.ui.Modifier)
++ {static} void CategoryMenuBarPreview()
++ {static} void CategoryMenuRowPreview()
+}
+class com.example.composememoapp.presentation.ui.component.MiniFloatingButtonModel {
+- androidx.compose.ui.graphics.vector.ImageVector icon
+- kotlin.jvm.functions.Function0<kotlin.Unit> onClick
+- java.lang.String description
++ com.example.composememoapp.presentation.ui.component.MiniFloatingButtonModel copy(androidx.compose.ui.graphics.vector.ImageVector,kotlin.jvm.functions.Function0<kotlin.Unit>,java.lang.String)
++ boolean equals(java.lang.Object)
++ int hashCode()
++ java.lang.String toString()
++ androidx.compose.ui.graphics.vector.ImageVector component1()
++ androidx.compose.ui.graphics.vector.ImageVector getIcon()
++ kotlin.jvm.functions.Function0<kotlin.Unit> component2()
++ kotlin.jvm.functions.Function0<kotlin.Unit> getOnClick()
++ java.lang.String component3()
++ java.lang.String getDescription()
+}
+class com.example.composememoapp.presentation.MainActivity {
+# void onCreate(android.os.Bundle)
+}
+abstract class com.example.composememoapp.data.database.TagDao {
++ {abstract}io.reactivex.rxjava3.core.Completable insertTagEntity(java.util.List<com.example.composememoapp.data.database.entity.TagEntity>)
++ {abstract}io.reactivex.rxjava3.core.Flowable<java.util.List<com.example.composememoapp.data.database.entity.TagEntity>> getAllTag()
+}
+class com.example.composememoapp.util.BitmapProvider {
+- android.content.Context context
++ io.reactivex.rxjava3.core.Single<android.graphics.Bitmap> getBitmapFromFile(android.net.Uri)
+- android.graphics.Bitmap decodeSampledBitmapFromFileInVersionP(android.content.Context,android.net.Uri,int,int)
+- android.graphics.Bitmap decodeSampledBitmapFromFile(android.net.Uri,android.content.Context,int,int)
+- int calculateInSampleSize(android.graphics.BitmapFactory.Options,int,int)
+}
+class com.example.composememoapp.di.DBModule_ProvideMemoDaoFactory {
+- Provider<MemoAppDatabase> appDatabaseProvider
++ MemoDao get()
++ {static} DBModule_ProvideMemoDaoFactory create(Provider<MemoAppDatabase>)
++ {static} MemoDao provideMemoDao(MemoAppDatabase)
+}
+class com.example.composememoapp.di.UseCaseModule_ProvideDeleteMemoUseCaseFactory {
+- Provider<MemoAppRepository> appRepositoryProvider
++ DeleteMemoUseCase get()
++ {static} UseCaseModule_ProvideDeleteMemoUseCaseFactory create(Provider<MemoAppRepository>)
++ {static} DeleteMemoUseCase provideDeleteMemoUseCase(MemoAppRepository)
+}
+class com.example.composememoapp.util.UnitUtilKt {
++ {static} long fontDimensionResource(int)
++ {static} int dpToPx(android.content.Context,int)
+}
+class com.example.composememoapp.MemoAppApplication_ComponentTreeDeps {
+}
+class hilt_aggregated_deps._com_example_composememoapp_di_UseCaseModule {
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC {
+- ApplicationContextModule applicationContextModule
+- DaggerMemoAppApplication_HiltComponents_SingletonC singletonC
+- Provider<MemoAppDatabase> provideMemoAppDatabaseProvider
++ {static} Builder builder()
+- MemoDao memoDao()
+- TagDao tagDao()
+- DefaultMemoAppRepository defaultMemoAppRepository()
+- void initialize(ApplicationContextModule)
++ void injectMemoAppApplication(MemoAppApplication)
++ Set<Boolean> getDisableFragmentGetContextFix()
++ ActivityRetainedComponentBuilder retainedComponentBuilder()
++ ServiceComponentBuilder serviceComponentBuilder()
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.Builder {
+- ApplicationContextModule applicationContextModule
++ Builder applicationContextModule(ApplicationContextModule)
++ Builder dBModule(DBModule)
++ Builder hiltWrapper_FragmentGetContextFix_FragmentGetContextFixModule(HiltWrapper_FragmentGetContextFix_FragmentGetContextFixModule)
++ Builder schedulerModule(SchedulerModule)
++ MemoAppApplication_HiltComponents.SingletonC build()
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ActivityRetainedCBuilder {
+- DaggerMemoAppApplication_HiltComponents_SingletonC singletonC
++ MemoAppApplication_HiltComponents.ActivityRetainedC build()
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ActivityCBuilder {
+- DaggerMemoAppApplication_HiltComponents_SingletonC singletonC
+- ActivityRetainedCImpl activityRetainedCImpl
+- Activity activity
++ ActivityCBuilder activity(Activity)
++ MemoAppApplication_HiltComponents.ActivityC build()
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.FragmentCBuilder {
+- DaggerMemoAppApplication_HiltComponents_SingletonC singletonC
+- ActivityRetainedCImpl activityRetainedCImpl
+- ActivityCImpl activityCImpl
+- Fragment fragment
++ FragmentCBuilder fragment(Fragment)
++ MemoAppApplication_HiltComponents.FragmentC build()
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewWithFragmentCBuilder {
+- DaggerMemoAppApplication_HiltComponents_SingletonC singletonC
+- ActivityRetainedCImpl activityRetainedCImpl
+- ActivityCImpl activityCImpl
+- FragmentCImpl fragmentCImpl
+- View view
++ ViewWithFragmentCBuilder view(View)
++ MemoAppApplication_HiltComponents.ViewWithFragmentC build()
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewCBuilder {
+- DaggerMemoAppApplication_HiltComponents_SingletonC singletonC
+- ActivityRetainedCImpl activityRetainedCImpl
+- ActivityCImpl activityCImpl
+- View view
++ ViewCBuilder view(View)
++ MemoAppApplication_HiltComponents.ViewC build()
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewModelCBuilder {
+- DaggerMemoAppApplication_HiltComponents_SingletonC singletonC
+- ActivityRetainedCImpl activityRetainedCImpl
+- SavedStateHandle savedStateHandle
++ ViewModelCBuilder savedStateHandle(SavedStateHandle)
++ MemoAppApplication_HiltComponents.ViewModelC build()
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ServiceCBuilder {
+- DaggerMemoAppApplication_HiltComponents_SingletonC singletonC
+- Service service
++ ServiceCBuilder service(Service)
++ MemoAppApplication_HiltComponents.ServiceC build()
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewWithFragmentCImpl {
+- DaggerMemoAppApplication_HiltComponents_SingletonC singletonC
+- ActivityRetainedCImpl activityRetainedCImpl
+- ActivityCImpl activityCImpl
+- FragmentCImpl fragmentCImpl
+- ViewWithFragmentCImpl viewWithFragmentCImpl
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.FragmentCImpl {
+- DaggerMemoAppApplication_HiltComponents_SingletonC singletonC
+- ActivityRetainedCImpl activityRetainedCImpl
+- ActivityCImpl activityCImpl
+- FragmentCImpl fragmentCImpl
++ DefaultViewModelFactories.InternalFactoryFactory getHiltInternalFactoryFactory()
++ ViewWithFragmentComponentBuilder viewWithFragmentComponentBuilder()
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewCImpl {
+- DaggerMemoAppApplication_HiltComponents_SingletonC singletonC
+- ActivityRetainedCImpl activityRetainedCImpl
+- ActivityCImpl activityCImpl
+- ViewCImpl viewCImpl
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ActivityCImpl {
+- DaggerMemoAppApplication_HiltComponents_SingletonC singletonC
+- ActivityRetainedCImpl activityRetainedCImpl
+- ActivityCImpl activityCImpl
++ void injectMainActivity(MainActivity)
++ DefaultViewModelFactories.InternalFactoryFactory getHiltInternalFactoryFactory()
++ Set<String> getViewModelKeys()
++ ViewModelComponentBuilder getViewModelComponentBuilder()
++ FragmentComponentBuilder fragmentComponentBuilder()
++ ViewComponentBuilder viewComponentBuilder()
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewModelCImpl {
+- DaggerMemoAppApplication_HiltComponents_SingletonC singletonC
+- ActivityRetainedCImpl activityRetainedCImpl
+- ViewModelCImpl viewModelCImpl
+- Provider<MemoViewModel> memoViewModelProvider
+- Provider<TagViewModel> tagViewModelProvider
+- SaveMemoUseCase saveMemoUseCase()
+- GetAllMemoUseCase getAllMemoUseCase()
+- DeleteMemoUseCase deleteMemoUseCase()
+- GetAllTagUseCase getAllTagUseCase()
+- void initialize(SavedStateHandle)
++ Map<String,Provider<ViewModel>> getHiltViewModelMap()
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewModelCImpl.SwitchingProvider {
+- DaggerMemoAppApplication_HiltComponents_SingletonC singletonC
+- ActivityRetainedCImpl activityRetainedCImpl
+- ViewModelCImpl viewModelCImpl
+- int id
++ T get()
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ActivityRetainedCImpl {
+- DaggerMemoAppApplication_HiltComponents_SingletonC singletonC
+- ActivityRetainedCImpl activityRetainedCImpl
+- Provider lifecycleProvider
+- void initialize()
++ ActivityComponentBuilder activityComponentBuilder()
++ ActivityRetainedLifecycle getActivityRetainedLifecycle()
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ActivityRetainedCImpl.SwitchingProvider {
+- DaggerMemoAppApplication_HiltComponents_SingletonC singletonC
+- ActivityRetainedCImpl activityRetainedCImpl
+- int id
++ T get()
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ServiceCImpl {
+- DaggerMemoAppApplication_HiltComponents_SingletonC singletonC
+- ServiceCImpl serviceCImpl
+}
+class com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.SwitchingProvider {
+- DaggerMemoAppApplication_HiltComponents_SingletonC singletonC
+- int id
++ T get()
+}
+abstract class com.example.composememoapp.presentation.Hilt_MainActivity {
+- ActivityComponentManager componentManager
+- Object componentManagerLock
+- boolean injected
+- void _initHiltInternal()
++ Object generatedComponent()
+# ActivityComponentManager createComponentManager()
++ ActivityComponentManager componentManager()
+# void inject()
++ ViewModelProvider.Factory getDefaultViewModelProviderFactory()
+}
+class com.example.composememoapp.util.model.CheckBoxStateKt {
++ {static} com.example.composememoapp.util.model.CheckBoxState rememberCheckBoxState(java.lang.String,boolean)
+}
+class com.example.composememoapp.presentation.ui.write.WriteScreenTopAppBarKt {
++ {static} void WriteScreenTopAppBar(kotlin.jvm.functions.Function0<kotlin.Unit>,kotlin.jvm.functions.Function0<kotlin.Unit>,kotlin.jvm.functions.Function0<kotlin.Unit>,boolean,boolean)
++ {static} void WriteScreenTopAppBarPreview()
+}
+class com.example.composememoapp.presentation.ui.MemoAppNavHostKt {
++ {static} void MemoAppNavHost(androidx.compose.ui.Modifier,androidx.navigation.NavHostController,com.example.composememoapp.presentation.viewModel.MemoViewModel,com.example.composememoapp.presentation.viewModel.TagViewModel)
+}
+class com.example.composememoapp.presentation.ui.component.HomeScreenBottomBarKt {
++ {static} void HomeScreenBottomBar(kotlin.jvm.functions.Function0<kotlin.Unit>,kotlin.jvm.functions.Function0<kotlin.Unit>,boolean,androidx.compose.ui.Modifier)
++ {static} void HomeScreenBottomBarPreview()
+}
+class com.example.composememoapp.presentation.viewModel.MemoViewModel_HiltModules {
+}
+abstract class com.example.composememoapp.presentation.viewModel.MemoViewModel_HiltModules.BindsModule {
++ {abstract}ViewModel binds(MemoViewModel)
+}
+class com.example.composememoapp.presentation.viewModel.MemoViewModel_HiltModules.KeyModule {
++ {static} String provide()
+}
+class com.example.composememoapp.di.SchedulerModule_ProvideAndroidMainSchedulerFactory {
++ Scheduler get()
++ {static} SchedulerModule_ProvideAndroidMainSchedulerFactory create()
++ {static} Scheduler provideAndroidMainScheduler()
+}
+class com.example.composememoapp.di.SchedulerModule_ProvideAndroidMainSchedulerFactory.InstanceHolder {
+- {static} SchedulerModule_ProvideAndroidMainSchedulerFactory INSTANCE
+}
+class com.example.composememoapp.di.DBModule {
++ {static} com.example.composememoapp.di.DBModule INSTANCE
++ com.example.composememoapp.data.database.MemoAppDatabase provideMemoAppDatabase(android.content.Context)
++ com.example.composememoapp.data.database.MemoDao provideMemoDao(com.example.composememoapp.data.database.MemoAppDatabase)
++ com.example.composememoapp.data.database.TagDao provideTagDao(com.example.composememoapp.data.database.MemoAppDatabase)
+}
+class com.example.composememoapp.BuildConfig {
++ {static} boolean DEBUG
++ {static} String APPLICATION_ID
++ {static} String BUILD_TYPE
++ {static} int VERSION_CODE
++ {static} String VERSION_NAME
+}
+class com.example.composememoapp.data.database.entity.TagEntity {
+- java.lang.Long id
+- java.lang.String tag
++ {static} android.os.Parcelable.Creator<com.example.composememoapp.data.database.entity.TagEntity> CREATOR
++ com.example.composememoapp.data.database.entity.TagEntity copy(java.lang.Long,java.lang.String)
++ boolean equals(java.lang.Object)
++ int hashCode()
++ java.lang.String toString()
++ java.lang.Long component1()
++ java.lang.Long getId()
++ java.lang.String component2()
++ java.lang.String getTag()
++ int describeContents()
++ void writeToParcel(android.os.Parcel,int)
+}
+class com.example.composememoapp.data.database.entity.TagEntity.Creator {
++ com.example.composememoapp.data.database.entity.TagEntity createFromParcel(android.os.Parcel)
++ com.example.composememoapp.data.database.entity.TagEntity[] newArray(int)
+}
+class com.example.composememoapp.presentation.ui.write.TagTextInputKt {
++ {static} void TagTextInput(com.example.composememoapp.util.model.TextInputSate,java.util.List<java.lang.String>,kotlin.jvm.functions.Function1<? super java.lang.String,kotlin.Unit>,androidx.compose.ui.Modifier)
++ {static} void SearchMemoTextInput()
+}
+class com.example.composememoapp.presentation.viewModel.TagViewModel_Factory {
+- Provider<GetAllTagUseCase> getAllTagUseCaseProvider
+- Provider<Scheduler> androidSchedulerProvider
+- Provider<Scheduler> ioSchedulerProvider
++ TagViewModel get()
++ {static} TagViewModel_Factory create(Provider<GetAllTagUseCase>,Provider<Scheduler>,Provider<Scheduler>)
++ {static} TagViewModel newInstance(GetAllTagUseCase,Scheduler,Scheduler)
+}
+class com.example.composememoapp.presentation.ui.write.WriteScreenBottomBarKt {
++ {static} void WriteScreenBottomBar(kotlin.jvm.functions.Function1<? super android.net.Uri,kotlin.Unit>,kotlin.jvm.functions.Function0<kotlin.Unit>,androidx.compose.ui.Modifier)
++ {static} void WriteScreenBottomBarPreview()
+}
+class hilt_aggregated_deps._com_example_composememoapp_presentation_viewModel_MemoViewModel_HiltModules_KeyModule {
+}
+class com.example.composememoapp.presentation.ui.component.CheckBoxModel {
+- java.lang.String text
+- boolean isChecked
++ com.example.composememoapp.presentation.ui.component.CheckBoxModel copy(java.lang.String,boolean)
++ boolean equals(java.lang.Object)
++ int hashCode()
++ java.lang.String toString()
++ java.lang.String component1()
++ java.lang.String getText()
++ void setText(java.lang.String)
++ boolean component2()
++ boolean isChecked()
++ void setChecked(boolean)
+}
+class com.example.composememoapp.presentation.ui.component.ChipKt {
++ {static} void Chip(java.lang.String)
++ {static} void ChipPreview()
+}
+class com.example.composememoapp.domain.GetAllTagUseCase {
+- com.example.composememoapp.data.repository.MemoAppRepository memoAppRepository
++ io.reactivex.rxjava3.core.Flowable<java.util.List<com.example.composememoapp.data.database.entity.TagEntity>> invoke()
+}
+class com.example.composememoapp.di.UseCaseModule_ProvideGetAllTagUseCaseFactory {
+- Provider<MemoAppRepository> appRepositoryProvider
++ GetAllTagUseCase get()
++ {static} UseCaseModule_ProvideGetAllTagUseCaseFactory create(Provider<MemoAppRepository>)
++ {static} GetAllTagUseCase provideGetAllTagUseCase(MemoAppRepository)
+}
+abstract class com.example.composememoapp.Hilt_MemoAppApplication {
+- ApplicationComponentManager componentManager
++ ApplicationComponentManager componentManager()
++ Object generatedComponent()
++ void onCreate()
+}
+class com.example.composememoapp.domain.GetAllMemoUseCase_Factory {
+- Provider<MemoAppRepository> memoAppRepositoryProvider
++ GetAllMemoUseCase get()
++ {static} GetAllMemoUseCase_Factory create(Provider<MemoAppRepository>)
++ {static} GetAllMemoUseCase newInstance(MemoAppRepository)
+}
+class com.example.composememoapp.data.database.MemoAppDatabase_Impl {
+- MemoDao _memoDao
+- TagDao _tagDao
+# SupportSQLiteOpenHelper createOpenHelper(DatabaseConfiguration)
+# InvalidationTracker createInvalidationTracker()
++ void clearAllTables()
+# Map<Class<?>,List<Class<?>>> getRequiredTypeConverters()
++ MemoDao memoDao()
++ TagDao tagDao()
+}
+class com.example.composememoapp.data.database.TypeConverters {
++ java.lang.Long dateToLong(java.util.Date)
++ java.util.Date longToDate(java.lang.Long)
++ java.lang.String contentTypeToString(com.example.composememoapp.presentation.ui.component.blocks.ContentType)
++ com.example.composememoapp.presentation.ui.component.blocks.ContentType stringToContentType(java.lang.String)
++ java.lang.String contentListToContentJson(java.util.List<com.example.composememoapp.data.database.entity.ContentBlockEntity>)
++ java.util.List<com.example.composememoapp.data.database.entity.ContentBlockEntity> contentJsonToContentList(java.lang.String)
++ java.lang.String stringListToJson(java.util.List<java.lang.String>)
++ java.util.List<java.lang.String> jsonToStringList(java.lang.String)
+}
+class com.example.composememoapp.util.model.ContentBlocksStateKt {
++ {static} com.example.composememoapp.util.model.ContentBlocksState rememberContentBlocksState(java.util.List<? extends com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>>)
+}
+class com.example.composememoapp.di.DBModule_ProvideTagDaoFactory {
+- Provider<MemoAppDatabase> appDatabaseProvider
++ TagDao get()
++ {static} DBModule_ProvideTagDaoFactory create(Provider<MemoAppDatabase>)
++ {static} TagDao provideTagDao(MemoAppDatabase)
+}
+class hilt_aggregated_deps._com_example_composememoapp_presentation_viewModel_TagViewModel_HiltModules_BindsModule {
+}
+class com.example.composememoapp.presentation.ui.home.MemosListScreenKt {
++ {static} void MemosListScreen(java.util.List<com.example.composememoapp.data.database.entity.MemoEntity>,kotlin.jvm.functions.Function1<? super com.example.composememoapp.data.database.entity.MemoEntity,kotlin.Unit>,androidx.compose.ui.Modifier)
+}
+interface com.example.composememoapp.MemoAppApplication_GeneratedInjector {
+~ void injectMemoAppApplication(MemoAppApplication)
+}
+class com.example.composememoapp.presentation.ui.home.HomeScreenKt {
++ {static} void HomeScreen(com.example.composememoapp.presentation.viewModel.MemoViewModel,com.example.composememoapp.presentation.viewModel.TagViewModel,kotlin.jvm.functions.Function0<kotlin.Unit>,kotlin.jvm.functions.Function1<? super com.example.composememoapp.data.database.entity.MemoEntity,kotlin.Unit>)
++ {static} void HomeScreenContent(kotlin.jvm.functions.Function1<? super java.lang.String,kotlin.Unit>,java.util.List<com.example.composememoapp.data.database.entity.MemoEntity>,java.util.List<com.example.composememoapp.data.database.entity.TagEntity>,java.lang.String,boolean,kotlin.jvm.functions.Function1<? super com.example.composememoapp.data.database.entity.TagEntity,kotlin.Unit>,kotlin.jvm.functions.Function0<kotlin.Unit>,kotlin.jvm.functions.Function1<? super com.example.composememoapp.data.database.entity.MemoEntity,kotlin.Unit>,kotlin.jvm.functions.Function1<? super java.lang.Boolean,kotlin.Unit>)
++ {static} void HomeScreenPreview()
+}
+interface com.example.composememoapp.util.model.InputState {
+}
+class com.example.composememoapp.presentation.viewModel.MemoViewModel_Factory {
+- Provider<SaveMemoUseCase> saveMemoUseCaseProvider
+- Provider<GetAllMemoUseCase> getAllMemoUseCaseProvider
+- Provider<DeleteMemoUseCase> deleteMemoUseCaseProvider
+- Provider<Scheduler> androidSchedulersProvider
+- Provider<Scheduler> ioSchedulerProvider
++ MemoViewModel get()
++ {static} MemoViewModel_Factory create(Provider<SaveMemoUseCase>,Provider<GetAllMemoUseCase>,Provider<DeleteMemoUseCase>,Provider<Scheduler>,Provider<Scheduler>)
++ {static} MemoViewModel newInstance(SaveMemoUseCase,GetAllMemoUseCase,DeleteMemoUseCase,Scheduler,Scheduler)
+}
+class com.example.composememoapp.domain.GetAllMemoUseCase {
+- com.example.composememoapp.data.repository.MemoAppRepository memoAppRepository
++ io.reactivex.rxjava3.core.Flowable<java.util.List<com.example.composememoapp.data.database.entity.MemoEntity>> invoke()
+}
+class dagger.hilt.internal.processedrootsentinel.codegen._com_example_composememoapp_MemoAppApplication {
+}
+class com.example.composememoapp.presentation.ui.component.TextInputKt {
++ {static} void TextInput(java.lang.String,androidx.compose.ui.text.input.TextFieldValue,kotlin.jvm.functions.Function1<? super androidx.compose.ui.text.input.TextFieldValue,kotlin.Unit>,boolean,androidx.compose.foundation.text.KeyboardActions,androidx.compose.foundation.text.KeyboardOptions,androidx.compose.ui.Modifier)
++ {static} void TextInputPreview()
+}
+class com.example.composememoapp.data.repository.DefaultMemoAppRepository {
+- com.example.composememoapp.data.database.MemoDao memoDao
+- com.example.composememoapp.data.database.TagDao tagDao
++ io.reactivex.rxjava3.core.Flowable<java.util.List<com.example.composememoapp.data.database.entity.MemoEntity>> getAllMemo()
++ io.reactivex.rxjava3.core.Completable insertMemo(com.example.composememoapp.data.database.entity.MemoEntity)
++ io.reactivex.rxjava3.core.Completable deleteMemo(com.example.composememoapp.data.database.entity.MemoEntity)
++ io.reactivex.rxjava3.core.Flowable<java.util.List<com.example.composememoapp.data.database.entity.TagEntity>> getAllTag()
+}
+class com.example.composememoapp.di.UseCaseModule_ProvideSaveMemoUseCaseFactory {
+- Provider<MemoAppRepository> appRepositoryProvider
++ SaveMemoUseCase get()
++ {static} UseCaseModule_ProvideSaveMemoUseCaseFactory create(Provider<MemoAppRepository>)
++ {static} SaveMemoUseCase provideSaveMemoUseCase(MemoAppRepository)
+}
+class com.example.composememoapp.data.database.MemoDao_Impl {
+- RoomDatabase __db
+- EntityInsertionAdapter<MemoEntity> __insertionAdapterOfMemoEntity
+- TypeConverters __typeConverters
+- EntityDeletionOrUpdateAdapter<MemoEntity> __deletionAdapterOfMemoEntity
++ Completable insertMemoEntity(MemoEntity)
++ Completable deleteMemo(MemoEntity)
++ Flowable<List<MemoEntity>> getAllMemo()
++ {static} List<Class<?>> getRequiredConverters()
+}
+class com.example.composememoapp.presentation.ui.component.TextInputIconableKt {
++ {static} void TextInputIconable(com.example.composememoapp.util.model.IconModel,com.example.composememoapp.util.model.IconModel,java.lang.String,java.lang.String,kotlin.jvm.functions.Function1<? super java.lang.String,kotlin.Unit>,boolean,androidx.compose.ui.Modifier)
++ {static} void TextInputIconablePreview()
++ {static} void TextInputNoIconPreview()
+}
+class com.example.composememoapp.presentation.ui.write.TagScreenKt {
++ {static} void TagScreen(java.util.List<java.lang.String>,java.util.List<java.lang.String>,kotlin.jvm.functions.Function1<? super java.lang.String,kotlin.Unit>,androidx.compose.ui.Modifier)
++ {static} void TagScreenPreview()
+}
+class com.example.composememoapp.presentation.theme.ColorKt {
+- {static} long Purple200
+- {static} long Purple500
+- {static} long Purple700
+- {static} long Teal200
+- {static} long DeepPurpleA200
+- {static} long DeepPurpleA200Light
+- {static} long DeepPurpleA200Dark
+- {static} long Gray50
+- {static} long Gray900
+- {static} long Black800
++ {static} long getPurple200()
++ {static} long getPurple500()
++ {static} long getPurple700()
++ {static} long getTeal200()
++ {static} long getDeepPurpleA200()
++ {static} long getDeepPurpleA200Light()
++ {static} long getDeepPurpleA200Dark()
++ {static} long getGray50()
++ {static} long getGray900()
++ {static} long getBlack800()
+}
+class hilt_aggregated_deps._com_example_composememoapp_presentation_viewModel_MemoViewModel_HiltModules_BindsModule {
+}
+class com.example.composememoapp.presentation.ui.component.StaggeredGridRowKt {
++ {static} void StaggeredGridRow(androidx.compose.ui.Modifier,int,kotlin.jvm.functions.Function0<kotlin.Unit>)
++ {static} void StaggeredGridRowPreview()
+}
+class com.example.composememoapp.presentation.viewModel.ContentBlockViewModel {
+- io.reactivex.rxjava3.subjects.BehaviorSubject<java.util.List<com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>>> _contentBlocksSource
+- java.util.List<com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>> contentBlockList
+- int focusedIndex
+- io.reactivex.rxjava3.core.Observable<java.util.List<com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>>> contentBlocks
++ io.reactivex.rxjava3.core.Observable<java.util.List<com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>>> getContentBlocks()
++ void insertTextBlock(java.lang.String)
++ void insertBlock(com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>)
++ void changeToImageBlock(android.net.Uri)
++ void changeToCheckBoxBlock()
++ void deleteBlock(com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>)
++ void focusedBlock(int)
+}
+class com.example.composememoapp.di.SchedulerModule_ProvideIOSchedulerFactory {
++ Scheduler get()
++ {static} SchedulerModule_ProvideIOSchedulerFactory create()
++ {static} Scheduler provideIOScheduler()
+}
+class com.example.composememoapp.di.SchedulerModule_ProvideIOSchedulerFactory.InstanceHolder {
+- {static} SchedulerModule_ProvideIOSchedulerFactory INSTANCE
+}
+class hilt_aggregated_deps._com_example_composememoapp_presentation_viewModel_TagViewModel_HiltModules_KeyModule {
+}
+enum com.example.composememoapp.util.Descriptions {
++  SearchIcon
++  ClearIcon
++  AddTagIcon
+- java.lang.String text
++ java.lang.String getText()
+}
+class hilt_aggregated_deps._com_example_composememoapp_di_SchedulerModule {
+}
+class com.example.composememoapp.presentation.ui.write.ContentBlockScreenKt {
++ {static} void ContentBlockScreen(com.example.composememoapp.presentation.viewModel.ContentBlockViewModel,java.util.List<? extends com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>>)
++ {static} void ContentBlocks(java.util.List<? extends com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>>,kotlin.jvm.functions.Function1<? super com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>,kotlin.Unit>,kotlin.jvm.functions.Function1<? super java.lang.Integer,kotlin.Unit>,com.example.composememoapp.presentation.viewModel.ContentBlockViewModel)
+}
+abstract class com.example.composememoapp.presentation.ui.component.blocks.ContentBlock {
+- kotlin.Lazy seq$delegate
+- kotlin.Lazy content$delegate
++ long getSeq()
++ T getContent()
++ {abstract}void drawOnlyReadContent(androidx.compose.ui.Modifier)
++ {abstract}boolean isEmpty()
++ {abstract}void addNextBlock(com.example.composememoapp.presentation.viewModel.ContentBlockViewModel)
++ {abstract}void drawEditableContent(androidx.compose.ui.Modifier,com.example.composememoapp.presentation.viewModel.ContentBlockViewModel)
++ {abstract}com.example.composememoapp.data.database.entity.ContentBlockEntity convertToContentBlockEntity()
+}
+class com.example.composememoapp.domain.GetAllTagUseCase_Factory {
+- Provider<MemoAppRepository> memoAppRepositoryProvider
++ GetAllTagUseCase get()
++ {static} GetAllTagUseCase_Factory create(Provider<MemoAppRepository>)
++ {static} GetAllTagUseCase newInstance(MemoAppRepository)
+}
+interface com.example.composememoapp.presentation.MainActivity_GeneratedInjector {
+~ void injectMainActivity(MainActivity)
+}
+class com.example.composememoapp.domain.SaveMemoUseCase_Factory {
+- Provider<MemoAppRepository> memoAppRepositoryProvider
++ SaveMemoUseCase get()
++ {static} SaveMemoUseCase_Factory create(Provider<MemoAppRepository>)
++ {static} SaveMemoUseCase newInstance(MemoAppRepository)
+}
+class com.example.composememoapp.presentation.viewModel.TagViewModel_HiltModules_KeyModule_ProvideFactory {
++ String get()
++ {static} TagViewModel_HiltModules_KeyModule_ProvideFactory create()
++ {static} String provide()
+}
+class com.example.composememoapp.presentation.viewModel.TagViewModel_HiltModules_KeyModule_ProvideFactory.InstanceHolder {
+- {static} TagViewModel_HiltModules_KeyModule_ProvideFactory INSTANCE
+}
+class hilt_aggregated_deps._com_example_composememoapp_di_RepositoryModule {
+}
+class com.example.composememoapp.presentation.ui.component.MiniFloatinfButtonGroupKt {
++ {static} void MiniFloatingButtonGroupExtendedPreview()
++ {static} void MiniFloatingButtonGroupNotExtendedPreview()
+}
+class com.example.composememoapp.di.DBModule_ProvideMemoAppDatabaseFactory {
+- Provider<Context> contextProvider
++ MemoAppDatabase get()
++ {static} DBModule_ProvideMemoAppDatabaseFactory create(Provider<Context>)
++ {static} MemoAppDatabase provideMemoAppDatabase(Context)
+}
+class com.example.composememoapp.presentation.ui.component.blocks.TextBlock {
+- long seq
+- java.lang.String content
+- androidx.compose.runtime.MutableState<androidx.compose.ui.text.input.TextFieldValue> textInputState
++ {static} android.os.Parcelable.Creator<com.example.composememoapp.presentation.ui.component.blocks.TextBlock> CREATOR
++ com.example.composememoapp.presentation.ui.component.blocks.TextBlock copy(long,java.lang.String)
++ boolean equals(java.lang.Object)
++ int hashCode()
++ java.lang.String toString()
++ long component1()
++ long getSeq()
++ void setSeq(long)
++ java.lang.String component2()
++ java.lang.String getContent()
++ void setContent(java.lang.String)
++ androidx.compose.runtime.MutableState<androidx.compose.ui.text.input.TextFieldValue> getTextInputState()
++ {static} void getTextInputState$annotations()
++ void setTextInputState(androidx.compose.runtime.MutableState<androidx.compose.ui.text.input.TextFieldValue>)
++ void drawOnlyReadContent(androidx.compose.ui.Modifier)
++ void drawEditableContent(androidx.compose.ui.Modifier,com.example.composememoapp.presentation.viewModel.ContentBlockViewModel)
++ com.example.composememoapp.data.database.entity.ContentBlockEntity convertToContentBlockEntity()
++ boolean isEmpty()
++ void addNextBlock(com.example.composememoapp.presentation.viewModel.ContentBlockViewModel)
++ int describeContents()
++ void writeToParcel(android.os.Parcel,int)
+}
+class com.example.composememoapp.presentation.ui.component.blocks.TextBlock.Creator {
++ com.example.composememoapp.presentation.ui.component.blocks.TextBlock createFromParcel(android.os.Parcel)
++ com.example.composememoapp.presentation.ui.component.blocks.TextBlock[] newArray(int)
+}
+class hilt_aggregated_deps._com_example_composememoapp_MemoAppApplication_GeneratedInjector {
+}
+class com.example.composememoapp.presentation.ui.write.AddImageButtonKt {
++ {static} void AddImageButton(androidx.compose.ui.Modifier,kotlin.jvm.functions.Function1<? super android.net.Uri,kotlin.Unit>)
++ {static} void AddImageButtonPreview()
+}
+class com.example.composememoapp.presentation.ui.MemoAppKt {
++ {static} void MemoApp(com.example.composememoapp.presentation.viewModel.MemoViewModel,com.example.composememoapp.presentation.viewModel.TagViewModel)
+}
+enum com.example.composememoapp.presentation.ui.MemoAppScreen {
++  Home
++  Write
++  Detail
+}
+class com.example.composememoapp.util.model.TagListState {
+- androidx.compose.runtime.MutableState tags$delegate
++ {static} com.example.composememoapp.util.model.TagListState.Companion Companion
+- {static} androidx.compose.runtime.saveable.Saver<com.example.composememoapp.util.model.TagListState,?> Saver
++ java.util.List<java.lang.String> getTags()
++ void setTags(java.util.List<java.lang.String>)
+}
+class com.example.composememoapp.util.model.TagListState.Companion {
++ androidx.compose.runtime.saveable.Saver<com.example.composememoapp.util.model.TagListState,?> getSaver()
+}
+class com.example.composememoapp.util.model.TagListStateKt {
++ {static} com.example.composememoapp.util.model.TagListState rememberTagListState(java.util.List<java.lang.String>)
+}
+class com.example.composememoapp.di.UseCaseModule_ProvideGetAllMemoUseCaseFactory {
+- Provider<MemoAppRepository> appRepositoryProvider
++ GetAllMemoUseCase get()
++ {static} UseCaseModule_ProvideGetAllMemoUseCaseFactory create(Provider<MemoAppRepository>)
++ {static} GetAllMemoUseCase provideGetAllMemoUseCase(MemoAppRepository)
+}
+class com.example.composememoapp.presentation.ui.home.MemoListKt {
++ {static} void MemoList(java.util.List<com.example.composememoapp.data.database.entity.MemoEntity>,kotlin.jvm.functions.Function1<? super com.example.composememoapp.data.database.entity.MemoEntity,kotlin.Unit>,androidx.compose.ui.Modifier)
++ {static} void MemoListItem(com.example.composememoapp.data.database.entity.MemoEntity,com.example.composememoapp.presentation.ui.component.blocks.ImageBlock,androidx.compose.ui.Modifier)
++ {static} void MemoListItemPreview()
++ {static} void MemoListItemImagePreview()
++ {static} void MemoListPreview()
+}
+abstract class com.example.composememoapp.data.database.MemoDao {
++ {abstract}io.reactivex.rxjava3.core.Flowable<java.util.List<com.example.composememoapp.data.database.entity.MemoEntity>> getAllMemo()
++ {abstract}io.reactivex.rxjava3.core.Completable insertMemoEntity(com.example.composememoapp.data.database.entity.MemoEntity)
++ {abstract}io.reactivex.rxjava3.core.Completable deleteMemo(com.example.composememoapp.data.database.entity.MemoEntity)
+}
+class com.example.composememoapp.presentation.theme.ThemeKt {
+- {static} androidx.compose.material.Colors DarkColorPalette
+- {static} androidx.compose.material.Colors LightColorPalette
++ {static} void ComposeMemoAppTheme(boolean,kotlin.jvm.functions.Function0<kotlin.Unit>)
+}
+class com.example.composememoapp.util.model.ContentBlocksState {
+- androidx.compose.runtime.snapshots.SnapshotStateList<com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>> contents
++ {static} com.example.composememoapp.util.model.ContentBlocksState.Companion Companion
+- {static} androidx.compose.runtime.saveable.Saver<com.example.composememoapp.util.model.ContentBlocksState,?> Saver
++ androidx.compose.runtime.snapshots.SnapshotStateList<com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>> getContents()
++ void setContents(androidx.compose.runtime.snapshots.SnapshotStateList<com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>>)
+}
+class com.example.composememoapp.util.model.ContentBlocksState.Companion {
++ androidx.compose.runtime.saveable.Saver<com.example.composememoapp.util.model.ContentBlocksState,?> getSaver()
+}
+class com.example.composememoapp.presentation.viewModel.MemoViewModel_HiltModules_KeyModule_ProvideFactory {
++ String get()
++ {static} MemoViewModel_HiltModules_KeyModule_ProvideFactory create()
++ {static} String provide()
+}
+class com.example.composememoapp.presentation.viewModel.MemoViewModel_HiltModules_KeyModule_ProvideFactory.InstanceHolder {
+- {static} MemoViewModel_HiltModules_KeyModule_ProvideFactory INSTANCE
+}
+class com.example.composememoapp.presentation.ui.component.CheckBoxBlock {
+- long seq
+- com.example.composememoapp.presentation.ui.component.CheckBoxModel content
+- androidx.compose.runtime.MutableState<java.lang.Boolean> checkState
+- androidx.compose.runtime.MutableState<androidx.compose.ui.text.input.TextFieldValue> textInputState
++ {static} com.example.composememoapp.presentation.ui.component.CheckBoxBlock.Companion Companion
++ {static} android.os.Parcelable.Creator<com.example.composememoapp.presentation.ui.component.CheckBoxBlock> CREATOR
++ long getSeq()
++ com.example.composememoapp.presentation.ui.component.CheckBoxModel getContent()
++ androidx.compose.runtime.MutableState<java.lang.Boolean> getCheckState()
++ {static} void getCheckState$annotations()
++ void setCheckState(androidx.compose.runtime.MutableState<java.lang.Boolean>)
++ androidx.compose.runtime.MutableState<androidx.compose.ui.text.input.TextFieldValue> getTextInputState()
++ {static} void getTextInputState$annotations()
++ void setTextInputState(androidx.compose.runtime.MutableState<androidx.compose.ui.text.input.TextFieldValue>)
++ void drawOnlyReadContent(androidx.compose.ui.Modifier)
++ void drawEditableContent(androidx.compose.ui.Modifier,com.example.composememoapp.presentation.viewModel.ContentBlockViewModel)
++ com.example.composememoapp.data.database.entity.ContentBlockEntity convertToContentBlockEntity()
++ boolean isEmpty()
++ void addNextBlock(com.example.composememoapp.presentation.viewModel.ContentBlockViewModel)
++ int describeContents()
++ void writeToParcel(android.os.Parcel,int)
+}
+class com.example.composememoapp.presentation.ui.component.CheckBoxBlock.Creator {
++ com.example.composememoapp.presentation.ui.component.CheckBoxBlock createFromParcel(android.os.Parcel)
++ com.example.composememoapp.presentation.ui.component.CheckBoxBlock[] newArray(int)
+}
+class com.example.composememoapp.presentation.ui.component.CheckBoxBlock.Companion {
++ void write(com.example.composememoapp.presentation.ui.component.CheckBoxBlock,android.os.Parcel,int)
++ com.example.composememoapp.presentation.ui.component.CheckBoxBlock create(android.os.Parcel)
++ com.example.composememoapp.presentation.ui.component.CheckBoxBlock[] newArray(int)
+}
+abstract class com.example.composememoapp.presentation.viewModel.MemoState {
+}
+class com.example.composememoapp.presentation.viewModel.MemoState.Loading {
++ {static} com.example.composememoapp.presentation.viewModel.MemoState.Loading INSTANCE
+}
+class com.example.composememoapp.presentation.viewModel.MemoState.FetchSuccess {
++ {static} com.example.composememoapp.presentation.viewModel.MemoState.FetchSuccess INSTANCE
+}
+class com.example.composememoapp.presentation.viewModel.MemoState.SaveSuccess {
++ {static} com.example.composememoapp.presentation.viewModel.MemoState.SaveSuccess INSTANCE
+}
+class com.example.composememoapp.presentation.viewModel.MemoState.DeleteSuccess {
++ {static} com.example.composememoapp.presentation.viewModel.MemoState.DeleteSuccess INSTANCE
+}
+class com.example.composememoapp.presentation.viewModel.MemoState.Error {
+- java.lang.String message
++ com.example.composememoapp.presentation.viewModel.MemoState.Error copy(java.lang.String)
++ boolean equals(java.lang.Object)
++ int hashCode()
++ java.lang.String toString()
++ java.lang.String component1()
++ java.lang.String getMessage()
+}
+class com.example.composememoapp.data.database.entity.MemoEntity {
+- java.lang.Long id
+- java.util.Date updatedDate
+- java.util.List<com.example.composememoapp.data.database.entity.ContentBlockEntity> contents
+- boolean isBookMarked
+- java.util.List<java.lang.String> tagEntities
++ com.example.composememoapp.data.database.entity.MemoEntity copy(java.lang.Long,java.util.Date,java.util.List<com.example.composememoapp.data.database.entity.ContentBlockEntity>,boolean,java.util.List<java.lang.String>)
++ boolean equals(java.lang.Object)
++ int hashCode()
++ java.lang.String toString()
++ java.lang.Long component1()
++ java.lang.Long getId()
++ java.util.Date component2()
++ java.util.Date getUpdatedDate()
++ java.util.List<com.example.composememoapp.data.database.entity.ContentBlockEntity> component3()
++ java.util.List<com.example.composememoapp.data.database.entity.ContentBlockEntity> getContents()
++ boolean component4()
++ boolean isBookMarked()
++ void setBookMarked(boolean)
++ java.util.List<java.lang.String> component5()
++ java.util.List<java.lang.String> getTagEntities()
++ void setTagEntities(java.util.List<java.lang.String>)
++ com.example.composememoapp.data.MemoModel convertToMemoModel()
+}
+class com.example.composememoapp.presentation.ui.Key {
++ {static} com.example.composememoapp.presentation.ui.Key INSTANCE
++ {static} java.lang.String MEMO_ARGS_KEY
+}
+class com.example.composememoapp.presentation.viewModel.TagViewModel {
+- com.example.composememoapp.domain.GetAllTagUseCase getAllTagUseCase
+- io.reactivex.rxjava3.core.Scheduler androidScheduler
+- io.reactivex.rxjava3.core.Scheduler ioScheduler
+- io.reactivex.rxjava3.subjects.BehaviorSubject<java.util.List<com.example.composememoapp.data.database.entity.TagEntity>> _tagListSource
+- io.reactivex.rxjava3.core.Observable<java.util.List<com.example.composememoapp.data.database.entity.TagEntity>> tagList
++ io.reactivex.rxjava3.core.Observable<java.util.List<com.example.composememoapp.data.database.entity.TagEntity>> getTagList()
++ void getAllTag()
+}
+class com.example.composememoapp.MemoAppApplication_HiltComponents {
+}
+interface com.example.composememoapp.MemoAppApplication_HiltComponents.ServiceCBuilderModule {
+~ ServiceComponentBuilder bind(ServiceC.Builder)
+}
+interface com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityRetainedCBuilderModule {
+~ ActivityRetainedComponentBuilder bind(ActivityRetainedC.Builder)
+}
+interface com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityCBuilderModule {
+~ ActivityComponentBuilder bind(ActivityC.Builder)
+}
+interface com.example.composememoapp.MemoAppApplication_HiltComponents.ViewModelCBuilderModule {
+~ ViewModelComponentBuilder bind(ViewModelC.Builder)
+}
+interface com.example.composememoapp.MemoAppApplication_HiltComponents.ViewCBuilderModule {
+~ ViewComponentBuilder bind(ViewC.Builder)
+}
+interface com.example.composememoapp.MemoAppApplication_HiltComponents.FragmentCBuilderModule {
+~ FragmentComponentBuilder bind(FragmentC.Builder)
+}
+interface com.example.composememoapp.MemoAppApplication_HiltComponents.ViewWithFragmentCBuilderModule {
+~ ViewWithFragmentComponentBuilder bind(ViewWithFragmentC.Builder)
+}
+abstract class com.example.composememoapp.MemoAppApplication_HiltComponents.SingletonC {
+}
+abstract class com.example.composememoapp.MemoAppApplication_HiltComponents.ServiceC {
+}
+interface com.example.composememoapp.MemoAppApplication_HiltComponents.ServiceC.Builder {
+}
+abstract class com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityRetainedC {
+}
+interface com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityRetainedC.Builder {
+}
+abstract class com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityC {
+}
+interface com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityC.Builder {
+}
+abstract class com.example.composememoapp.MemoAppApplication_HiltComponents.ViewModelC {
+}
+interface com.example.composememoapp.MemoAppApplication_HiltComponents.ViewModelC.Builder {
+}
+abstract class com.example.composememoapp.MemoAppApplication_HiltComponents.ViewC {
+}
+interface com.example.composememoapp.MemoAppApplication_HiltComponents.ViewC.Builder {
+}
+abstract class com.example.composememoapp.MemoAppApplication_HiltComponents.FragmentC {
+}
+interface com.example.composememoapp.MemoAppApplication_HiltComponents.FragmentC.Builder {
+}
+abstract class com.example.composememoapp.MemoAppApplication_HiltComponents.ViewWithFragmentC {
+}
+interface com.example.composememoapp.MemoAppApplication_HiltComponents.ViewWithFragmentC.Builder {
+}
+class com.example.composememoapp.util.model.IconModel {
+- int iconId
+- kotlin.jvm.functions.Function0<kotlin.Unit> onClick
+- java.lang.String description
++ com.example.composememoapp.util.model.IconModel copy(int,kotlin.jvm.functions.Function0<kotlin.Unit>,java.lang.String)
++ boolean equals(java.lang.Object)
++ int hashCode()
++ java.lang.String toString()
++ int component1()
++ int getIconId()
++ kotlin.jvm.functions.Function0<kotlin.Unit> component2()
++ kotlin.jvm.functions.Function0<kotlin.Unit> getOnClick()
++ java.lang.String component3()
++ java.lang.String getDescription()
+}
+class com.example.composememoapp.presentation.viewModel.MemoViewModel {
+- com.example.composememoapp.domain.SaveMemoUseCase saveMemoUseCase
+- com.example.composememoapp.domain.GetAllMemoUseCase getAllMemoUseCase
+- com.example.composememoapp.domain.DeleteMemoUseCase deleteMemoUseCase
+- io.reactivex.rxjava3.core.Scheduler androidSchedulers
+- io.reactivex.rxjava3.core.Scheduler ioScheduler
+- io.reactivex.rxjava3.subjects.PublishSubject<com.example.composememoapp.presentation.viewModel.MemoState> _stateSource
+- io.reactivex.rxjava3.subjects.BehaviorSubject<java.lang.String> _querySource
+- io.reactivex.rxjava3.subjects.BehaviorSubject<java.lang.Boolean> _favoriteSource
+- io.reactivex.rxjava3.subjects.BehaviorSubject<java.util.List<com.example.composememoapp.data.database.entity.MemoEntity>> _memoListSource
+- io.reactivex.rxjava3.subjects.BehaviorSubject<java.lang.String> _tagSource
+- java.util.List<com.example.composememoapp.data.database.entity.MemoEntity> _memoList
+- io.reactivex.rxjava3.core.Observable<java.util.List<com.example.composememoapp.data.database.entity.MemoEntity>> memoList
+- io.reactivex.rxjava3.core.Observable<com.example.composememoapp.presentation.viewModel.MemoState> state
++ io.reactivex.rxjava3.core.Observable<java.util.List<com.example.composememoapp.data.database.entity.MemoEntity>> getMemoList()
++ io.reactivex.rxjava3.core.Observable<com.example.composememoapp.presentation.viewModel.MemoState> getState()
++ void saveMemo(com.example.composememoapp.data.MemoModel,android.content.Context)
++ com.example.composememoapp.data.database.entity.MemoEntity getMemo(long)
++ void getAllMemo()
++ void searchMemo(java.lang.String)
++ void deleteMemo(com.example.composememoapp.data.database.entity.MemoEntity)
++ void filterMemoByTag(java.lang.String)
++ void filterMemoByFavorite(boolean)
+- void handleLoadingState()
+- void handleSuccess(com.example.composememoapp.presentation.viewModel.MemoState)
+- void handleError(java.lang.String)
+}
+class com.example.composememoapp.data.database.TagDao_Impl {
+- RoomDatabase __db
+- EntityInsertionAdapter<TagEntity> __insertionAdapterOfTagEntity
++ Completable insertTagEntity(List<TagEntity>)
++ Flowable<List<TagEntity>> getAllTag()
++ {static} List<Class<?>> getRequiredConverters()
+}
+class hilt_aggregated_deps._com_example_composememoapp_presentation_MainActivity_GeneratedInjector {
+}
+class com.example.composememoapp.util.model.TextInputSateKt {
++ {static} com.example.composememoapp.util.model.TextInputSate rememberTextInputState(java.lang.String)
+}
+class com.example.composememoapp.presentation.ui.component.MiniFloatingButtonKt {
++ {static} void MiniFloatingButtonPreview()
++ {static} void MiniFloatingButtonGroupItemPreview()
+}
+class com.example.composememoapp.data.database.entity.ContentBlockEntity {
+- com.example.composememoapp.presentation.ui.component.blocks.ContentType type
+- long seq
+- java.lang.String content
++ com.example.composememoapp.data.database.entity.ContentBlockEntity copy(com.example.composememoapp.presentation.ui.component.blocks.ContentType,long,java.lang.String)
++ boolean equals(java.lang.Object)
++ int hashCode()
++ java.lang.String toString()
++ com.example.composememoapp.presentation.ui.component.blocks.ContentType component1()
++ com.example.composememoapp.presentation.ui.component.blocks.ContentType getType()
++ long component2()
++ long getSeq()
++ void setSeq(long)
++ java.lang.String component3()
++ java.lang.String getContent()
++ com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?> convertToContentBlockModel()
+}
+class com.example.composememoapp.util.Permissions {
++ {static} com.example.composememoapp.util.Permissions INSTANCE
++ {static} java.lang.String CAMERA
++ {static} java.lang.String READ_EXTERNAL_STORAGE
++ void handlePermissionRequest(java.lang.String,android.content.Context,kotlin.jvm.functions.Function0<kotlin.Unit>,kotlin.jvm.functions.Function0<kotlin.Unit>,kotlin.jvm.functions.Function0<kotlin.Unit>)
+}
+abstract class com.example.composememoapp.data.database.MemoAppDatabase {
++ {abstract}com.example.composememoapp.data.database.MemoDao memoDao()
++ {abstract}com.example.composememoapp.data.database.TagDao tagDao()
+}
+class com.example.composememoapp.data.repository.DefaultMemoAppRepository_Factory {
+- Provider<MemoDao> memoDaoProvider
+- Provider<TagDao> tagDaoProvider
++ DefaultMemoAppRepository get()
++ {static} DefaultMemoAppRepository_Factory create(Provider<MemoDao>,Provider<TagDao>)
++ {static} DefaultMemoAppRepository newInstance(MemoDao,TagDao)
+}
+class hilt_aggregated_deps._com_example_composememoapp_di_DBModule {
+}
+interface com.example.composememoapp.data.repository.MemoAppRepository {
++ {abstract}io.reactivex.rxjava3.core.Flowable<java.util.List<com.example.composememoapp.data.database.entity.MemoEntity>> getAllMemo()
++ {abstract}io.reactivex.rxjava3.core.Completable insertMemo(com.example.composememoapp.data.database.entity.MemoEntity)
++ {abstract}io.reactivex.rxjava3.core.Completable deleteMemo(com.example.composememoapp.data.database.entity.MemoEntity)
++ {abstract}io.reactivex.rxjava3.core.Flowable<java.util.List<com.example.composememoapp.data.database.entity.TagEntity>> getAllTag()
+}
+class com.example.composememoapp.presentation.viewModel.TagViewModel_HiltModules {
+}
+abstract class com.example.composememoapp.presentation.viewModel.TagViewModel_HiltModules.BindsModule {
++ {abstract}ViewModel binds(TagViewModel)
+}
+class com.example.composememoapp.presentation.viewModel.TagViewModel_HiltModules.KeyModule {
++ {static} String provide()
+}
+abstract class com.example.composememoapp.di.RepositoryModule {
++ {abstract}com.example.composememoapp.data.repository.MemoAppRepository bindsDefaultMemoRepository(com.example.composememoapp.data.repository.DefaultMemoAppRepository)
+}
+class com.example.composememoapp.presentation.ui.write.TagListKt {
++ {static} void TagList(java.util.List<java.lang.String>)
+}
+class com.example.composememoapp.domain.DeleteMemoUseCase {
+- com.example.composememoapp.data.repository.MemoAppRepository memoAppRepository
++ io.reactivex.rxjava3.core.Completable invoke(com.example.composememoapp.data.database.entity.MemoEntity)
+}
+class com.example.composememoapp.data.MemoModel {
+- java.lang.Long id
+- java.util.Date updatedDate
+- java.util.List<? extends com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>> contents
+- boolean isBookMarked
+- java.util.List<java.lang.String> tagEntities
++ com.example.composememoapp.data.MemoModel copy(java.lang.Long,java.util.Date,java.util.List<? extends com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>>,boolean,java.util.List<java.lang.String>)
++ boolean equals(java.lang.Object)
++ int hashCode()
++ java.lang.String toString()
++ java.lang.Long component1()
++ java.lang.Long getId()
++ java.util.Date component2()
++ java.util.Date getUpdatedDate()
++ java.util.List<com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>> component3()
++ java.util.List<com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>> getContents()
++ void setContents(java.util.List<? extends com.example.composememoapp.presentation.ui.component.blocks.ContentBlock<?>>)
++ boolean component4()
++ boolean isBookMarked()
++ void setBookMarked(boolean)
++ java.util.List<java.lang.String> component5()
++ java.util.List<java.lang.String> getTagEntities()
++ void setTagEntities(java.util.List<java.lang.String>)
++ com.example.composememoapp.data.database.entity.MemoEntity convertToMemoEntity()
+}
+
+
+com.example.composememoapp.Application <|-- com.example.composememoapp.MemoAppApplication
+com.example.composememoapp.util.model.InputState <|.. com.example.composememoapp.util.model.CheckBoxState
+com.example.composememoapp.util.model.CheckBoxState +.. com.example.composememoapp.util.model.CheckBoxState.Companion
+com.example.composememoapp.presentation.ui.component.blocks.Parcelable <|.. com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
+com.example.composememoapp.presentation.ui.component.blocks.ContentBlock <|-- com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
+com.example.composememoapp.presentation.ui.component.blocks.ImageBlock +.. com.example.composememoapp.presentation.ui.component.blocks.ImageBlock.Creator
+com.example.composememoapp.presentation.ui.component.blocks.Creator <|.. com.example.composememoapp.presentation.ui.component.blocks.ImageBlock.Creator
+com.example.composememoapp.util.model.InputState <|.. com.example.composememoapp.util.model.TextInputSate
+com.example.composememoapp.util.model.TextInputSate +.. com.example.composememoapp.util.model.TextInputSate.Companion
+com.example.composememoapp.presentation.ComponentActivity <|-- com.example.composememoapp.presentation.MainActivity
+dagger.internal.Factory <|.. com.example.composememoapp.di.DBModule_ProvideMemoDaoFactory
+dagger.internal.Factory <|.. com.example.composememoapp.di.UseCaseModule_ProvideDeleteMemoUseCaseFactory
+com.example.composememoapp.SingletonC <|-- com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC
+com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC +.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.Builder
+com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC +.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ActivityRetainedCBuilder
+com.example.composememoapp.Builder <|.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ActivityRetainedCBuilder
+com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC +.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ActivityCBuilder
+com.example.composememoapp.Builder <|.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ActivityCBuilder
+com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC +.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.FragmentCBuilder
+com.example.composememoapp.Builder <|.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.FragmentCBuilder
+com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC +.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewWithFragmentCBuilder
+com.example.composememoapp.Builder <|.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewWithFragmentCBuilder
+com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC +.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewCBuilder
+com.example.composememoapp.Builder <|.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewCBuilder
+com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC +.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewModelCBuilder
+com.example.composememoapp.Builder <|.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewModelCBuilder
+com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC +.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ServiceCBuilder
+com.example.composememoapp.Builder <|.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ServiceCBuilder
+com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC +.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewWithFragmentCImpl
+com.example.composememoapp.ViewWithFragmentC <|-- com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewWithFragmentCImpl
+com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC +.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.FragmentCImpl
+com.example.composememoapp.FragmentC <|-- com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.FragmentCImpl
+com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC +.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewCImpl
+com.example.composememoapp.ViewC <|-- com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewCImpl
+com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC +.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ActivityCImpl
+com.example.composememoapp.ActivityC <|-- com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ActivityCImpl
+com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC +.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewModelCImpl
+com.example.composememoapp.ViewModelC <|-- com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewModelCImpl
+com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewModelCImpl +.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewModelCImpl.SwitchingProvider
+com.example.composememoapp.Provider <|.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ViewModelCImpl.SwitchingProvider
+com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC +.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ActivityRetainedCImpl
+com.example.composememoapp.ActivityRetainedC <|-- com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ActivityRetainedCImpl
+com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ActivityRetainedCImpl +.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ActivityRetainedCImpl.SwitchingProvider
+com.example.composememoapp.Provider <|.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ActivityRetainedCImpl.SwitchingProvider
+com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC +.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ServiceCImpl
+com.example.composememoapp.ServiceC <|-- com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.ServiceCImpl
+com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC +.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.SwitchingProvider
+com.example.composememoapp.Provider <|.. com.example.composememoapp.DaggerMemoAppApplication_HiltComponents_SingletonC.SwitchingProvider
+dagger.hilt.internal.GeneratedComponentManagerHolder <|.. com.example.composememoapp.presentation.Hilt_MainActivity
+androidx.activity.ComponentActivity <|-- com.example.composememoapp.presentation.Hilt_MainActivity
+com.example.composememoapp.presentation.viewModel.MemoViewModel_HiltModules +.. com.example.composememoapp.presentation.viewModel.MemoViewModel_HiltModules.BindsModule
+com.example.composememoapp.presentation.viewModel.MemoViewModel_HiltModules +.. com.example.composememoapp.presentation.viewModel.MemoViewModel_HiltModules.KeyModule
+dagger.internal.Factory <|.. com.example.composememoapp.di.SchedulerModule_ProvideAndroidMainSchedulerFactory
+com.example.composememoapp.di.SchedulerModule_ProvideAndroidMainSchedulerFactory +.. com.example.composememoapp.di.SchedulerModule_ProvideAndroidMainSchedulerFactory.InstanceHolder
+com.example.composememoapp.data.database.entity.Parcelable <|.. com.example.composememoapp.data.database.entity.TagEntity
+com.example.composememoapp.data.database.entity.TagEntity +.. com.example.composememoapp.data.database.entity.TagEntity.Creator
+com.example.composememoapp.data.database.entity.Creator <|.. com.example.composememoapp.data.database.entity.TagEntity.Creator
+dagger.internal.Factory <|.. com.example.composememoapp.presentation.viewModel.TagViewModel_Factory
+dagger.internal.Factory <|.. com.example.composememoapp.di.UseCaseModule_ProvideGetAllTagUseCaseFactory
+dagger.hilt.internal.GeneratedComponentManagerHolder <|.. com.example.composememoapp.Hilt_MemoAppApplication
+android.app.Application <|-- com.example.composememoapp.Hilt_MemoAppApplication
+dagger.internal.Factory <|.. com.example.composememoapp.domain.GetAllMemoUseCase_Factory
+com.example.composememoapp.data.database.MemoAppDatabase <|-- com.example.composememoapp.data.database.MemoAppDatabase_Impl
+dagger.internal.Factory <|.. com.example.composememoapp.di.DBModule_ProvideTagDaoFactory
+dagger.internal.Factory <|.. com.example.composememoapp.presentation.viewModel.MemoViewModel_Factory
+com.example.composememoapp.data.repository.MemoAppRepository <|.. com.example.composememoapp.data.repository.DefaultMemoAppRepository
+dagger.internal.Factory <|.. com.example.composememoapp.di.UseCaseModule_ProvideSaveMemoUseCaseFactory
+com.example.composememoapp.data.database.MemoDao <|-- com.example.composememoapp.data.database.MemoDao_Impl
+com.example.composememoapp.presentation.viewModel.ViewModel <|-- com.example.composememoapp.presentation.viewModel.ContentBlockViewModel
+dagger.internal.Factory <|.. com.example.composememoapp.di.SchedulerModule_ProvideIOSchedulerFactory
+com.example.composememoapp.di.SchedulerModule_ProvideIOSchedulerFactory +.. com.example.composememoapp.di.SchedulerModule_ProvideIOSchedulerFactory.InstanceHolder
+dagger.internal.Factory <|.. com.example.composememoapp.domain.GetAllTagUseCase_Factory
+dagger.internal.Factory <|.. com.example.composememoapp.domain.SaveMemoUseCase_Factory
+dagger.internal.Factory <|.. com.example.composememoapp.presentation.viewModel.TagViewModel_HiltModules_KeyModule_ProvideFactory
+com.example.composememoapp.presentation.viewModel.TagViewModel_HiltModules_KeyModule_ProvideFactory +.. com.example.composememoapp.presentation.viewModel.TagViewModel_HiltModules_KeyModule_ProvideFactory.InstanceHolder
+dagger.internal.Factory <|.. com.example.composememoapp.di.DBModule_ProvideMemoAppDatabaseFactory
+com.example.composememoapp.presentation.ui.component.blocks.Parcelable <|.. com.example.composememoapp.presentation.ui.component.blocks.TextBlock
+com.example.composememoapp.presentation.ui.component.blocks.ContentBlock <|-- com.example.composememoapp.presentation.ui.component.blocks.TextBlock
+com.example.composememoapp.presentation.ui.component.blocks.TextBlock +.. com.example.composememoapp.presentation.ui.component.blocks.TextBlock.Creator
+com.example.composememoapp.presentation.ui.component.blocks.Creator <|.. com.example.composememoapp.presentation.ui.component.blocks.TextBlock.Creator
+com.example.composememoapp.util.model.TagListState +.. com.example.composememoapp.util.model.TagListState.Companion
+dagger.internal.Factory <|.. com.example.composememoapp.di.UseCaseModule_ProvideGetAllMemoUseCaseFactory
+com.example.composememoapp.util.model.InputState <|.. com.example.composememoapp.util.model.ContentBlocksState
+com.example.composememoapp.util.model.ContentBlocksState +.. com.example.composememoapp.util.model.ContentBlocksState.Companion
+dagger.internal.Factory <|.. com.example.composememoapp.presentation.viewModel.MemoViewModel_HiltModules_KeyModule_ProvideFactory
+com.example.composememoapp.presentation.viewModel.MemoViewModel_HiltModules_KeyModule_ProvideFactory +.. com.example.composememoapp.presentation.viewModel.MemoViewModel_HiltModules_KeyModule_ProvideFactory.InstanceHolder
+com.example.composememoapp.presentation.ui.component.Parcelable <|.. com.example.composememoapp.presentation.ui.component.CheckBoxBlock
+com.example.composememoapp.presentation.ui.component.ContentBlock <|-- com.example.composememoapp.presentation.ui.component.CheckBoxBlock
+com.example.composememoapp.presentation.ui.component.CheckBoxBlock +.. com.example.composememoapp.presentation.ui.component.CheckBoxBlock.Creator
+com.example.composememoapp.presentation.ui.component.Creator <|.. com.example.composememoapp.presentation.ui.component.CheckBoxBlock.Creator
+com.example.composememoapp.presentation.ui.component.CheckBoxBlock +.. com.example.composememoapp.presentation.ui.component.CheckBoxBlock.Companion
+com.example.composememoapp.presentation.ui.component.Parceler <|.. com.example.composememoapp.presentation.ui.component.CheckBoxBlock.Companion
+com.example.composememoapp.presentation.viewModel.MemoState +.. com.example.composememoapp.presentation.viewModel.MemoState.Loading
+com.example.composememoapp.presentation.viewModel.MemoState <|-- com.example.composememoapp.presentation.viewModel.MemoState.Loading
+com.example.composememoapp.presentation.viewModel.MemoState +.. com.example.composememoapp.presentation.viewModel.MemoState.FetchSuccess
+com.example.composememoapp.presentation.viewModel.MemoState <|-- com.example.composememoapp.presentation.viewModel.MemoState.FetchSuccess
+com.example.composememoapp.presentation.viewModel.MemoState +.. com.example.composememoapp.presentation.viewModel.MemoState.SaveSuccess
+com.example.composememoapp.presentation.viewModel.MemoState <|-- com.example.composememoapp.presentation.viewModel.MemoState.SaveSuccess
+com.example.composememoapp.presentation.viewModel.MemoState +.. com.example.composememoapp.presentation.viewModel.MemoState.DeleteSuccess
+com.example.composememoapp.presentation.viewModel.MemoState <|-- com.example.composememoapp.presentation.viewModel.MemoState.DeleteSuccess
+com.example.composememoapp.presentation.viewModel.MemoState +.. com.example.composememoapp.presentation.viewModel.MemoState.Error
+com.example.composememoapp.presentation.viewModel.MemoState <|-- com.example.composememoapp.presentation.viewModel.MemoState.Error
+com.example.composememoapp.presentation.viewModel.ViewModel <|-- com.example.composememoapp.presentation.viewModel.TagViewModel
+com.example.composememoapp.MemoAppApplication_HiltComponents +.. com.example.composememoapp.MemoAppApplication_HiltComponents.ServiceCBuilderModule
+com.example.composememoapp.MemoAppApplication_HiltComponents +.. com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityRetainedCBuilderModule
+com.example.composememoapp.MemoAppApplication_HiltComponents +.. com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityCBuilderModule
+com.example.composememoapp.MemoAppApplication_HiltComponents +.. com.example.composememoapp.MemoAppApplication_HiltComponents.ViewModelCBuilderModule
+com.example.composememoapp.MemoAppApplication_HiltComponents +.. com.example.composememoapp.MemoAppApplication_HiltComponents.ViewCBuilderModule
+com.example.composememoapp.MemoAppApplication_HiltComponents +.. com.example.composememoapp.MemoAppApplication_HiltComponents.FragmentCBuilderModule
+com.example.composememoapp.MemoAppApplication_HiltComponents +.. com.example.composememoapp.MemoAppApplication_HiltComponents.ViewWithFragmentCBuilderModule
+com.example.composememoapp.MemoAppApplication_HiltComponents +.. com.example.composememoapp.MemoAppApplication_HiltComponents.SingletonC
+com.example.composememoapp.MemoAppApplication_GeneratedInjector <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.SingletonC
+com.example.composememoapp.FragmentGetContextFixEntryPoint <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.SingletonC
+com.example.composememoapp.HiltWrapper_ActivityRetainedComponentManager_ActivityRetainedComponentBuilderEntryPoint <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.SingletonC
+com.example.composememoapp.ServiceComponentBuilderEntryPoint <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.SingletonC
+com.example.composememoapp.SingletonComponent <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.SingletonC
+com.example.composememoapp.GeneratedComponent <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.SingletonC
+com.example.composememoapp.MemoAppApplication_HiltComponents +.. com.example.composememoapp.MemoAppApplication_HiltComponents.ServiceC
+com.example.composememoapp.ServiceComponent <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ServiceC
+com.example.composememoapp.GeneratedComponent <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ServiceC
+com.example.composememoapp.MemoAppApplication_HiltComponents.ServiceC +.. com.example.composememoapp.MemoAppApplication_HiltComponents.ServiceC.Builder
+com.example.composememoapp.ServiceComponentBuilder <|-- com.example.composememoapp.MemoAppApplication_HiltComponents.ServiceC.Builder
+com.example.composememoapp.MemoAppApplication_HiltComponents +.. com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityRetainedC
+com.example.composememoapp.ActivityRetainedComponent <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityRetainedC
+com.example.composememoapp.ActivityComponentBuilderEntryPoint <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityRetainedC
+com.example.composememoapp.HiltWrapper_ActivityRetainedComponentManager_ActivityRetainedLifecycleEntryPoint <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityRetainedC
+com.example.composememoapp.GeneratedComponent <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityRetainedC
+com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityRetainedC +.. com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityRetainedC.Builder
+com.example.composememoapp.ActivityRetainedComponentBuilder <|-- com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityRetainedC.Builder
+com.example.composememoapp.MemoAppApplication_HiltComponents +.. com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityC
+com.example.composememoapp.MainActivity_GeneratedInjector <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityC
+com.example.composememoapp.ActivityComponent <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityC
+com.example.composememoapp.ActivityEntryPoint <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityC
+com.example.composememoapp.HiltWrapper_HiltViewModelFactory_ActivityCreatorEntryPoint <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityC
+com.example.composememoapp.FragmentComponentBuilderEntryPoint <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityC
+com.example.composememoapp.ViewComponentBuilderEntryPoint <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityC
+com.example.composememoapp.GeneratedComponent <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityC
+com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityC +.. com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityC.Builder
+com.example.composememoapp.ActivityComponentBuilder <|-- com.example.composememoapp.MemoAppApplication_HiltComponents.ActivityC.Builder
+com.example.composememoapp.MemoAppApplication_HiltComponents +.. com.example.composememoapp.MemoAppApplication_HiltComponents.ViewModelC
+com.example.composememoapp.ViewModelComponent <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ViewModelC
+com.example.composememoapp.ViewModelFactoriesEntryPoint <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ViewModelC
+com.example.composememoapp.GeneratedComponent <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ViewModelC
+com.example.composememoapp.MemoAppApplication_HiltComponents.ViewModelC +.. com.example.composememoapp.MemoAppApplication_HiltComponents.ViewModelC.Builder
+com.example.composememoapp.ViewModelComponentBuilder <|-- com.example.composememoapp.MemoAppApplication_HiltComponents.ViewModelC.Builder
+com.example.composememoapp.MemoAppApplication_HiltComponents +.. com.example.composememoapp.MemoAppApplication_HiltComponents.ViewC
+com.example.composememoapp.ViewComponent <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ViewC
+com.example.composememoapp.GeneratedComponent <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ViewC
+com.example.composememoapp.MemoAppApplication_HiltComponents.ViewC +.. com.example.composememoapp.MemoAppApplication_HiltComponents.ViewC.Builder
+com.example.composememoapp.ViewComponentBuilder <|-- com.example.composememoapp.MemoAppApplication_HiltComponents.ViewC.Builder
+com.example.composememoapp.MemoAppApplication_HiltComponents +.. com.example.composememoapp.MemoAppApplication_HiltComponents.FragmentC
+com.example.composememoapp.FragmentComponent <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.FragmentC
+com.example.composememoapp.FragmentEntryPoint <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.FragmentC
+com.example.composememoapp.ViewWithFragmentComponentBuilderEntryPoint <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.FragmentC
+com.example.composememoapp.GeneratedComponent <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.FragmentC
+com.example.composememoapp.MemoAppApplication_HiltComponents.FragmentC +.. com.example.composememoapp.MemoAppApplication_HiltComponents.FragmentC.Builder
+com.example.composememoapp.FragmentComponentBuilder <|-- com.example.composememoapp.MemoAppApplication_HiltComponents.FragmentC.Builder
+com.example.composememoapp.MemoAppApplication_HiltComponents +.. com.example.composememoapp.MemoAppApplication_HiltComponents.ViewWithFragmentC
+com.example.composememoapp.ViewWithFragmentComponent <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ViewWithFragmentC
+com.example.composememoapp.GeneratedComponent <|.. com.example.composememoapp.MemoAppApplication_HiltComponents.ViewWithFragmentC
+com.example.composememoapp.MemoAppApplication_HiltComponents.ViewWithFragmentC +.. com.example.composememoapp.MemoAppApplication_HiltComponents.ViewWithFragmentC.Builder
+com.example.composememoapp.ViewWithFragmentComponentBuilder <|-- com.example.composememoapp.MemoAppApplication_HiltComponents.ViewWithFragmentC.Builder
+com.example.composememoapp.presentation.viewModel.ViewModel <|-- com.example.composememoapp.presentation.viewModel.MemoViewModel
+com.example.composememoapp.data.database.TagDao <|-- com.example.composememoapp.data.database.TagDao_Impl
+com.example.composememoapp.data.database.RoomDatabase <|-- com.example.composememoapp.data.database.MemoAppDatabase
+dagger.internal.Factory <|.. com.example.composememoapp.data.repository.DefaultMemoAppRepository_Factory
+com.example.composememoapp.presentation.viewModel.TagViewModel_HiltModules +.. com.example.composememoapp.presentation.viewModel.TagViewModel_HiltModules.BindsModule
+com.example.composememoapp.presentation.viewModel.TagViewModel_HiltModules +.. com.example.composememoapp.presentation.viewModel.TagViewModel_HiltModules.KeyModule
+@enduml

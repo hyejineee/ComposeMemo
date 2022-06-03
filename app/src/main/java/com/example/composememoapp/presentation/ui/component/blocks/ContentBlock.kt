@@ -15,10 +15,10 @@ abstract class ContentBlock<T> {
 
     abstract fun isEmpty(): Boolean
 
-    abstract fun addNextBlock(viewModel : ContentBlockViewModel)
+    abstract fun addNextBlock(viewModel: ContentBlockViewModel)
 
     @Composable
-    abstract fun drawEditableContent(modifier: Modifier,viewModel: ContentBlockViewModel)
+    abstract fun drawEditableContent(modifier: Modifier, viewModel: ContentBlockViewModel)
 
     abstract fun convertToContentBlockEntity(): ContentBlockEntity
 }

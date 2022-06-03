@@ -2,9 +2,7 @@ package com.example.composememoapp.presentation.ui.write
 
 import android.net.Uri
 import android.util.Log
-import android.view.KeyEvent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,15 +22,10 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.nativeKeyCode
-import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import com.example.composememoapp.presentation.ui.component.CheckBoxBlock
 import com.example.composememoapp.presentation.ui.component.blocks.ContentBlock
-import com.example.composememoapp.presentation.ui.component.blocks.ImageBlock
-import com.example.composememoapp.presentation.ui.component.blocks.TextBlock
 import com.example.composememoapp.presentation.viewModel.ContentBlockViewModel
 
 @ExperimentalAnimationApi

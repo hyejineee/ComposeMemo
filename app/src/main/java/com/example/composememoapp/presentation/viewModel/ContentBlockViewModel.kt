@@ -1,7 +1,6 @@
 package com.example.composememoapp.presentation.viewModel
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.composememoapp.data.database.entity.ContentBlockEntity
 import com.example.composememoapp.presentation.ui.component.CheckBoxBlock

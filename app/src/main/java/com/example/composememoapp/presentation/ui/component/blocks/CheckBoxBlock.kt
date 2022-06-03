@@ -2,7 +2,6 @@ package com.example.composememoapp.presentation.ui.component
 
 import android.os.Parcel
 import android.os.Parcelable
-import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,7 +30,6 @@ import com.google.gson.Gson
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parceler
 import kotlinx.parcelize.RawValue
-import javax.inject.Inject
 
 data class CheckBoxModel(
     var text: String,
@@ -43,7 +41,6 @@ class CheckBoxBlock(
     override val seq: Long = 0,
     override val content: @RawValue CheckBoxModel,
 ) : ContentBlock<CheckBoxModel>(), Parcelable {
-
 
     @IgnoredOnParcel
     var checkState: MutableState<Boolean> = mutableStateOf(content.isChecked)

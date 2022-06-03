@@ -64,7 +64,6 @@ data class TextBlock(
         )
     }
 
-
     override fun convertToContentBlockEntity() = ContentBlockEntity(
         type = ContentType.Text,
         seq = seq,

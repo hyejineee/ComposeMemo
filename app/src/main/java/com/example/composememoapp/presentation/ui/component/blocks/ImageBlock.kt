@@ -57,7 +57,7 @@ class ImageBlock(
     }
 
     @Composable
-    override fun drawEditableContent(modifier: Modifier,viewModel: ContentBlockViewModel) {
+    override fun drawEditableContent(modifier: Modifier, viewModel: ContentBlockViewModel) {
 
         Box(modifier = modifier.fillMaxWidth()) {
             GlideImage(
