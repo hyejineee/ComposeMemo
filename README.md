@@ -7,7 +7,7 @@ Android Jetpack Compose로 만드는 간단한 메모앱
 2021.11월 한달동안 진행한 [GDG 컴포즈 스터디](https://sites.google.com/view/devfest-korea-2021/compose-codelab)를 수료하고,
 컴포즈에 익숙해지기 위해 만들어 본 메모 애플리케이션입니다. 아이폰의 메모앱 처럼 동작하도록 구현했습니다. 컴포저블 함수 테스트 → 단위 테스트를 번갈아 가며 테스트 주도 방식으로 프로젝트를 진행했습니다. 
 
-<img width="70%" src="./images/composeMemoAppDiagram.svg">  
+<img width="100%" src="./images/composeMemoAppDiagram.svg">  
 
 ## 🛠 사용기술 및 언어
 
